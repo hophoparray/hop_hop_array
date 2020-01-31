@@ -14,6 +14,9 @@ const Algo = db.define('algos', {
   tests: {
     type: Sequelize.ARRAY(Sequelize.TEXT)
   },
+  solution: {
+    type: Sequelize.TEXT
+  },
   algoLevel: {
     type: Sequelize.INTEGER,
     validation: {
