@@ -14,7 +14,7 @@ class SingleAlgo extends React.Component {
         <MonacoEditor
           monaco={monaco}
           width="800"
-          height="600"
+          height="400"
           language="javascript"
           theme="vs-dark"
           options={options}
