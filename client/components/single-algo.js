@@ -15,11 +15,14 @@ class SingleAlgo extends React.Component {
       currentAlgo: {}
     }
     this.editorDidMount = this.editorDidMount.bind(this)
+    this.onAttempt = this.onAttempt.bind(this)
   }
   editorDidMount(editor, monaco) {
     console.log('editorDidMount', editor)
+    console.log(this.props.match)
+    // this.props.match.params.id => get algo id
   }
-  onChange() {}
+  onAttempt() {}
 
   render() {
     const options = {selectOnLineNumbers: true}
@@ -35,6 +38,10 @@ class SingleAlgo extends React.Component {
           options={options}
           editorDidMount={this.editorDidMount()}
         />
+        {/* TO DO: Add Submit button when tests pass */}
+        <button>Give me a {'<br/>'}</button>
+        <button>Attempt</button>
+        {/* TODO: Continue flow to fail/succeed components */}
       </div>
     )
   }
