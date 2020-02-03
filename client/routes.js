@@ -28,7 +28,6 @@ class Routes extends Component {
 
             <Route path="/home" component={UserHome} />
             {/* <Route path="/algorithm" component={SingleAlgo} /> */}
-
             <Route exact path="/algos" component={AllAlgos} />
           </Switch>
         )}
