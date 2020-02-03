@@ -19,3 +19,9 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+th,
+td,
+.all-algos-table {
+  border-bottom: 1px solid #ddd;
+}
