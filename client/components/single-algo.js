@@ -15,13 +15,14 @@ class SingleAlgo extends React.Component {
       currentAlgo: {},
       editorMounted: false
     }
-    this.editorDidMount = this.editorDidMount.bind(this)
+    // this.EditorDidMount = this.EditorDidMount.bind(this)
     this.onAttempt = this.onAttempt.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  editorDidMount(editor, monaco) {
-    console.log('editorDidMount')
-    console.log(this.props.match)
+
+  EditorDidMount(editor, monaco) {
+    console.log('editorDidMount', editor)
+    console.log(this.props.match.params)
     this.editor = editor
     // this.props.match.params.id => get algo id
   }
@@ -31,15 +32,18 @@ class SingleAlgo extends React.Component {
   onAttempt(value) {
     console.log('Attempt', value)
   }
-  handleChange() {
+  handleChange(value) {
     console.log('Change')
-    this.setState({editorMounted: true})
+    this.setState({
+      userCode: value
+    })
+    // this.setState({editorMounted: true})
   }
 
   render() {
     const options = {selectOnLineNumbers: true}
     const value = 0
-    if (this.state.editorMounted || Object.keys(this.refs).length) {
+    if (Object.keys(this.refs).length) {
       console.log('MOUNTED')
       console.log('THIS', this)
       const model = this.refs.monaco.editor.getModel()
@@ -57,9 +61,10 @@ class SingleAlgo extends React.Component {
           height="400"
           language="javascript"
           theme="vs-dark"
-          value={this.state.defaultText}
+          value={this.state.userCode}
+          defaultValue={this.state.defaultText}
           options={options}
-          editorDidMount={this.editorDidMount}
+          // editorDidMount={this.EditorDidMount}
           onChange={this.handleChange}
         />
         {/* TO DO: Add Submit button when tests pass */}
