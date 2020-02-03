@@ -21,11 +21,13 @@ class SingleAlgo extends React.Component {
   }
 
   EditorDidMount(editor, monaco) {
+    console.log('from editor did mount, monaco', monaco)
     console.log('editorDidMount', editor)
-    console.log(this.props.match.params)
-    this.editor = editor
+    // console.log(this.props.match.params)
+    // this.editor = editor
     // this.props.match.params.id => get algo id
   }
+
   componentDidUpdate() {
     console.log('UPDATE')
   }
@@ -42,12 +44,12 @@ class SingleAlgo extends React.Component {
 
   render() {
     const options = {selectOnLineNumbers: true}
-    const value = 0
+    let value = ''
     if (Object.keys(this.refs).length) {
       console.log('MOUNTED')
       console.log('THIS', this)
       const model = this.refs.monaco.editor.getModel()
-      const value = model.getValue()
+      value = model.getValue()
       console.log('MODEL', model)
       console.log('VALUE', value)
     }
@@ -64,7 +66,7 @@ class SingleAlgo extends React.Component {
           value={this.state.userCode}
           defaultValue={this.state.defaultText}
           options={options}
-          // editorDidMount={this.EditorDidMount}
+          editorDidMount={this.EditorDidMount}
           onChange={this.handleChange}
         />
         {/* TO DO: Add Submit button when tests pass */}
