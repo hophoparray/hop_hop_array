@@ -2,6 +2,9 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Algo = db.define('algos', {
+  name: {
+    type: Sequelize.STRING
+  },
   prompt: {
     type: Sequelize.TEXT
   },
@@ -11,12 +14,12 @@ const Algo = db.define('algos', {
   defaultText: {
     type: Sequelize.TEXT
   },
-  tests: {
-    type: Sequelize.ARRAY(Sequelize.TEXT)
-  },
-  solution: {
-    type: Sequelize.TEXT
-  },
+  // tests: {
+  //   type: Sequelize.ARRAY(Sequelize.TEXT)
+  // },
+  // solution: {
+  //   type: Sequelize.TEXT
+  // },
   algoLevel: {
     type: Sequelize.INTEGER,
     validation: {
