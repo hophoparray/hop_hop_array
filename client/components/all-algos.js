@@ -2,28 +2,24 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import {runInNewContext} from 'vm'
 
 class AllAlgos extends Component {
-  componentDidMount() {
-    this.getAlgos()
-  }
-
-  async getAlgos() {
-    try {
-      const allAlgos = await axios.get('/api/algos')
-      this.setState({
-        algos: allAlgos.data
-      })
-      return
-    } catch (error) {
-      console.log('Algos did not load')
+  constructor() {
+    super()
+    this.state = {
+      algos: []
     }
   }
 
+  async componentDidMount() {
+    const {data} = await axios.get('/api/algos')
+    this.setState({algos: data})
+  }
+
   render() {
-    //const algos = this.state.algos
-    const algos = dummydata
+    const algos = this.state.algos
+    console.log(this.state)
+    //const algos = dummydata
     return (
       <div>
         <h1>All Algos</h1>
