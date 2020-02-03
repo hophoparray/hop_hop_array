@@ -16,7 +16,6 @@ try {
     usersCode.removeDuplicatesSet([1, 2, 3, 4, 5, 6, 7]) ==
       [1, 2, 3, 4, 5, 6, 7]
   )
-  assert(usersCode.removeDuplicatesSet([5, 5, 5, 5, 5]) == [5])
 } catch {
   testResults.push(testName)
 }
