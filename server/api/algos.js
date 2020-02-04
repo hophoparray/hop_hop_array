@@ -8,9 +8,12 @@ const {exec} = require('child_process')
 const Docker = require('dockerode')
 const docker = new Docker({socketPath: '/var/run/docker.sock'})
 const writeFileAsync = promisify(fs.writeFile)
+const removeFileAsync = promisify(fs.unlink)
 const execAsync = promisify(exec)
 
 module.exports = router
+
+// TODO: Write Image
 
 //All Algos
 router.get('/', async (req, res, next) => {
@@ -38,13 +41,31 @@ router.get('/:algoId', async (req, res, next) => {
       ...algo,
       userAlgo: userAlgo && userAlgo.solution
     }
-    console.log('RESPONSE', response)
     res.json(response)
   } catch (error) {
     console.log('ERROR', error)
     next(error)
   }
 })
+
+const testCode = `const chai = require('chai');
+const expect = chai.expect
+const funcs = require("./userCode");
+
+for (let key in funcs) {
+  let func = funcs[key];
+
+  describe('ch1-q3: ' + key, function() {
+
+    it('works with null/undefined as input', function() {
+      expect(func(undefined)).to.be.undefined;
+      expect(func(null)).to.be.null;
+    });
+
+    it('works with an empty array as input', function() {
+      expect(func([])).to.eql([]);
+    });
+}`
 
 router.post('/:algoId', async (req, res, next) => {
   try {
@@ -55,39 +76,82 @@ router.post('/:algoId', async (req, res, next) => {
     // Start container
     await myContainer.start()
 
-    // Write user input to file
-    const usersCode = req.body.text
-    // write to a file
-    await writeFileAsync('usersCode.js', usersCode)
+    const userCode = req.body.text
+    // await copyStringToContainer(userCode, 'userCode.js', myContainer.id)
+    // await copyStringToContainer(testCode, 'test.js', myContainer.id)
 
-    // Get container id for copy file
-    const containerInfo = await myContainer.inspect()
+    await writeFileAsync('userCode.js', userCode)
+    await myContainer.putArchive('userCode.js', {
+      path: '/container/usr/src/app/'
+    })
+    await removeFileAsync('userCode.js')
 
-    // Copy user file into container
-    //await myContainer.putArchive("usersCode.js", {path: "/usr/src/app/"})
-    const ret = await execAsync(
-      'docker cp usersCode.js ' + containerInfo.Id + ':/usr/src/app/'
+    // Write user input to file in container
+    // await execAsync(
+    //   `docker exec ${myContainer.id} bash -c "echo '${userCode}' > userCode.js"`
+    // )
+    // TODO: Implement these next two commands
+    // await execAsync(
+    //   `(docker exec -i ${
+    //     myContainer.id
+    //   } bash -c "cat > test.js") < echo "${testCode
+    //     .replace(/\"/g, `\"`)
+    //     .replace(/\'/g, `\'`)}"`
+    // )
+    const {stdout} = await execAsync(
+      `docker exec ${myContainer.id} bash -c "npm run mocha-test"`
     )
-    console.log(ret)
+    console.log('STDOUT', stdout)
 
-    // Exec test command and save text
-    console.log('Exec')
-    const output = await execAsync(
-      'docker exec ' +
-        containerInfo.Id +
-        ` node run_tests_{req.params.algoId}.js`
-    )
-    console.log(output)
+    // // write to a file
+    // await writeFileAsync('tempUserCode.js', userCode)
+    // await execAsync(
+    //   'docker cp tempUserCode.js ' +
+    //     myContainer.id +
+    //     ':/usr/src/app/userCode.js'
+    // )
+    // await removeFileAsync('tempUserCode.js')
+
+    // // Copy user file into container
+    // //await myContainer.putArchive("usersCode.js", {path: "/usr/src/app/"})
+    // console.log(ret)
+
+    // // Exec test command and save text
+    // console.log('Exec')
+    // const output = await execAsync(
+    //   'docker exec ' +
+    //     myContainer.id +
+    //     ` node run_tests_${req.params.algoId}.js`
+    // )
+    // console.log(output)
 
     // Turn off docker container
-    console.log('Stop')
-    await myContainer.stop()
-    console.log('Remove')
-    await myContainer.remove()
+    // console.log('Stop')
+    // await myContainer.stop()
+    // console.log('Remove')
+    // await myContainer.remove()
 
     console.log('Done')
-    res.json(output)
+    res.json({test: 'test'})
   } catch (error) {
+    console.log('ERROR:', error)
     next(error)
   }
 })
+
+const copyStringToContainer = async (str, fileName, containerId) => {
+  console.log('copy string to container', str, fileName, containerId)
+  await writeFileAsync(fileName, str)
+  console.log('written!')
+  const cmd = `docker cp ./${fileName} ${containerId}:/usr/src/app/`
+  console.log(cmd)
+  await execAsync('docker cp userCode.js ' + containerId + ':/usr/src/app/')
+  // await execAsync(`docker cp ./${fileName} ${containerId}:/usr/src/app/`)
+  // const res = await execAsync(
+  //   'docker cp ./${fileName} ${containerId}:/usr/src/app/'
+  // )
+  // console.log(res)
+  console.log('copied!')
+  await removeFileAsync(fileName)
+  console.log('done!')
+}

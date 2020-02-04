@@ -6,9 +6,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node run_tests.js"
+    "test": "node run_tests.js",
+    "mocha-test": "mocha test.js"
   },
-  "dependencies": {
-    "express": "^4.16.1"
+  "dependencies": { 
+    "chai": "^4.2.0",
+    "express": "^4.16.1",
+    "mocha": "^7.0.1"
   }
 }
