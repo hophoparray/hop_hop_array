@@ -8,70 +8,42 @@ class SingleAlgo extends React.Component {
     super(props)
     //TODO: Load user solution from UserAlgo
     this.state = {
-      defaultText: '// Type your code...',
-      userCode: '',
-      failedTests: [],
-      passingAllTests: false,
-      currentAlgo: {},
-      editorMounted: false
+      userCode: '// Type your code...'
+      // failedTests: [],
+      // passingAllTests: false,
+      // currentAlgo: {},
     }
-    // this.EditorDidMount = this.EditorDidMount.bind(this)
-    this.onAttempt = this.onAttempt.bind(this)
-    this.handleChange = this.handleChange.bind(this)
   }
-
-  EditorDidMount(editor, monaco) {
-    console.log('from editor did mount, monaco', monaco)
-    console.log('editorDidMount', editor)
-    // console.log(this.props.match.params)
-    // this.editor = editor
-    // this.props.match.params.id => get algo id
-  }
-
-  componentDidUpdate() {
-    console.log('UPDATE')
-  }
-  onAttempt(value) {
+  onAttempt = async value => {
     console.log('Attempt', value)
+    const response = await Axios.get('/api/algos/1')
+    console.log(response)
   }
-  handleChange(value) {
-    console.log('Change')
+  handleChange = value => {
     this.setState({
       userCode: value
     })
-    // this.setState({editorMounted: true})
   }
 
   render() {
     const options = {selectOnLineNumbers: true}
-    let value = ''
-    if (Object.keys(this.refs).length) {
-      console.log('MOUNTED')
-      console.log('THIS', this)
-      const model = this.refs.monaco.editor.getModel()
-      value = model.getValue()
-      console.log('MODEL', model)
-      console.log('VALUE', value)
-    }
 
     return (
       <div>
         <MonacoEditor
-          ref="monaco"
-          monaco={monaco}
           width="800"
           height="400"
           language="javascript"
           theme="vs-dark"
           value={this.state.userCode}
-          defaultValue={this.state.defaultText}
           options={options}
-          editorDidMount={this.EditorDidMount}
           onChange={this.handleChange}
         />
         {/* TO DO: Add Submit button when tests pass */}
         <button>Give me a {'<br/>'}</button>
-        <button onClick={() => this.onAttempt(value)}>Attempt</button>
+        <button onClick={() => this.onAttempt(this.state.userCode)}>
+          Attempt
+        </button>
         {/* TODO: Continue flow to fail/succeed components */}
       </div>
     )
