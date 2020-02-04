@@ -26,11 +26,22 @@ router.get('/', async (req, res, next) => {
 router.get('/:algoId', async (req, res, next) => {
   const algoId = req.params.algoId
   try {
-    const selectedAlgo = await Algo.findOne({
-      where: {id: algoId}
+    const algo = await Algo.findOne({
+      where: {id: algoId},
+      raw: true
     })
-    res.json(selectedAlgo)
+    const userAlgo = await userAlgos.findOne({
+      where: {userId: req.user.id},
+      raw: true
+    })
+    const response = {
+      ...algo,
+      userAlgo: userAlgo && userAlgo.solution
+    }
+    console.log('RESPONSE', response)
+    res.json(response)
   } catch (error) {
+    console.log('ERROR', error)
     next(error)
   }
 })
