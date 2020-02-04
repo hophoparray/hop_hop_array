@@ -4,3 +4,4 @@ secrets.js
 npm-debug.log
 yarn-error.log
 public/dist/
+.env
