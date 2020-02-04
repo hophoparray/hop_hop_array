@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Algo} = require('../db/models')
+const {Algo, userAlgos} = require('../db/models')
 const fs = require('fs') // for writing files
 const {promisify} = require('util')
 // For copying file into docker container
@@ -30,6 +30,20 @@ router.get('/:algoId', async (req, res, next) => {
       where: {id: algoId}
     })
     res.json(selectedAlgo)
+  } catch (error) {
+    next(error)
+  }
+})
+
+//User Algo
+router.get('/userAlgos/:userId', async (req, res, next) => {
+  try {
+    const data = await userAlgos.findAll({
+      where: {
+        userId: req.params.userId
+      }
+    })
+    res.json(data)
   } catch (error) {
     next(error)
   }
