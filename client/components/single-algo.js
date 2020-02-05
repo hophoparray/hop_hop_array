@@ -19,7 +19,13 @@ class SingleAlgo extends React.Component {
   onAttempt = async value => {
     console.log('Attempt', value)
     // axios post request
-    console.log(response)
+    const res = await Axios.post(
+      `/api/algos/${this.props.match.params.algoId}`,
+      {
+        text: this.state.userCode
+      }
+    )
+    console.log('RESULT: ', res.data)
   }
   handleChange = value => {
     this.setState({

@@ -8,9 +8,12 @@ const {exec} = require('child_process')
 const Docker = require('dockerode')
 const docker = new Docker({socketPath: '/var/run/docker.sock'})
 const writeFileAsync = promisify(fs.writeFile)
+const removeFileAsync = promisify(fs.unlink)
 const execAsync = promisify(exec)
 
 module.exports = router
+
+// TODO: Write Image
 
 //All Algos
 router.get('/', async (req, res, next) => {
@@ -38,13 +41,48 @@ router.get('/:algoId', async (req, res, next) => {
       ...algo,
       userAlgo: userAlgo && userAlgo.solution
     }
-    console.log('RESPONSE', response)
     res.json(response)
   } catch (error) {
     console.log('ERROR', error)
     next(error)
   }
 })
+
+
+const testCode = `const chai = require("chai");
+const expect = chai.expect
+const { hasUniqueCharactersSet } = require('./userCode');
+
+describe('ch1-q1', function() {
+
+  [
+    'abcdefghi',
+    'jklpoiuqwerzxcvmnsadf',
+    '1234567890',
+    'AaBbCcDdeFg1234567890(*&^%$#@!)'
+  ].forEach(arg => {
+
+    it('returns true for unique string: ' + arg, function() {
+      expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
+    });
+
+  });
+
+  [
+    'abcadef',
+    'aaaaaaaaaa',
+    'abcdefghijklmnopqrstuvwxyza',
+    '1234567890asdklf1',
+    '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
+  ].forEach(arg => {
+
+    it('returns false for string with dupes: ' + arg, function() {
+      expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
+    });
+
+  });
+});
+`
 
 //User Algo
 router.get('/userAlgos/:userId', async (req, res, next) => {
@@ -60,38 +98,46 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
+
 router.post('/:algoId', async (req, res, next) => {
   try {
     // Create docker instance
+    console.log('Beginning of post route')
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
     // Start container
+    console.log('container starts')
     await myContainer.start()
 
-    // Write user input to file
-    const usersCode = req.body.text
-    // write to a file
-    await writeFileAsync('usersCode.js', usersCode)
+    console.log('write file for test code')
+    await dockerExec(myContainer, ['node', 'writeFile.js', 'test.js', testCode])
 
-    // Get container id for copy file
-    const containerInfo = await myContainer.inspect()
+    console.log('write file for user code')
+    const userCode = req.body.text
+    await dockerExec(myContainer, [
+      'node',
+      'writeFile.js',
+      'userCode.js',
+      userCode
+    ])
 
-    // Copy user file into container
-    //await myContainer.putArchive("usersCode.js", {path: "/usr/src/app/"})
-    const ret = await execAsync(
-      'docker cp usersCode.js ' + containerInfo.Id + ':/usr/src/app/'
-    )
-    console.log(ret)
-
-    // Exec test command and save text
-    console.log('Exec')
-    const output = await execAsync(
-      'docker exec ' +
-        containerInfo.Id +
-        ` node run_tests_{req.params.algoId}.js`
-    )
-    console.log(output)
+    let testResult
+    try {
+      testResult = await dockerExec(myContainer, [
+        './node_modules/.bin/mocha',
+        'test.js',
+        '--reporter',
+        'json'
+      ])
+    } catch (error) {
+      console.log('TESTS FAILED')
+      console.log(error.message)
+      testResult = error.message
+    }
+    testResult = formatTestJson(testResult)
+    console.log('TEST RESULTS:')
+    console.log(testResult)
 
     // Turn off docker container
     console.log('Stop')
@@ -100,8 +146,45 @@ router.post('/:algoId', async (req, res, next) => {
     await myContainer.remove()
 
     console.log('Done')
-    res.json(output)
+    res.json(testResult.stats)
   } catch (error) {
+    console.log('ERROR:', error)
     next(error)
   }
 })
+
+// The test result is JSON, but it has some random characters (for terminal colors)
+function formatTestJson(testStr) {
+  let firstCurlyIndex = testStr.indexOf('{')
+  if (firstCurlyIndex > -1) {
+    let fixedStr = testStr.slice(firstCurlyIndex)
+    return JSON.parse(fixedStr)
+  }
+  throw new Error('Formatting failed: ' + testStr)
+}
+
+async function dockerExec(container, command) {
+  const exec = await container.exec({
+    Cmd: command,
+    AttachStdout: true,
+    AttachStderr: true
+  })
+
+  // Run exec and convert output stream into a string
+  const commandOutput = await new Promise((resolve, reject) => {
+    exec.start(async (err, stream) => {
+      if (err) return reject(err)
+      let message = ''
+      stream.on('data', data => (message += data.toString()))
+      stream.on('end', () => resolve(message))
+    })
+  })
+
+  // Get the exit code for the command (0 === success)
+  const {ExitCode} = await exec.inspect()
+
+  if (ExitCode !== 0) {
+    throw new Error(commandOutput)
+  }
+  return commandOutput
+}
