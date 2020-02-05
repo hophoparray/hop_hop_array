@@ -19,7 +19,7 @@ class AllAlgos extends Component {
   render() {
     const algos = this.state.algos
     console.log(this.state)
-    //const algos = dummydata
+
     return (
       <div>
         <h1>All Algos</h1>
@@ -71,26 +71,3 @@ function shortPrompt(prompt, maxLength) {
     return prompt.slice(0, maxLength - 3) + '...'
   }
 }
-
-//dummy data
-const dummydata = [
-  {
-    id: 1,
-    name: 'algo1',
-    prompt: 'Test Question Prompt',
-    examples: ['Input 3, Output: 3', 'Input: 4, Output: 4'],
-    defaultText: 'function test(input){}',
-    tests: ['sample tests'],
-    algoLevel: 1
-  },
-  {
-    id: 2,
-    name: 'algo2',
-    prompt:
-      'Test Question PromptTest Question PromptTest Question PromptTest Question PromptTest Question PromptTest Question PromptTest Question Prompt',
-    examples: ['Input 3, Output: 3', 'Input: 4, Output: 4'],
-    defaultText: 'function test(input){}',
-    tests: ['sample tests'],
-    algoLevel: 1
-  }
-]

@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
+require('dotenv').config()
+
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
@@ -42,4 +44,5 @@ router.get('/me', (req, res) => {
   res.json(req.user)
 })
 
+router.use('/github', require('./github'))
 router.use('/google', require('./google'))
