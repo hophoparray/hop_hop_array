@@ -9,7 +9,8 @@ import {
   AllAlgos,
   AlgoPass,
   AlgoFail,
-  SingleAlgo
+  SingleAlgo,
+  UserProfile
 } from './components'
 import {me} from './store'
 
@@ -38,6 +39,7 @@ class Routes extends Component {
             <Route exact path="/algos" component={AllAlgos} />
             <Route exact path="/algofail" component={AlgoFail} />
             <Route path="/algos/:algoId" component={SingleAlgo} />
+            <Route exact path="/profile" component={UserProfile} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
