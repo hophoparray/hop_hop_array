@@ -14,73 +14,61 @@ async function seed() {
 
   const algos = await Promise.all([
     Algo.create({
-      id: 1,
-      name: 'Remove Duplicates',
-      prompt:
-        'Iterate through list keeping a Set of all the values seen. If a seen value is seen again in the list then skip over it.',
-      examples: [
-        'Input: [1, 2, 3, 4, 5, 6, 7] \n Output: [1, 2, 3, 4, 5, 6, 7]',
-        'Input: [5, 5, 5, 5, 5] \n Output: [5]'
-      ],
-      defaultText: 'function removeDuplicatesSet(list) { \n }',
-      algoLevel: 1
-    }),
-    Algo.create({
-      id: 2,
-      name: 'Squares of a Sorted Array',
-      prompt:
-        'Given an array of integers A sorted in non-decreasing order, return an array of the squares of each number, also in sorted non-decreasing order.',
-      examples: [
-        'Input: [-4,-1,0,3,10] \n Output: [0,1,9,16,100]',
-        'Input: [-7,-3,2,3,11] \n Output: [4,9,9,49,121]'
-      ],
-      defaultText: 'function sortedSquares(A) { \n }',
-      algoLevel: 1
-    }),
-    Algo.create({
-      id: 3,
-      name: 'Partition',
-      prompt:
-        'Travel through list and maintain two lists as we travel through. One list contains all the items less than the partition value and the other contains all the items greater than or equal to it.',
-      examples: [
-        'Input: [4, 9, 15, 30, 5, 8, 3, 2, 2, 3, 7, 1, 15, 5, 6, 7], 6 \n Output: [4, 5, 3, 2, 2, 3, 1, 5, 9, 15, 30, 8, 7, 15, 6, 7]',
-        'Input: [5, 8, 3, 2, 7, 1, 4, 9, 15, 30], 2 \n Output: [1, 5, 8, 3, 2, 7, 4, 9, 15, 30]'
-      ],
-      defaultText: 'function partition(list, val) { \n }',
-      algoLevel: 1
-    }),
-    Algo.create({
-      id: 4,
-      name: 'Is Palindrome?',
-      prompt:
-        'First find out the length of the list, then walk through half of the list pushing the values onto a stack. Once the middle is reached if the list had an odd length then skip the middle element. After that walk to the end of the list and compare node values to a value popped off the stack, if no mismatches then the list is a palindrome.',
-      examples: [
-        'Input: [1, 2, 1] \n Output: true',
-        'Input: [2, 1, 3, 3, 1, 2] \n Output: true',
-        'Input: [1, 2, 2] \n Output: false'
-      ],
-      defaultText: 'function function isPalindromeStack(list) { \n }',
-      algoLevel: 1
-    }),
-    Algo.create({
       id: 5,
       name: 'Unique Characters',
       prompt:
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
       examples: ['Input: ["abcdefghi"] \n Output: [true]'],
-      defaultText: 'function hasUniqueCharactersSet(str){ \n }',
-      algoLevel: 1
-    }),
-    Algo.create({
-      id: 6,
-      name: 'Peak Index in a Mountain Array',
-      prompt:
-        "Let's call an array A a mountain if the following properties hold: A.length >= 3, there exists some 0 < i < A.length - 1 such that A[0] < A[1] < ... A[i-1] < A[i] > A[i+1] > ... > A[A.length-1]. Given an array that is definitely a mountain, return any i such that A[0] < A[1] < ... A[i-1] < A[i] > A[i+1] > ... > A[A.length-1]",
-      examples: [
-        'Input: [0,1,0] \n Output: 1',
-        'Input: [0,2,1,0] \n Output: 1'
-      ],
-      defaultText: 'function peakIndexInMountainArray(A) { \n }',
+      defaultText:
+        'function hasUniqueCharactersSet(str){ \n } // DO NOT TOUCH \n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { hasUniqueCharactersSet } = require('./userCode');
+
+      describe('ch1-q1', function() {
+
+        [
+          'abcdefghi',
+          'jklpoiuqwerzxcvmnsadf',
+          '1234567890',
+          'AaBbCcDdeFg1234567890(*&^%$#@!)'
+        ].forEach(arg => {
+
+          it('returns true for unique string: ' + arg, function() {
+            expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
+          });
+
+        });
+
+        [
+          'abcadef',
+          'aaaaaaaaaa',
+          'abcdefghijklmnopqrstuvwxyza',
+          '1234567890asdklf1',
+          '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
+        ].forEach(arg => {
+
+          it('returns false for string with dupes: ' + arg, function() {
+            expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
+          });
+
+        });
+      });
+      `,
+      solution: `function hasUniqueCharactersSet(str) {
+        let chars = new Set();
+
+        for (let i = 0; i < str.length; ++i) {
+          if (chars.has(str[i])) {
+            return false;
+          }
+          chars.add(str[i]);
+        }
+        return true;
+      }
+
+      exports.hasUniqueCharactersSet = hasUniqueCharactersSet
+      `,
       algoLevel: 1
     }),
     Algo.create({
@@ -102,7 +90,69 @@ async function seed() {
       prompt:
         'Sort the stack by taking one item off the input stack at a time, find the right place within the processed items in the temp stack to insert it into. Insertion is done by holding the next value aside and moving the temp stack values into the input stack until the right spot is found.',
       examples: ['Input: [[5, 3, 1, 4, 6, 2]] \n Output: [1, 2, 3, 4, 5, 6]'],
-      defaultText: 'function sortStack(stack) { \n }',
+      defaultText:
+        'function sortStack(stack) { \n } //DO NOT TOUCH \n exports.sortStack = sortStack',
+      solution: `function sortStack(stack) {
+        let temp = [];
+        temp.push(stack.pop());
+        while (!isEmpty(stack)) {
+          let curr = stack.pop(),
+            count = 0;
+
+          while (!isEmpty(temp) && curr < peek(temp)) {
+            stack.push(temp.pop());
+            ++count;
+          }
+          temp.push(curr);
+          for (let i = 0; i < count; ++i) {
+            temp.push(stack.pop());
+          }
+        }
+
+        while (!isEmpty(temp)) {
+          stack.push(temp.pop());
+        }
+
+        return stack;
+      }
+
+      function peek(stack) {
+        return stack[stack.length - 1];
+      }
+
+      function isEmpty(stack) {
+        return stack.length === 0;
+      }
+
+      exports.sortStack = sortStack`,
+      tests: `const chai = require ('chai');
+      const funcs = require('./userCode');
+
+      for (let key in funcs) {
+        let func = funcs[key];
+
+        describe('ch3-q5: ' + key, function() {
+
+          it('does not crash on an empty list', function() {
+            let stack = [];
+            expect(() => func(stack)).to.not.throw(Error).and.to.equal(stack);
+          });
+
+          it('works with a single element stack', function() {
+            expect(func([4])).to.eql([4]);
+          });
+
+          it('correctly sorts with 100 random numbers', function() {
+            let stack = [];
+            for (let i = 0; i < 100; ++i) {
+              stack.push(Math.trunc(Math.random() * 9999999));
+            }
+            let expected = stack.slice(0).sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
+            expect(func(stack)).to.eql(expected);
+          });
+
+        });
+      }`,
       algoLevel: 2
     })
   ])
