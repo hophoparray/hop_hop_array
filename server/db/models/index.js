@@ -1,4 +1,4 @@
-const User = require('./User')
+const User = require('./user')
 const Algo = require('./Algo')
 const userAlgos = require('./userAlgos')
 
