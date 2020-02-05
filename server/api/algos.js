@@ -48,110 +48,127 @@ router.get('/:algoId', async (req, res, next) => {
   }
 })
 
-const testCode = `const chai = require('chai');
+const testCode = `const chai = require("chai");
 const expect = chai.expect
-const funcs = require("./userCode");
+const { hasUniqueCharactersSet } = require('./userCode');
 
-for (let key in funcs) {
-  let func = funcs[key];
+describe('ch1-q1', function() {
 
-  describe('ch1-q3: ' + key, function() {
+  [
+    'abcdefghi',
+    'jklpoiuqwerzxcvmnsadf',
+    '1234567890',
+    'AaBbCcDdeFg1234567890(*&^%$#@!)'
+  ].forEach(arg => {
 
-    it('works with null/undefined as input', function() {
-      expect(func(undefined)).to.be.undefined;
-      expect(func(null)).to.be.null;
+    it('returns true for unique string: ' + arg, function() {
+      expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
     });
 
-    it('works with an empty array as input', function() {
-      expect(func([])).to.eql([]);
+  });
+
+  [
+    'abcadef',
+    'aaaaaaaaaa',
+    'abcdefghijklmnopqrstuvwxyza',
+    '1234567890asdklf1',
+    '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
+  ].forEach(arg => {
+
+    it('returns false for string with dupes: ' + arg, function() {
+      expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
     });
-}`
+
+  });
+});
+`
 
 router.post('/:algoId', async (req, res, next) => {
   try {
     // Create docker instance
+    console.log('Beginning of post route')
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
     // Start container
+    console.log('container starts')
     await myContainer.start()
 
+    console.log('write file for test code')
+    await dockerExec(myContainer, ['node', 'writeFile.js', 'test.js', testCode])
+
+    console.log('write file for user code')
     const userCode = req.body.text
-    // await copyStringToContainer(userCode, 'userCode.js', myContainer.id)
-    // await copyStringToContainer(testCode, 'test.js', myContainer.id)
+    await dockerExec(myContainer, [
+      'node',
+      'writeFile.js',
+      'userCode.js',
+      userCode
+    ])
 
-    await writeFileAsync('userCode.js', userCode)
-    await myContainer.putArchive('userCode.js', {
-      path: '/container/usr/src/app/'
-    })
-    await removeFileAsync('userCode.js')
-
-    // Write user input to file in container
-    // await execAsync(
-    //   `docker exec ${myContainer.id} bash -c "echo '${userCode}' > userCode.js"`
-    // )
-    // TODO: Implement these next two commands
-    // await execAsync(
-    //   `(docker exec -i ${
-    //     myContainer.id
-    //   } bash -c "cat > test.js") < echo "${testCode
-    //     .replace(/\"/g, `\"`)
-    //     .replace(/\'/g, `\'`)}"`
-    // )
-    const {stdout} = await execAsync(
-      `docker exec ${myContainer.id} bash -c "npm run mocha-test"`
-    )
-    console.log('STDOUT', stdout)
-
-    // // write to a file
-    // await writeFileAsync('tempUserCode.js', userCode)
-    // await execAsync(
-    //   'docker cp tempUserCode.js ' +
-    //     myContainer.id +
-    //     ':/usr/src/app/userCode.js'
-    // )
-    // await removeFileAsync('tempUserCode.js')
-
-    // // Copy user file into container
-    // //await myContainer.putArchive("usersCode.js", {path: "/usr/src/app/"})
-    // console.log(ret)
-
-    // // Exec test command and save text
-    // console.log('Exec')
-    // const output = await execAsync(
-    //   'docker exec ' +
-    //     myContainer.id +
-    //     ` node run_tests_${req.params.algoId}.js`
-    // )
-    // console.log(output)
+    let testResult
+    try {
+      testResult = await dockerExec(myContainer, [
+        './node_modules/.bin/mocha',
+        'test.js',
+        '--reporter',
+        'json'
+      ])
+    } catch (error) {
+      console.log('TESTS FAILED')
+      console.log(error.message)
+      testResult = error.message
+    }
+    testResult = formatTestJson(testResult)
+    console.log('TEST RESULTS:')
+    console.log(testResult)
 
     // Turn off docker container
-    // console.log('Stop')
-    // await myContainer.stop()
-    // console.log('Remove')
-    // await myContainer.remove()
+    console.log('Stop')
+    await myContainer.stop()
+    console.log('Remove')
+    await myContainer.remove()
 
     console.log('Done')
-    res.json({test: 'test'})
+    res.json(testResult.stats)
   } catch (error) {
     console.log('ERROR:', error)
     next(error)
   }
 })
 
-const copyStringToContainer = async (str, fileName, containerId) => {
-  console.log('copy string to container', str, fileName, containerId)
-  await writeFileAsync(fileName, str)
-  console.log('written!')
-  const cmd = `docker cp ./${fileName} ${containerId}:/usr/src/app/`
-  console.log(cmd)
-  await execAsync('docker cp userCode.js ' + containerId + ':/usr/src/app/')
-  // await execAsync(`docker cp ./${fileName} ${containerId}:/usr/src/app/`)
-  // const res = await execAsync(
-  //   'docker cp ./${fileName} ${containerId}:/usr/src/app/'
-  // )
-  // console.log(res)
-  console.log('copied!')
-  await removeFileAsync(fileName)
-  console.log('done!')
+// The test result is JSON, but it has some random characters (for terminal colors)
+function formatTestJson(testStr) {
+  let firstCurlyIndex = testStr.indexOf('{')
+  if (firstCurlyIndex > -1) {
+    let fixedStr = testStr.slice(firstCurlyIndex)
+    return JSON.parse(fixedStr)
+  }
+  throw new Error('Formatting failed: ' + testStr)
+}
+
+async function dockerExec(container, command) {
+  const exec = await container.exec({
+    Cmd: command,
+    AttachStdout: true,
+    AttachStderr: true
+  })
+
+  // Run exec and convert output stream into a string
+  const commandOutput = await new Promise((resolve, reject) => {
+    exec.start(async (err, stream) => {
+      if (err) return reject(err)
+      let message = ''
+      stream.on('data', data => (message += data.toString()))
+      stream.on('end', () => resolve(message))
+    })
+  })
+
+  // Get the exit code for the command (0 === success)
+  const {ExitCode} = await exec.inspect()
+
+  if (ExitCode !== 0) {
+    throw new Error(commandOutput)
+  }
+  return commandOutput
 }
