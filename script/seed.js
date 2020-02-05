@@ -287,6 +287,111 @@ async function seed() {
       });
     `,
       algoLevel: 1
+    }),
+    Algo.create({
+      id: 5,
+      name: 'Animal Shelter',
+      prompt:
+        'Uses two different queues one for dogs and one for cats. Each entry is assigned a unique identifier which allows dequeueAny to determine which of the two queues to dequeue an item from.',
+      examples: [
+        'Input: “this.obj.enqueueDog(“dog”) \nthis.obj.dequeueAny()” \n Output: “dog”'
+      ],
+      defaultText:
+        'class AnimalShelter {\n} \n// DO NOT TOUCH \nexports.AnimalShelter = AnimalShelter ',
+      tests: `const expect = require(‘chai’).expect;
+      const {AnimalShelter} = require(‘./userCode’);
+        describe(‘ch3-q6: ’, function() {
+          beforeEach(function() {
+            this.obj = new AnimalShelter();
+          });
+          it(‘any returns whichever animal is in queue’, function() {
+            this.obj.enqueueCat(‘cat’);
+            expect(this.obj.dequeueAny()).to.equal(‘cat’);
+            expect(this.obj.dequeueAny()).to.be.undefined;
+            this.obj.enqueueDog(‘dog’);
+            expect(this.obj.dequeueAny()).to.equal(‘dog’);
+            expect(this.obj.dequeueAny()).to.be.undefined;
+          });
+          it(‘returns animals in the right order’, function() {
+            for (let i = 0; i < 4; ++i) {
+              this.obj.enqueueCat(‘cat’ + i);
+            }
+            for (let i = 0; i < 4; ++i) {
+              expect(this.obj.dequeueAny()).to.equal(‘cat’ + i);
+            }
+          });
+          it(‘returns animals in alternating order when enqueued that way’, function() {
+            for (let i = 20; i > 0; --i) {
+              if (i & 1) {
+                this.obj.enqueueCat(i);
+              }
+              else {
+                this.obj.enqueueDog(i);
+              }
+            }
+            for (let i = 20; i > 0; --i) {
+              expect(this.obj.dequeueAny()).to.equal(i);
+            }
+          });
+          it(‘correctly returns animals when enqueued alternating but dequeued one at a time’, function() {
+            for (let i = 20; i > 0; --i) {
+              if (i & 1) {
+                this.obj.enqueueCat(i);
+              }
+              else {
+                this.obj.enqueueDog(i);
+              }
+            }
+            for (let i = 20; i > 10; i -= 2) {
+              expect(this.obj.dequeueDog()).to.equal(i);
+            }
+            for (let i = 19; i > 10; i -= 2) {
+              expect(this.obj.dequeueCat()).to.equal(i);
+            }
+            for (let i = 10; i > 0; --i) {
+              expect(this.obj.dequeueAny()).to.equal(i);
+            }
+          });
+        });`,
+      solution: `class AnimalShelter {
+        constructor() {
+          this._dogs = [];
+          this._cats = [];
+          this._id = 0;
+        }
+        enqueueCat(name) {
+          this._cats.push({
+            name: name,
+            id: ++this._id
+          });
+        }
+        enqueueDog(name) {
+          this._dogs.push({
+            name: name,
+            id: ++this._id
+          });
+        }
+        dequeueAny() {
+          let dogId = this._dogs.length > 0 ? this._dogs[0].id : Number.POSITIVE_INFINITY,
+            catId = this._cats.length > 0 ? this._cats[0].id : Number.POSITIVE_INFINITY;
+          if (dogId !== Number.POSITIVE_INFINITY || catId !== Number.POSITIVE_INFINITY) {
+            if (dogId < catId) {
+              return this._dogs.shift().name;
+            }
+            else {
+              return this._cats.shift().name;
+            }
+          }
+        }
+        dequeueCat() {
+          return this._cats.shift().name;
+        }
+        dequeueDog() {
+          return this._dogs.shift().name;
+        }
+      }
+      exports.AnimalShelter = AnimalShelter`,
+      algoLevel: 3
     })
   ])
 

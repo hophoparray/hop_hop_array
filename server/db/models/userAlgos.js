@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const userAlgos = db.define('userAlgos', {
-  solution: {
+  userSolution: {
     type: Sequelize.TEXT
   },
   status: {
