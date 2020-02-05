@@ -14,7 +14,7 @@ async function seed() {
 
   const algos = await Promise.all([
     Algo.create({
-      id: 5,
+      id: 1,
       name: 'Unique Characters',
       prompt:
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
@@ -72,20 +72,7 @@ async function seed() {
       algoLevel: 1
     }),
     Algo.create({
-      id: 7,
-      name: 'Minimum to Make Valid',
-      prompt:
-        "Given a string S of '(' and ')' parentheses, we add the minimum number of parentheses ( '(' or ')', and in any positions ) so that the resulting parentheses string is valid. Formally, a parentheses string is valid if and only if: it is the empty string, or it can be written as AB (A concatenated with B), where A and B are valid strings, or it can be written as (A), where A is a valid string. Given a parentheses string, return the minimum number of parentheses we must add to make the resulting string valid.",
-      examples: [
-        'Input: "())" \n Output: 1',
-        'Input: "(((" \n Output: 3',
-        'Input: "()" \n Output: 0'
-      ],
-      defaultText: 'function minAddToMakeValid(str) { \n }',
-      algoLevel: 2
-    }),
-    Algo.create({
-      id: 8,
+      id: 2,
       name: 'Stack Sort',
       prompt:
         'Sort the stack by taking one item off the input stack at a time, find the right place within the processed items in the temp stack to insert it into. Insertion is done by holding the next value aside and moving the temp stack values into the input stack until the right spot is found.',
@@ -125,35 +112,181 @@ async function seed() {
       }
 
       exports.sortStack = sortStack`,
+
       tests: `const chai = require ('chai');
-      const funcs = require('./userCode');
+      const expect = chai.expect
+      const { sortStack } = require('./userCode');
 
-      for (let key in funcs) {
-        let func = funcs[key];
+      describe('ch3-q5: ', function() {
 
-        describe('ch3-q5: ' + key, function() {
+        it('does not crash on an empty list', function() {
+          let stack = [];
+          expect(() => sortStack(stack)).to.not.throw(Error).and.to.equal(stack);
+        });
 
-          it('does not crash on an empty list', function() {
-            let stack = [];
-            expect(() => func(stack)).to.not.throw(Error).and.to.equal(stack);
-          });
+        it('works with a single element stack', function() {
+          expect(sortStack([4])).to.eql([4]);
+        });
 
-          it('works with a single element stack', function() {
-            expect(func([4])).to.eql([4]);
-          });
+        it('correctly sorts with 100 random numbers', function() {
+          let stack = [];
+          for (let i = 0; i < 100; ++i) {
+            stack.push(Math.trunc(Math.random() * 9999999));
+          }
+          let expected = stack.slice(0).sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
+          expect(sortStack(stack)).to.eql(expected);
+        });
 
-          it('correctly sorts with 100 random numbers', function() {
-            let stack = [];
-            for (let i = 0; i < 100; ++i) {
-              stack.push(Math.trunc(Math.random() * 9999999));
-            }
-            let expected = stack.slice(0).sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
-            expect(func(stack)).to.eql(expected);
+      });`,
+      algoLevel: 2
+    }),
+    Algo.create({
+      id: 3,
+      name: 'Permutation Map',
+      prompt:
+        'Keep track of characters counts with a Map data structure, fail when str2 has a character different to str2 or if any characters are left over at the end.',
+      examples: ['Input: [["1a1", "a11"]] \n Output: [true]'],
+      defaultText:
+        'function isPermutationMap(str1, str2) { \n } //DO NOT TOUCH \n exports.isPermutationMap = isPermutationMap',
+      solution: `function isPermutationMap(str1, str2) {
+        if (str1.length === 0 || str1.length !== str2.length) {
+          return false;
+        }
+
+        let chars = new Map();
+
+        for (let i = 0; i < str1.length; ++i) {
+          chars.set(str1[i], chars.get(str1[i]) + 1 || 1); // increment or set to 1
+        }
+
+        for (let i = 0; i < str2.length; ++i) {
+          let count = chars.get(str2[i]);
+          if (!count) {
+            return false;
+          }
+          if (count === 1) {
+            chars.delete(str2[i]);
+          }
+          else {
+            chars.set(str2[i], count - 1);
+          }
+        }
+
+        return chars.size === 0;
+      }
+      exports.isPermutationMap = isPermutationMap`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { isPermutationMap } = require('./userCode);
+
+      describe('ch1-q2: ', function() {
+
+        [
+          ['abcdefghi', 'ihgfedcba'],
+          ['1a1', 'a11'],
+          ['1234567812345678', '8877665544332211'],
+          ['icarraci', 'carcarii']
+        ].forEach(args => {
+
+          it("returns true for strings that are permutations: args[0] & args[1]", function() {
+            expect(func(args[0].split(''), args[1].split(''))).to.be.true;
           });
 
         });
-      }`,
-      algoLevel: 2
+
+        [
+          ['abcdefghiz', 'ihgfedcbaa'],
+          ['1a1', '11'],
+          ['1122334455667788', '9911223344556677'],
+          ['45678', '1239']
+        ].forEach(args => {
+
+          it("returns false for strings that are not permutations: args[0] & args[1]", function() {
+            expect(func(args[0].split(''), args[1].split(''))).to.be.false;
+          });
+
+        });
+
+      })`,
+      algoLevel: 1
+    }),
+    Algo.create({
+      id: 4,
+      name: 'Encode Spaces',
+      prompt:
+        'Count the number of spaces in the string to calculate the new length of the string and move characters back where required replacing spaces with %20.',
+      examples: [
+        'Input: [["http://www.google.com/search?q=something really really funny"]] \n Output: ["http://www.google.com/search?q=something%20really%20really%20funny"]'
+      ],
+      defaultText:
+        'function encodeSpaces(url) { \n } //DO NOT TOUCH \n exports.encodeSpaces = encodeSpaces',
+      solution: `function encodeSpaces(url) {
+        if (!url || url.length === 0) {
+          return url;
+        }
+
+        let spaceCount = 0;
+        for (let i = 0; i < url.length; ++i) {
+          if (url[i] === ' ') {
+            ++spaceCount;
+          }
+        }
+
+        // add an extra 2 characters for each space
+        let newLength = url.length - 1 + 2 * spaceCount;
+        for (let i = url.length - 1, j = newLength; i >= 0 && j > i; --i, --j) {
+          if (url[i] === ' ') {
+            url[j] = '0';
+            url[--j] = '2';
+            url[--j] = '%';
+          }
+          else {
+            url[j] = url[i];
+          }
+        }
+
+        return url;
+      }
+
+      exports.encodeSpaces = encodeSpaces`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { encodeSpaces } = require('./userCode')
+
+      describe('ch1-q3: ', function() {
+
+        it('works with null/undefined as input', function() {
+          expect(encodeSpaces(undefined)).to.be.undefined;
+          expect(encodeSpaces(null)).to.be.null;
+        });
+
+        it('works with an empty array as input', function() {
+          expect(encodeSpaces([])).to.eql([]);
+        });
+
+        [
+          'nospaces',
+          ' ',
+          '   ',
+          ' firstSpace',
+          'lastSpace ',
+          '  surroundedBySpaces  ',
+          'middle  spaces',
+          ' l o t s   o f   s p a c e ',
+          'http://www.google.com/',
+          'http://www.google.com/search?q=something really really funny'
+        ].forEach(arg => {
+
+          it("returns true for unique string:", function() {
+            let expected = arg.replace(/ /g, '%20').split('');
+            expect(encodeSpaces(arg.split(''))).to.eql(expected);
+          });
+
+        });
+
+      });
+    `,
+      algoLevel: 1
     })
   ])
 
