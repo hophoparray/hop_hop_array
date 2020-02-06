@@ -143,13 +143,13 @@ router.post('/:algoId', async (req, res, next) => {
         'json'
       ])
     } catch (error) {
-      console.log('TESTS FAILED')
-      console.log(error.message)
+      // console.log('TESTS FAILED')
+      // console.log(error.message)
       testResult = error.message
     }
     testResult = formatTestJson(testResult)
     console.log('TEST RESULTS:')
-    console.log(testResult)
+    // console.log(testResult)
 
     // Turn off docker container
     console.log('Stop')

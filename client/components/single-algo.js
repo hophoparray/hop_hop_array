@@ -1,6 +1,6 @@
 import React from 'react'
 import MonacoEditor from 'react-monaco-editor'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import Axios from 'axios'
 
 class SingleAlgo extends React.Component {
@@ -53,8 +53,13 @@ class SingleAlgo extends React.Component {
     })
   }
   render() {
-    const options = {selectOnLineNumbers: true}
-    console.log('this.state on single algo page', this.state)
+    const options = {
+      selectOnLineNumbers: true,
+      minimap: {enabled: false},
+      fontFamily: 'Fira Code',
+      fontLigatures: true
+    }
+
     return (
       <div>
         <h1>{this.state.title}</h1>
@@ -63,7 +68,7 @@ class SingleAlgo extends React.Component {
           width="800"
           height="400"
           language="javascript"
-          theme="vs-dark"
+          theme="fairyfloss"
           value={this.state.userCode}
           options={options}
           onChange={this.handleChange}

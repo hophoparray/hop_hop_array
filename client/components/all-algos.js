@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import styled from 'styled-components'
 
 class AllAlgos extends Component {
   constructor() {
@@ -21,34 +22,34 @@ class AllAlgos extends Component {
     console.log(this.state)
 
     return (
-      <div>
-        <h1>All Algos</h1>
-        <h4>Select an algo to attempt!</h4>
+      <Wrapper>
+        <PageName>All Algos</PageName>
+        <SubHead>Select an algo to attempt!</SubHead>
         <div>
           <table className="all-algos-table">
-            <thead>
+            <TableHeader>
               <tr>
-                <th>Algo</th>
-                <th>Level</th>
-                <th>Prompt</th>
+                <Headers>Algo</Headers>
+                <Headers>Level</Headers>
+                <Headers>Prompt</Headers>
               </tr>
-            </thead>
+            </TableHeader>
             <tbody>
               {algos.map(algo => {
                 return (
-                  <tr key={algo.id}>
+                  <TableRow key={algo.id}>
                     <td>
                       <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
                     </td>
-                    <td>{algo.algoLevel}</td>
+                    <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
-                  </tr>
+                  </TableRow>
                 )
               })}
             </tbody>
           </table>
         </div>
-      </div>
+      </Wrapper>
     )
   }
 }
@@ -71,3 +72,41 @@ function shortPrompt(prompt, maxLength) {
     return prompt.slice(0, maxLength - 3) + '...'
   }
 }
+
+//styled components
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const PageName = styled.h1`
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+  font-weight: lighter;
+  letter-spacing: 1.9px;
+  margin-block-end: 0;
+`
+const SubHead = styled.h4`
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+`
+const TableHeader = styled.thead`
+  background-color: #e7e7e7;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+`
+const Headers = styled.th`
+  padding: 10px;
+  align-text: center;
+`
+const TableRow = styled.tr`
+  background-color: #ffffff;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+  font-family: 'Open Sans', sans-serif;
+`
+const Level = styled.td`
+  text-align: center;
+`

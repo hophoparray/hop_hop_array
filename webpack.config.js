@@ -65,12 +65,12 @@ module.exports = {
       }
     ]
   },
-  // plugins: [new MonacoWebpackPlugin({languages: ['json', 'javascript']})]
   plugins: [
     new MonacoWebpackPlugin({
       // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['json']
-      // features: ['!gotoSymbol']
+      languages: ['javascript'],
+      publicPath: '/',
+      features: ['wordHighlighter', 'suggest', 'bracketMatching']
     })
   ]
 }
