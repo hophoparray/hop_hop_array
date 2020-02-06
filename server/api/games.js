@@ -28,12 +28,25 @@ router.get('/:gameId', async (req, res, next) => {
 
 //New Game
 router.post('/', async (req, res, next) => {
-  const algoId = req.body
+  const algoId = req.body.algoId
+  const userId = req.body.userId
   try {
+    //creates new game
     const newGame = await Game.create({
-      round: 0,
       algoId: algoId
     })
+
+    //updates users gamer ID
+    const [numAffectedRows, affectedRows] = await User.update(
+      {
+        gameId: newGame.id
+      },
+      {
+        where: {id: userId},
+        returning: true
+      }
+    )
+
     res.json(newGame)
   } catch (error) {
     next(error)

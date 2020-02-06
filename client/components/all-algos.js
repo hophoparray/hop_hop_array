@@ -16,7 +16,11 @@ class AllAlgos extends Component {
     this.setState({algos: data})
   }
 
-  startNewGame() {}
+  async startNewGame(algoId, userId) {
+    console.log(userId)
+    const {data} = await axios.post('/api/games', {algoId, userId})
+    console.log(this.props)
+  }
 
   render() {
     const algos = this.state.algos
@@ -50,11 +54,12 @@ class AllAlgos extends Component {
                     <td>{algo.algoLevel}</td>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
                     <td>
-                      <button>
-                        onClick={' '}
-                        {() => {
-                          this.startNewGame(input)
+                      <button
+                        onClick={() => {
+                          this.startNewGame(algo.id, user.id)
                         }}
+                      >
+                        Start New Game
                       </button>
                     </td>
                   </tr>

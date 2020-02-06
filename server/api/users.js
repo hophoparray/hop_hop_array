@@ -28,25 +28,3 @@ router.get('/userId', async (req, res, next) => {
     next(err)
   }
 })
-
-router.put('/userId', async (req, res, next) => {
-  const id = req.params.userId
-  try {
-    const [numAffectedRows, affectedRows] = await Article.update(
-      {
-        title: req.body.title,
-        message: 'Updated successfully'
-      },
-      {
-        where: {id: rowId},
-        returning: true
-      },
-      {
-        attributes: ['id', 'email']
-      }
-    )
-    res.json(singleUser)
-  } catch (err) {
-    next(err)
-  }
-})
