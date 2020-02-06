@@ -20,7 +20,7 @@ async function seed() {
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
       examples: ['Input: ["abcdefghi"] \n Output: [true]'],
       defaultText:
-        'function hasUniqueCharactersSet(str){ \n } // DO NOT TOUCH \n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
+        'function hasUniqueCharactersSet(str){ \n } \n// DO NOT TOUCH \n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
       const expect = chai.expect
       const { hasUniqueCharactersSet } = require('./userCode');
@@ -78,7 +78,7 @@ async function seed() {
         'Sort the stack by taking one item off the input stack at a time, find the right place within the processed items in the temp stack to insert it into. Insertion is done by holding the next value aside and moving the temp stack values into the input stack until the right spot is found.',
       examples: ['Input: [[5, 3, 1, 4, 6, 2]] \n Output: [1, 2, 3, 4, 5, 6]'],
       defaultText:
-        'function sortStack(stack) { \n } //DO NOT TOUCH \n exports.sortStack = sortStack',
+        'function sortStack(stack) { \n } \n//DO NOT TOUCH \n exports.sortStack = sortStack',
       solution: `function sortStack(stack) {
         let temp = [];
         temp.push(stack.pop());
@@ -147,7 +147,7 @@ async function seed() {
         'Keep track of characters counts with a Map data structure, fail when str2 has a character different to str2 or if any characters are left over at the end.',
       examples: ['Input: [["1a1", "a11"]] \n Output: [true]'],
       defaultText:
-        'function isPermutationMap(str1, str2) { \n } //DO NOT TOUCH \n exports.isPermutationMap = isPermutationMap',
+        'function isPermutationMap(str1, str2) { \n } \n //DO NOT TOUCH \n exports.isPermutationMap = isPermutationMap',
       solution: `function isPermutationMap(str1, str2) {
         if (str1.length === 0 || str1.length !== str2.length) {
           return false;
@@ -177,7 +177,7 @@ async function seed() {
       exports.isPermutationMap = isPermutationMap`,
       tests: `const chai = require("chai");
       const expect = chai.expect
-      const { isPermutationMap } = require('./userCode);
+      const { isPermutationMap } = require("./userCode");
 
       describe('ch1-q2: ', function() {
 
@@ -219,7 +219,7 @@ async function seed() {
         'Input: [["http://www.google.com/search?q=something really really funny"]] \n Output: ["http://www.google.com/search?q=something%20really%20really%20funny"]'
       ],
       defaultText:
-        'function encodeSpaces(url) { \n } //DO NOT TOUCH \n exports.encodeSpaces = encodeSpaces',
+        'function encodeSpaces(url) { \n } \n //DO NOT TOUCH \n exports.encodeSpaces = encodeSpaces',
       solution: `function encodeSpaces(url) {
         if (!url || url.length === 0) {
           return url;
@@ -298,29 +298,30 @@ async function seed() {
       ],
       defaultText:
         'class AnimalShelter {\n} \n// DO NOT TOUCH \nexports.AnimalShelter = AnimalShelter ',
-      tests: `const expect = require(‘chai’).expect;
-      const {AnimalShelter} = require(‘./userCode’);
-        describe(‘ch3-q6: ’, function() {
+      tests: `const chai = require ('chai')
+      const expect = chai.expect;
+      const {AnimalShelter} = require('./userCode');
+        describe('ch3-q6: ', function() {
           beforeEach(function() {
             this.obj = new AnimalShelter();
           });
-          it(‘any returns whichever animal is in queue’, function() {
-            this.obj.enqueueCat(‘cat’);
-            expect(this.obj.dequeueAny()).to.equal(‘cat’);
+          it('any returns whichever animal is in queue', function() {
+            this.obj.enqueueCat('cat');
+            expect(this.obj.dequeueAny()).to.equal('cat');
             expect(this.obj.dequeueAny()).to.be.undefined;
-            this.obj.enqueueDog(‘dog’);
-            expect(this.obj.dequeueAny()).to.equal(‘dog’);
+            this.obj.enqueueDog('dog');
+            expect(this.obj.dequeueAny()).to.equal('dog');
             expect(this.obj.dequeueAny()).to.be.undefined;
           });
-          it(‘returns animals in the right order’, function() {
+          it('returns animals in the right order', function() {
             for (let i = 0; i < 4; ++i) {
-              this.obj.enqueueCat(‘cat’ + i);
+              this.obj.enqueueCat('cat' + i);
             }
             for (let i = 0; i < 4; ++i) {
-              expect(this.obj.dequeueAny()).to.equal(‘cat’ + i);
+              expect(this.obj.dequeueAny()).to.equal('cat' + i);
             }
           });
-          it(‘returns animals in alternating order when enqueued that way’, function() {
+          it('returns animals in alternating order when enqueued that way', function() {
             for (let i = 20; i > 0; --i) {
               if (i & 1) {
                 this.obj.enqueueCat(i);
@@ -333,7 +334,7 @@ async function seed() {
               expect(this.obj.dequeueAny()).to.equal(i);
             }
           });
-          it(‘correctly returns animals when enqueued alternating but dequeued one at a time’, function() {
+          it('correctly returns animals when enqueued alternating but dequeued one at a time', function() {
             for (let i = 20; i > 0; --i) {
               if (i & 1) {
                 this.obj.enqueueCat(i);
