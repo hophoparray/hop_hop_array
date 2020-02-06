@@ -82,16 +82,6 @@ router.get('/algopass/:algoId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
-  try {
-    console.log('REQ.BODY', req.body)
-    const res = await userAlgo.create(req.body)
-    res.json(res)
-  } catch (error) {
-    next(error)
-  }
-})
-
 router.put('/:algoId', async (req, res, next) => {
   try {
     let updatePoints = await User.update(
@@ -104,11 +94,45 @@ router.put('/:algoId', async (req, res, next) => {
         }
       }
     )
-    res.json(updatePoints)
+
+    let userAlgo = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+
+    if (userAlgo) {
+      const [numOfAffectedRows, updatedUserAlgo] = await userAlgos.update(
+        {
+          status: 'pass'
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          },
+          returning: true
+        }
+      )
+      res.json({updatePoints, newStatus: updatedUserAlgo.status})
+    } else {
+      res.json({updatePoints})
+    }
   } catch (error) {
     next(error)
   }
 })
+
+// router.post('/:', async (req, res, next) => {
+//   try {
+//     console.log('REQ.BODY', req.body)
+//     const res = await userAlgo.create(req.body)
+//     res.json(res)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 router.post('/:algoId', async (req, res, next) => {
   try {
@@ -118,6 +142,21 @@ router.post('/:algoId', async (req, res, next) => {
       },
       attributes: ['tests']
     })
+
+    const row = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+    let newUserAlgo
+
+    if (!row) {
+      newUserAlgo = await userAlgos.create({
+        userId: req.user.id,
+        algoId: req.params.algoId
+      })
+    }
 
     let testCode = findAlgo.dataValues.tests
     // console.log('this is the testCode', testCode)
@@ -168,7 +207,7 @@ router.post('/:algoId', async (req, res, next) => {
     await myContainer.remove()
 
     console.log('Done')
-    res.json(testResult)
+    res.json({testResult, newUserAlgo})
   } catch (error) {
     console.log('ERROR:', error)
     next(error)
