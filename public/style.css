@@ -1,65 +1,57 @@
-@font-face {
-  font-family: 'Fira Code';
-  src: url('FiraCode-Regular.woff');
-}
-body {
-  font-family: sans-serif;
-}
 
-a {
-  text-decoration: none;
-}
 
-label {
-  display: block;
-}
-
-nav a {
-  display: inline-block;
-  margin: 1em;
-}
-
-form div {
-  margin: 1em;
-  display: inline-block;
-}
-
-table.all-algos-table th,
-table.all-algos-table td {
-  border: 0px solid #aaaaaa;
-  padding: 3px 2px;
-}
-
-table.all-algos-table {
-  border: 0px solid #1c6ea4;
-  background-color: #eeeeee;
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-}
-table.all-algos-table tbody td {
-  font-size: 16px;
-}
-
-table.all-algos-table thead {
-  background: #1c6ea4;
-  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1c6ea4 100%);
-  background: -webkit-linear-gradient(
-    top,
-    #5592bb 0%,
-    #327cad 66%,
-    #1c6ea4 100%
-  );
-  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1c6ea4 100%);
-  border-bottom: 2px solid #444444;
-}
-
-table.all-algos-table thead th {
-  font-size: 15px;
+.button {
+  --c: black;
+  color: var(--c);
+  width: 12em;
+  height: 3em;
+  border: 0.3em solid var(--c);
+  text-align: center;
+  text-transform: uppercase;
   font-weight: bold;
-  color: #ffffff;
-  border-left: 2px solid #d0e4f5;
+  font-family: sans-serif;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: 0.5s;
+  margin: 1em;
+  background: #e7e7e7;
 }
-table.all-algos-table thead th:first-child {
-  border-left: none;
+
+button:hover {
+  color: white;
+}
+
+.button span {
+  position: absolute;
+  width: 25%;
+  height: 100%;
+  background-color: var(--c);
+  transform: translateY(150%);
+  border-radius: 50%;
+  left: calc((var(--n) - 1) * 25%);
+  transition: 0.5s;
+  transition-delay: calc((var(--n) - 1) * 0.1s);
+  z-index: -1;
+}
+
+.button:hover span {
+  transform: translateY(0) scale(2);
+}
+
+.button span:nth-child(1) {
+  --n: 1;
+}
+
+.button span:nth-child(2) {
+  --n: 2;
+}
+
+.button span:nth-child(3) {
+  --n: 3;
+}
+
+.button span:nth-child(4) {
+  --n: 4;
 }
