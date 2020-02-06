@@ -100,6 +100,17 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res, next) => {
+  try {
+    console.log('REQ.BODY', req.body)
+    const res = await userAlgo.create(req.body)
+
+    res.json(res)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.post('/:algoId', async (req, res, next) => {
   try {
     let findAlgo = await Algo.findOne({
