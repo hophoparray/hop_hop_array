@@ -26,30 +26,28 @@ class AllAlgos extends Component {
         <PageName>All Algos</PageName>
         <SubHead>Select an algo to attempt!</SubHead>
         <div>
-          <ul className="responsive-table">
-            <li className="table-header">
-              <div className="col col-1">Algo</div>
-              <div className="col col-2">Level</div>
-              <div className="col col-3">Prompt</div>
-              <div className="col col-4">Complete</div>
-            </li>
-            <li className="table-row">
+          <table className="all-algos-table">
+            <TableHeader>
+              <tr>
+                <Headers>Algo</Headers>
+                <Headers>Level</Headers>
+                <Headers>Prompt</Headers>
+              </tr>
+            </TableHeader>
+            <tbody>
               {algos.map(algo => {
                 return (
-                  <div key={algo.id}>
-                    <div className="col col-1">
+                  <TableRow key={algo.id}>
+                    <td>
                       <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
-                    </div>
-                    <div className="col col-2">{algo.algoLevel}</div>
-                    <div className="col col-3">
-                      {shortPrompt(algo.prompt, 50)}
-                    </div>
-                    <div className="col col-4">True</div>
-                  </div>
+                    </td>
+                    <Level>{algo.algoLevel}</Level>
+                    <td>{shortPrompt(algo.prompt, 50)}</td>
+                  </TableRow>
                 )
               })}
-            </li>
-          </ul>
+            </tbody>
+          </table>
         </div>
       </Wrapper>
     )
@@ -94,16 +92,21 @@ const SubHead = styled.h4`
   text-transform: uppercase;
 `
 const TableHeader = styled.thead`
-  background: #e7e7e7;
-  text-transform: uppercase;
+  background-color: #e7e7e7;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
   font-family: 'Open Sans', sans-serif;
-  font-weight: lighter;
+  text-transform: uppercase;
+  text-align: center;
 `
 const Headers = styled.th`
   padding: 10px;
+  align-text: center;
 `
 const TableRow = styled.tr`
   background-color: #ffffff;
   box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
   font-family: 'Open Sans', sans-serif;
+`
+const Level = styled.td`
+  text-align: center;
 `
