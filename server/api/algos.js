@@ -48,39 +48,41 @@ router.get('/:algoId', async (req, res, next) => {
   }
 })
 
-
 const testCode = `const chai = require("chai");
 const expect = chai.expect
-const { hasUniqueCharactersSet } = require('./userCode');
+const { encodeSpaces } = require('./userCode')
 
-describe('ch1-q1', function() {
+describe('ch1-q3: ', function() {
+
+  it('works with null/undefined as input', function() {
+    expect(encodeSpaces(undefined)).to.be.undefined;
+    expect(encodeSpaces(null)).to.be.null;
+  });
+
+  it('works with an empty array as input', function() {
+    expect(encodeSpaces([])).to.eql([]);
+  });
 
   [
-    'abcdefghi',
-    'jklpoiuqwerzxcvmnsadf',
-    '1234567890',
-    'AaBbCcDdeFg1234567890(*&^%$#@!)'
+    'nospaces',
+    ' ',
+    '   ',
+    ' firstSpace',
+    'lastSpace ',
+    '  surroundedBySpaces  ',
+    'middle  spaces',
+    ' l o t s   o f   s p a c e ',
+    'http://www.google.com/',
+    'http://www.google.com/search?q=something really really funny'
   ].forEach(arg => {
 
-    it('returns true for unique string: ' + arg, function() {
-      expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
+    it("returns true for unique string:", function() {
+      let expected = arg.replace(/ /g, '%20').split('');
+      expect(encodeSpaces(arg.split(''))).to.eql(expected);
     });
 
   });
 
-  [
-    'abcadef',
-    'aaaaaaaaaa',
-    'abcdefghijklmnopqrstuvwxyza',
-    '1234567890asdklf1',
-    '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
-  ].forEach(arg => {
-
-    it('returns false for string with dupes: ' + arg, function() {
-      expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
-    });
-
-  });
 });
 `
 
@@ -97,7 +99,6 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
     next(error)
   }
 })
-
 
 router.post('/:algoId', async (req, res, next) => {
   try {

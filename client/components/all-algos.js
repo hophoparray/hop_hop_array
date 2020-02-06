@@ -16,9 +16,16 @@ class AllAlgos extends Component {
     this.setState({algos: data})
   }
 
+  startNewGame() {}
+
   render() {
     const algos = this.state.algos
-    console.log(this.state)
+    const user = this.props.user
+    // if(user.gameId !== null){
+    //   startGame=true
+    // }else{
+    //   startGame =false
+    // }
 
     return (
       <div>
@@ -42,6 +49,14 @@ class AllAlgos extends Component {
                     </td>
                     <td>{algo.algoLevel}</td>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
+                    <td>
+                      <button>
+                        onClick={' '}
+                        {() => {
+                          this.startNewGame(input)
+                        }}
+                      </button>
+                    </td>
                   </tr>
                 )
               })}
@@ -70,4 +85,8 @@ function shortPrompt(prompt, maxLength) {
   } else {
     return prompt.slice(0, maxLength - 3) + '...'
   }
+}
+
+function openAlgos(allAlgos, userLevel) {
+  return allAlgos.filter(algo => algo.algoLevel <= userLevel)
 }
