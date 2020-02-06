@@ -16,18 +16,32 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <NavContainer>
       {isLoggedIn ? (
         <Nav>
-          {/* The navbar will show these links after you log in */}
-          <a href="/home">
-            <Button>Home</Button>
-          </a>
           <a href="/algos">
-            <Button>Practice</Button>
+            <button className="button">
+              Practice
+              <span />
+              <span />
+              <span />
+              <span />
+            </button>
           </a>
           <a href="/profile">
-            <Button>Profile</Button>
+            <button className="button">
+              Profile
+              <span />
+              <span />
+              <span />
+              <span />
+            </button>
           </a>
           <a href="#" onClick={handleClick}>
-            <Button>Logout</Button>
+            <button className="button">
+              Logout
+              <span />
+              <span />
+              <span />
+              <span />
+            </button>
           </a>
         </Nav>
       ) : (
@@ -100,18 +114,4 @@ const Nav = styled.div`
   display: flex;
   justify-content: space-around;
   flex-grow: 2;
-`
-const Button = styled.button`
-  font-size: 2vh;
-  background-color: #e7e7e7;
-  border: #e7e7e7;
-  text-transform: uppercase;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: lighter;
-  border-radius: 10px;
-  transition: padding 0.4s ease;
-  &:hover {
-    background-color: black;
-    color: white;
-  }
 `
