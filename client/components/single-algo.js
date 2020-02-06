@@ -18,11 +18,11 @@ class SingleAlgo extends React.Component {
       currentAlgo: {},
       prompt: 'Prompt',
       title: 'Title',
-      user: {}
+      user: {},
+      bool: true
     }
   }
   onAttempt = async value => {
-    console.log('Attempt', value)
     // axios post request
     const res = await Axios.post(
       `/api/algos/${this.props.match.params.algoId}`,
@@ -30,18 +30,17 @@ class SingleAlgo extends React.Component {
         text: this.state.userCode
       }
     )
-    console.log('RESULT: ', res.data)
     this.setState({
-      tests: res.data.tests,
-      passes: res.data.passes,
-      failures: res.data.failures,
-      stats: res.data.stats
+      tests: res.data.testResult.tests,
+      passes: res.data.testResult.passes,
+      failures: res.data.testResult.failures,
+      stats: res.data.testResult.stats,
+      bool: false
     })
+    let update
     if (this.state.failures.length === 0) {
-      const updatePoints = await Axios.put(
-        `/api/algos/${this.props.match.params.algoId}`
-      )
-      history.push('/algopass')
+      update = await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+      history.push(`/algopass/${this.props.match.params.algoId}`)
     }
   }
 
@@ -69,7 +68,8 @@ class SingleAlgo extends React.Component {
       fontFamily: 'Fira Code',
       fontLigatures: true
     }
-    console.log('this.prop of single algo', this.props)
+    // console.log('this.prop of single algo', this.props)
+    console.log('STATE', this.state)
 
     return (
       <div>
@@ -85,10 +85,29 @@ class SingleAlgo extends React.Component {
           onChange={this.handleChange}
         />
 
+        {/* TO DO: Add Submit button when tests pass */}
+        <a href="/algofail">
+          <button>Give me a {'<br/>'}</button>
+        </a>
+        <button onClick={() => this.onAttempt(this.state.userCode)}>
+          Attempt
+        </button>
+        {/* {console.log('this is state after attempt', this.state)} */}
+        {/* TODO: Continue flow to fail/succeed components */}
+
         <div>
           <h4>tests!</h4>
-          <div>Number of Tests Passed: {this.state.passes.length}</div>
-          <div>Number of Tests Failed: {this.state.failures.length}</div>
+          {this.state.bool ? (
+            <div>
+              <div>Number of Tests Passed: 0</div>
+              <div>Number of Tests Failed: 0</div>
+            </div>
+          ) : (
+            <div>
+              <div>Number of Tests Passed: {this.state.passes.length}</div>
+              <div>Number of Tests Failed: {this.state.failures.length}</div>
+            </div>
+          )}
 
           <div>Tests Failed:</div>
 
@@ -108,15 +127,7 @@ class SingleAlgo extends React.Component {
             </div>
           )}
         </div>
-        {/* TO DO: Add Submit button when tests pass */}
-        <a href="/algofail">
-          <button>Give me a {'<br/>'}</button>
-        </a>
-        <button onClick={() => this.onAttempt(this.state.userCode)}>
-          Attempt
-        </button>
-        {console.log('this is state after attempt', this.state)}
-        {/* TODO: Continue flow to fail/succeed components */}
+        {/* {console.log('STATE AFTER', this.state)} */}
       </div>
     )
   }
