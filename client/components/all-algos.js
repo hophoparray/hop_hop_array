@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
+import Axios from 'axios'
 
 class AllAlgos extends Component {
   constructor() {
@@ -47,10 +48,20 @@ class AllAlgos extends Component {
             </TableHeader>
             <tbody>
               {algos.map(algo => {
+                let num = algo.id
                 return (
                   <TableRow key={algo.id}>
                     <td>
-                      <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
+                      <Link
+                        // onClick={async () => {
+                        //   await Axios.post(`/api/algos`, {
+                        //     userSolution: algo.defaultText
+                        //   })
+                        // }}
+                        to={`/algos/${algo.id}`}
+                      >
+                        {algo.name}
+                      </Link>
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>

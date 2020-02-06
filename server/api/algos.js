@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Algo, userAlgos} = require('../db/models')
+const {Algo, userAlgos, User} = require('../db/models')
 const fs = require('fs') // for writing files
 const {promisify} = require('util')
 // For copying file into docker container
@@ -37,9 +37,15 @@ router.get('/:algoId', async (req, res, next) => {
       where: {userId: req.user.id},
       raw: true
     })
+    const findUser = await User.findOne({
+      where: {
+        id: req.user.id
+      }
+    })
     const response = {
       ...algo,
-      userAlgo: userAlgo && userAlgo.solution
+      userAlgo: userAlgo && userAlgo.solution,
+      findUser
     }
     res.json(response)
   } catch (error) {
@@ -57,6 +63,48 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
       }
     })
     res.json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// algo success page
+router.get('/algopass/:algoId', async (req, res, next) => {
+  try {
+    const findAlgo = await Algo.findOne({
+      where: {
+        id: req.params.algoId
+      }
+    })
+    res.json(findAlgo)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/', async (req, res, next) => {
+  try {
+    console.log('REQ.BODY', req.body)
+    const res = await userAlgo.create(req.body)
+    res.json(res)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/:algoId', async (req, res, next) => {
+  try {
+    let updatePoints = await User.update(
+      {
+        points: (req.user.points += 10)
+      },
+      {
+        where: {
+          id: req.user.id
+        }
+      }
+    )
+    res.json(updatePoints)
   } catch (error) {
     next(error)
   }
