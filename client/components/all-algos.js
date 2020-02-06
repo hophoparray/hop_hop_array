@@ -64,7 +64,6 @@ class AllAlgos extends Component {
                         Start New Game
                       </button>
                     </td>
-                  </tr>
                   </TableRow>
                 )
               })}
@@ -135,4 +134,3 @@ const TableRow = styled.tr`
 const Level = styled.td`
   text-align: center;
 `
-
