@@ -15,3 +15,16 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/userId', async (req, res, next) => {
+  const id = req.params.userId
+  try {
+    const singleUser = await User.findOne({
+      where: {id: id},
+      attributes: ['id', 'email']
+    })
+    res.json(singleUser)
+  } catch (err) {
+    next(err)
+  }
+})

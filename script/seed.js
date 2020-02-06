@@ -178,7 +178,6 @@ async function seed() {
       tests: `const chai = require("chai");
       const expect = chai.expect
       const { isPermutationMap } = require("./userCode");
-
       describe('ch1-q2: ', function() {
 
         [
