@@ -2,6 +2,8 @@ import React from 'react'
 import MonacoEditor from 'react-monaco-editor'
 // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import Axios from 'axios'
+import history from '../history'
+import algoPass from './algoPass'
 
 class SingleAlgo extends React.Component {
   constructor(props) {
@@ -15,7 +17,8 @@ class SingleAlgo extends React.Component {
       stats: [],
       currentAlgo: {},
       prompt: 'Prompt',
-      title: 'Title'
+      title: 'Title',
+      user: {}
     }
   }
   onAttempt = async value => {
@@ -34,6 +37,12 @@ class SingleAlgo extends React.Component {
       failures: res.data.failures,
       stats: res.data.stats
     })
+    if (this.state.failures.length === 0) {
+      const updatePoints = await Axios.put(
+        `/api/algos/${this.props.match.params.algoId}`
+      )
+      history.push('/algopass')
+    }
   }
 
   handleChange = value => {
@@ -49,7 +58,8 @@ class SingleAlgo extends React.Component {
     this.setState({
       title: data.name,
       prompt: data.prompt,
-      userCode: data.defaultText
+      userCode: data.defaultText,
+      user: data.findUser
     })
   }
   render() {
@@ -59,6 +69,7 @@ class SingleAlgo extends React.Component {
       fontFamily: 'Fira Code',
       fontLigatures: true
     }
+    console.log('this.prop of single algo', this.props)
 
     return (
       <div>
@@ -98,10 +109,13 @@ class SingleAlgo extends React.Component {
           )}
         </div>
         {/* TO DO: Add Submit button when tests pass */}
-        <button>Give me a {'<br/>'}</button>
+        <a href="/algofail">
+          <button>Give me a {'<br/>'}</button>
+        </a>
         <button onClick={() => this.onAttempt(this.state.userCode)}>
           Attempt
         </button>
+        {console.log('this is state after attempt', this.state)}
         {/* TODO: Continue flow to fail/succeed components */}
       </div>
     )
