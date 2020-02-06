@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'Fira Code';
+  src: url('FiraCode-Regular.woff');
+}
 body {
   font-family: sans-serif;
 }
