@@ -10,7 +10,8 @@ import {
   AlgoPass,
   AlgoFail,
   SingleAlgo,
-  UserProfile
+  UserProfile,
+  Game
 } from './components'
 import {me} from './store'
 
@@ -37,6 +38,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route exact path="/algopass/:algoId" component={AlgoPass} />
             <Route exact path="/algos" component={AllAlgos} />
+            <Route exact path="/games" />
             <Route exact path="/algofail" component={AlgoFail} />
             <Route path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />

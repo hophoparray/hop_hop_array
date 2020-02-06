@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import Axios from 'axios'
+import {updateGame} from '../store/user'
 
 class AllAlgos extends Component {
   constructor() {
@@ -19,18 +20,16 @@ class AllAlgos extends Component {
   }
 
   async startNewGame(algoId, userId) {
-    console.log(userId)
     const {data} = await axios.post('/api/games', {algoId, userId})
-    console.log(this.props)
+    this.props.onStartGame(data.id)
   }
 
   render() {
     const algos = this.state.algos
     const user = this.props.user
-    // if(user.gameId !== null){
-    //   startGame=true
-    // }else{
-    //   startGame =false
+    let startGame = false
+    // if (user.gameId === null) {
+    //   startGame = true
     // }
 
     return (
@@ -65,16 +64,17 @@ class AllAlgos extends Component {
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
-
-                    <td>
-                      <button
-                        onClick={() => {
-                          this.startNewGame(algo.id, user.id)
-                        }}
-                      >
-                        Start New Game
-                      </button>
-                    </td>
+                    {startGame ? (
+                      <td>
+                        <button
+                          onClick={() => {
+                            this.startNewGame(algo.id, user.id)
+                          }}
+                        >
+                          Start New Game
+                        </button>
+                      </td>
+                    ) : null}
                   </TableRow>
                 )
               })}
@@ -92,7 +92,15 @@ const mapStateToProps = state => {
   }
 }
 
-const ConnectedAlgos = connect(mapStateToProps)(AllAlgos)
+const mapDispatchToProps = function(dispatch) {
+  return {
+    onStartGame: function(gameId) {
+      dispatch(updateGame(gameId))
+    }
+  }
+}
+
+const ConnectedAlgos = connect(mapStateToProps, mapDispatchToProps)(AllAlgos)
 
 export default ConnectedAlgos
 
