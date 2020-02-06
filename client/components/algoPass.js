@@ -1,22 +1,18 @@
 import React from 'react'
 
-//incomplete page, need to figure out break down of point system based on algo difficulty
-
-//routing in back end for algoPass depends on how Single Algo page will render - if Single Algo pulls algo data, can pass down to algoPass as props
-
-//need to update userAlgos table with 'pass'
-
-//nothing built in back end yet
-
-// not sure where next button will lead to
-
 export default class AlgoPass extends React.Component {
   render() {
+    console.log('this is props of algopass', this)
     return (
       <div>
         <h3>CONGRATULATIONS</h3>
-        <p>You've earned [INSERT PONTS] points</p>
-        <button>Next</button>
+        <p>You've earned 10 points</p>
+        <a href="/algos">
+          <button>Practice More</button>
+        </a>
+        <a href="/profile">
+          <button>See Your Progress</button>
+        </a>
       </div>
     )
   }
