@@ -18,15 +18,20 @@ class AllAlgos extends Component {
     this.setState({algos: data})
   }
 
-  // onClick = async() => {
-  //   const newRow = await Axios.post(
-  //     `/api/algos`, {userSolution: this.state.algos..defaultText}
-  //   )
-  // }
+  async startNewGame(algoId, userId) {
+    console.log(userId)
+    const {data} = await axios.post('/api/games', {algoId, userId})
+    console.log(this.props)
+  }
 
   render() {
     const algos = this.state.algos
-    console.log(this.state)
+    const user = this.props.user
+    // if(user.gameId !== null){
+    //   startGame=true
+    // }else{
+    //   startGame =false
+    // }
 
     return (
       <Wrapper>
@@ -60,6 +65,16 @@ class AllAlgos extends Component {
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
+
+                    <td>
+                      <button
+                        onClick={() => {
+                          this.startNewGame(algo.id, user.id)
+                        }}
+                      >
+                        Start New Game
+                      </button>
+                    </td>
                   </TableRow>
                 )
               })}
@@ -90,8 +105,11 @@ function shortPrompt(prompt, maxLength) {
   }
 }
 
-//styled components
+function openAlgos(allAlgos, userLevel) {
+  return allAlgos.filter(algo => algo.algoLevel <= userLevel)
+}
 
+//styled components
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
