@@ -104,7 +104,6 @@ router.post('/', async (req, res, next) => {
   try {
     console.log('REQ.BODY', req.body)
     const res = await userAlgo.create(req.body)
-
     res.json(res)
   } catch (error) {
     next(error)

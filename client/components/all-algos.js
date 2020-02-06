@@ -48,11 +48,11 @@ class AllAlgos extends Component {
                   <TableRow key={algo.id}>
                     <td>
                       <Link
-                        onClick={async () => {
-                          await Axios.post(`/api/algos`, {
-                            userSolution: algo.defaultText
-                          })
-                        }}
+                        // onClick={async () => {
+                        //   await Axios.post(`/api/algos`, {
+                        //     userSolution: algo.defaultText
+                        //   })
+                        // }}
                         to={`/algos/${algo.id}`}
                       >
                         {algo.name}
