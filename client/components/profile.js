@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
 import {fetchMyAlgos} from '../store/userAlgos'
+import styled from 'styled-components'
 
 class UserProfile extends Component {
   constructor(props) {
@@ -32,7 +33,6 @@ class UserProfile extends Component {
   }
 
   render() {
-    console.log('STATE', this.state)
     if (!this.state.user) {
       return null
     }
@@ -49,38 +49,42 @@ class UserProfile extends Component {
       level = 'Expert'
     }
     if (level == 'Expert') {
-      return (
+      level = 'Master'
+    }
+    return (
+      <Wrapper>
         <div>
           <div>
-            <h1>Your Stats</h1>
-            <h4>Level {user.userLevel}:</h4>
-            <h4>{level}</h4>
-            <h4>Points: {user.points}</h4>
-            <h4>Keep up the good work!</h4>
+            <div>
+              <Header>
+                <PageName>Your Stats</PageName>
+                <SubSubHead>{user.email}</SubSubHead>
+              </Header>
+            </div>
+
+            <StatWrapper>
+              <SubHead>Level: {user.userLevel}</SubHead>
+              <SubSubHead>
+                <i className="fa fa-star" /> {level}{' '}
+                <i className="fa fa-star" />
+              </SubSubHead>
+            </StatWrapper>
+            <br />
+            <StatWrapper>
+              <SubHead>Points: {user.points}</SubHead>
+              <SubSubHead>
+                <i className="fa fa-arrow-up" /> {100 - user.points} points from{' '}
+                {next} <i className="fa fa-arrow-up" />
+              </SubSubHead>
+            </StatWrapper>
           </div>
           <div>
-            <h1>Completed Exercises</h1>
+            <br />
+            <PageName>Completed Exercises</PageName>
             <h4>map through here</h4>
           </div>
         </div>
-      )
-    }
-    return (
-      <div>
-        <div>
-          <h1>Your Stats</h1>
-          <h4>Level {user.userLevel}:</h4>
-          <h4>{level}</h4>
-          <h4>Points: {user.points}</h4>
-          <h4>
-            {100 - user.points} points from {next}
-          </h4>
-        </div>
-        <div>
-          <h1>Completed Exercises</h1>
-          <h4>map through here</h4>
-        </div>
-      </div>
+      </Wrapper>
     )
   }
 }
@@ -100,3 +104,39 @@ const mapDispatch = dispatch => {
 }
 
 export default connect(mapState, mapDispatch)(UserProfile)
+
+//styled components
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const PageName = styled.h1`
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+
+  letter-spacing: 1.9px;
+  margin-block-end: 0;
+`
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`
+const SubHead = styled.h2`
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+`
+
+const SubSubHead = styled.h4`
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+`
+
+const StatWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e7e7e7;
+  border-radius: 5px;
+`
