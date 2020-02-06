@@ -27,11 +27,10 @@ class AllAlgos extends Component {
   render() {
     const algos = this.state.algos
     const user = this.props.user
-    // if(user.gameId !== null){
-    //   startGame=true
-    // }else{
-    //   startGame =false
-    // }
+    let startGame = false
+    if (user.gameId === null) {
+      startGame = true
+    }
 
     return (
       <Wrapper>
@@ -65,16 +64,17 @@ class AllAlgos extends Component {
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
-
-                    <td>
-                      <button
-                        onClick={() => {
-                          this.startNewGame(algo.id, user.id)
-                        }}
-                      >
-                        Start New Game
-                      </button>
-                    </td>
+                    {startGame ? (
+                      <td>
+                        <button
+                          onClick={() => {
+                            this.startNewGame(algo.id, user.id)
+                          }}
+                        >
+                          Start New Game
+                        </button>
+                      </td>
+                    ) : null}
                   </TableRow>
                 )
               })}
