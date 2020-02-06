@@ -1,6 +1,6 @@
 import React from 'react'
 import MonacoEditor from 'react-monaco-editor'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import Axios from 'axios'
 
 class SingleAlgo extends React.Component {
@@ -40,7 +40,12 @@ class SingleAlgo extends React.Component {
     this.setState({title: data.name, prompt: 'Prompt: ' + data.prompt})
   }
   render() {
-    const options = {selectOnLineNumbers: true}
+    const options = {
+      selectOnLineNumbers: true,
+      minimap: {enabled: false},
+      fontFamily: 'Fira Code',
+      fontLigatures: true
+    }
     console.log(this.props)
     return (
       <div>
@@ -50,7 +55,7 @@ class SingleAlgo extends React.Component {
           width="800"
           height="400"
           language="javascript"
-          theme="vs-dark"
+          theme="fairyfloss"
           value={this.state.userCode}
           options={options}
           onChange={this.handleChange}
