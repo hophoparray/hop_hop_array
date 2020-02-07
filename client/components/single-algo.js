@@ -3,7 +3,7 @@ import MonacoEditor from 'react-monaco-editor'
 // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import Axios from 'axios'
 import history from '../history'
-import algoPass from './algoPass'
+import ReactLoading from 'react-loading'
 
 class SingleAlgo extends React.Component {
   constructor(props) {
@@ -19,11 +19,16 @@ class SingleAlgo extends React.Component {
       prompt: 'Prompt',
       title: 'Title',
       user: {},
-      bool: true
+      bool: true,
+      loading: true
     }
   }
+
   onAttempt = async value => {
     // axios post request
+    this.setState({
+      loading: false
+    })
     const res = await Axios.post(
       `/api/algos/${this.props.match.params.algoId}`,
       {
@@ -35,7 +40,8 @@ class SingleAlgo extends React.Component {
       passes: res.data.testResult.passes,
       failures: res.data.testResult.failures,
       stats: res.data.testResult.stats,
-      bool: false
+      bool: false,
+      loading: true
     })
     let update
     if (this.state.failures.length === 0) {
@@ -52,6 +58,7 @@ class SingleAlgo extends React.Component {
   // TODO: editor focus
   async componentDidMount() {
     // TODO: Create User-Algo if none exist
+    console.log('component did mount!')
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
     this.setState({
@@ -70,6 +77,7 @@ class SingleAlgo extends React.Component {
     }
     // console.log('this.prop of single algo', this.props)
     console.log('STATE', this.state)
+    console.log('single algo props', this.props)
 
     return (
       <div>
@@ -89,9 +97,23 @@ class SingleAlgo extends React.Component {
         <a href="/algofail">
           <button>Give me a {'<br/>'}</button>
         </a>
-        <button onClick={() => this.onAttempt(this.state.userCode)}>
-          Attempt
-        </button>
+
+        {this.state.loading ? (
+          <div>
+            <button onClick={() => this.onAttempt(this.state.userCode)}>
+              Attempt
+            </button>
+          </div>
+        ) : (
+          <div>
+            <ReactLoading type="bars" color="black" />
+          </div>
+        )}
+
+        {/* <button onClick={() => this.onAttempt(this.state.userCode)}>
+         Attempt
+        </button> */}
+
         {/* {console.log('this is state after attempt', this.state)} */}
         {/* TODO: Continue flow to fail/succeed components */}
 
