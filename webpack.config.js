@@ -70,7 +70,8 @@ module.exports = {
       // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
       languages: ['javascript'],
       publicPath: '/',
-      features: ['wordHighlighter', 'suggest', 'bracketMatching']
+      features: ['wordHighlighter', 'suggest', 'bracketMatching'],
+      fontFamily: 'Fira Code'
     })
   ]
 }
