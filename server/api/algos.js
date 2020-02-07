@@ -13,8 +13,6 @@ const execAsync = promisify(exec)
 
 module.exports = router
 
-// TODO: Write Image
-
 //All Algos
 router.get('/', async (req, res, next) => {
   try {
@@ -84,16 +82,11 @@ router.get('/algopass/:algoId', async (req, res, next) => {
 
 router.put('/:algoId', async (req, res, next) => {
   try {
-    let updatePoints = await User.update(
-      {
-        points: (req.user.points += 10)
-      },
-      {
-        where: {
-          id: req.user.id
-        }
-      }
-    )
+    const user = await User.findByPk(req.user.id)
+    user.points = req.user.points + 50
+    if (user.points >= 100 && user.points < 200) user.userLevel = 2
+    if (user.points >= 200) user.userLevel = 3
+    user.save()
 
     let userAlgo = await userAlgos.findOne({
       where: {
@@ -115,7 +108,7 @@ router.put('/:algoId', async (req, res, next) => {
           returning: true
         }
       )
-      res.json({updatePoints, newStatus: updatedUserAlgo.status})
+      res.json({})
     } else {
       res.json({updatePoints})
     }
@@ -123,16 +116,6 @@ router.put('/:algoId', async (req, res, next) => {
     next(error)
   }
 })
-
-// router.post('/:', async (req, res, next) => {
-//   try {
-//     console.log('REQ.BODY', req.body)
-//     const res = await userAlgo.create(req.body)
-//     res.json(res)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
 
 router.post('/:algoId', async (req, res, next) => {
   try {
