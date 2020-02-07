@@ -74,6 +74,10 @@ const createApp = () => {
     '/algos',
     express.static(path.join(__dirname, '..', 'public', 'dist'))
   )
+  app.use(
+    '/algofail/:algoId',
+    express.static(path.join(__dirname, '..', 'public', 'dist'))
+  )
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {

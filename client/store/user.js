@@ -19,6 +19,10 @@ const defaultUser = {}
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 
+const updatedGame = newGameId => ({
+  type: UPDATE_GAME,
+  gameId: newGameId
+})
 /**
  * THUNK CREATORS
  */
@@ -57,6 +61,15 @@ export const logout = () => async dispatch => {
   }
 }
 
+export const updateGame = gameId => dispatch => {
+  try {
+    console.log(history)
+    dispatch(updatedGame(gameId))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 /**
  * REDUCER
  */
@@ -64,6 +77,9 @@ export default function(state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
       return action.user
+    case UPDATE_GAME:
+      state.gameId = action.gameId
+      return state
     case REMOVE_USER:
       return defaultUser
     default:

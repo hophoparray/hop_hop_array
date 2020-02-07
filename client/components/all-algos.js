@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
+import Axios from 'axios'
+import {updateGame} from '../store/user'
 
 class AllAlgos extends Component {
   constructor() {
@@ -13,23 +15,26 @@ class AllAlgos extends Component {
   }
 
   async componentDidMount() {
-    const {data} = await axios.get('/api/algos')
-    this.setState({algos: data})
+    const user = this.props.user
+    const allAlgos = await axios.get('/api/algos')
+    const notAttempted = await uncompletedAlgos(allAlgos.data, user.id)
+
+    this.setState({algos: notAttempted})
   }
 
   async startNewGame(algoId, userId) {
-    console.log(userId)
     const {data} = await axios.post('/api/games', {algoId, userId})
-    console.log(this.props)
+
+    this.props.onStartGame(data.id)
   }
 
   render() {
     const algos = this.state.algos
     const user = this.props.user
-    // if(user.gameId !== null){
-    //   startGame=true
-    // }else{
-    //   startGame =false
+
+    let startGame = false
+    // if (user.gameId === null) {
+    //   startGame = true
     // }
 
     return (
@@ -43,10 +48,12 @@ class AllAlgos extends Component {
                 <Headers>Algo</Headers>
                 <Headers>Level</Headers>
                 <Headers>Prompt</Headers>
+                {startGame ? <Headers>Start Tournament</Headers> : null}
               </tr>
             </TableHeader>
             <tbody>
               {algos.map(algo => {
+                let num = algo.id
                 return (
                   <TableRow key={algo.id}>
                     <td>
@@ -54,16 +61,19 @@ class AllAlgos extends Component {
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
-
-                    <td>
-                      <button
-                        onClick={() => {
-                          this.startNewGame(algo.id, user.id)
-                        }}
-                      >
-                        Start New Game
-                      </button>
-                    </td>
+                    {startGame ? (
+                      <td>
+                        <a href={`/algos/${algo.id}`}>
+                          <button
+                            onClick={() => {
+                              this.startNewGame(algo.id, user.id)
+                            }}
+                          >
+                            Start
+                          </button>
+                        </a>
+                      </td>
+                    ) : null}
                   </TableRow>
                 )
               })}
@@ -81,7 +91,15 @@ const mapStateToProps = state => {
   }
 }
 
-const ConnectedAlgos = connect(mapStateToProps)(AllAlgos)
+const mapDispatchToProps = function(dispatch) {
+  return {
+    onStartGame: function(gameId) {
+      dispatch(updateGame(gameId))
+    }
+  }
+}
+
+const ConnectedAlgos = connect(mapStateToProps, mapDispatchToProps)(AllAlgos)
 
 export default ConnectedAlgos
 
@@ -96,6 +114,20 @@ function shortPrompt(prompt, maxLength) {
 
 function openAlgos(allAlgos, userLevel) {
   return allAlgos.filter(algo => algo.algoLevel <= userLevel)
+}
+
+async function uncompletedAlgos(allAlgos, userId) {
+  const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
+  const completedAlgoIds = []
+  attemptedAlgos.data.forEach(algo => {
+    if (algo.status === 'pass' || algo.status === 'fail') {
+      completedAlgoIds.push(algo.algoId)
+    }
+  })
+  const notAttempted = allAlgos.filter(
+    algo => !completedAlgoIds.includes(algo.id)
+  )
+  return notAttempted
 }
 
 //styled components

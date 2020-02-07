@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Algo, userAlgos} = require('../db/models')
+const {Algo, userAlgos, User} = require('../db/models')
 const fs = require('fs') // for writing files
 const {promisify} = require('util')
 // For copying file into docker container
@@ -12,8 +12,6 @@ const removeFileAsync = promisify(fs.unlink)
 const execAsync = promisify(exec)
 
 module.exports = router
-
-// TODO: Write Image
 
 //All Algos
 router.get('/', async (req, res, next) => {
@@ -37,9 +35,15 @@ router.get('/:algoId', async (req, res, next) => {
       where: {userId: req.user.id},
       raw: true
     })
+    const findUser = await User.findOne({
+      where: {
+        id: req.user.id
+      }
+    })
     const response = {
       ...algo,
-      userAlgo: userAlgo && userAlgo.solution
+      userAlgo: userAlgo && userAlgo.solution,
+      findUser
     }
     res.json(response)
   } catch (error) {
@@ -62,6 +66,43 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
+router.put('/:algoId', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.user.id)
+    user.points = req.user.points + 50
+    if (user.points >= 100 && user.points < 200) user.userLevel = 2
+    if (user.points >= 200) user.userLevel = 3
+    user.save()
+
+    let userAlgo = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+
+    if (userAlgo) {
+      const [numOfAffectedRows, updatedUserAlgo] = await userAlgos.update(
+        {
+          status: 'pass'
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          },
+          returning: true
+        }
+      )
+      res.json({})
+    } else {
+      res.json({updatePoints})
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.post('/:algoId', async (req, res, next) => {
   try {
     let findAlgo = await Algo.findOne({
@@ -70,6 +111,21 @@ router.post('/:algoId', async (req, res, next) => {
       },
       attributes: ['tests']
     })
+
+    const row = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+    let newUserAlgo
+
+    if (!row) {
+      newUserAlgo = await userAlgos.create({
+        userId: req.user.id,
+        algoId: req.params.algoId
+      })
+    }
 
     let testCode = findAlgo.dataValues.tests
     // console.log('this is the testCode', testCode)
@@ -120,7 +176,7 @@ router.post('/:algoId', async (req, res, next) => {
     await myContainer.remove()
 
     console.log('Done')
-    res.json(testResult)
+    res.json({testResult, newUserAlgo})
   } catch (error) {
     console.log('ERROR:', error)
     next(error)

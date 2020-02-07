@@ -2,6 +2,8 @@ import React from 'react'
 import MonacoEditor from 'react-monaco-editor'
 // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import Axios from 'axios'
+import history from '../history'
+import ReactLoading from 'react-loading'
 
 class SingleAlgo extends React.Component {
   constructor(props) {
@@ -15,25 +17,41 @@ class SingleAlgo extends React.Component {
       stats: [],
       currentAlgo: {},
       prompt: 'Prompt',
-      title: 'Title'
+      title: 'Title',
+      user: {},
+      bool: true,
+      loading: true,
+      errorMessage: ''
     }
   }
+
+  // axios post request
   onAttempt = async value => {
-    console.log('Attempt', value)
-    // axios post request
-    const res = await Axios.post(
-      `/api/algos/${this.props.match.params.algoId}`,
-      {
-        text: this.state.userCode
+    try {
+      this.setState({
+        loading: false
+      })
+      const res = await Axios.post(
+        `/api/algos/${this.props.match.params.algoId}`,
+        {
+          text: this.state.userCode
+        }
+      )
+      this.setState({
+        tests: res.data.testResult.tests,
+        passes: res.data.testResult.passes,
+        failures: res.data.testResult.failures,
+        stats: res.data.testResult.stats,
+        bool: false,
+        loading: true
+      })
+      if (this.state.failures.length === 0) {
+        await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+        history.push(`/algopass/${this.props.match.params.algoId}`)
       }
-    )
-    console.log('RESULT: ', res.data)
-    this.setState({
-      tests: res.data.tests,
-      passes: res.data.passes,
-      failures: res.data.failures,
-      stats: res.data.stats
-    })
+    } catch (error) {
+      this.setState({errorMessage: error, loading: true})
+    }
   }
 
   handleChange = value => {
@@ -41,6 +59,7 @@ class SingleAlgo extends React.Component {
       userCode: value
     })
   }
+
   // TODO: editor focus
   async componentDidMount() {
     // TODO: Create User-Algo if none exist
@@ -49,9 +68,11 @@ class SingleAlgo extends React.Component {
     this.setState({
       title: data.name,
       prompt: data.prompt,
-      userCode: data.defaultText
+      userCode: data.defaultText,
+      user: data.findUser
     })
   }
+
   render() {
     const options = {
       selectOnLineNumbers: true,
@@ -59,7 +80,6 @@ class SingleAlgo extends React.Component {
       fontFamily: 'Fira Code',
       fontLigatures: true
     }
-
     return (
       <div>
         <h1>{this.state.title}</h1>
@@ -74,10 +94,42 @@ class SingleAlgo extends React.Component {
           onChange={this.handleChange}
         />
 
+        {/* TO DO: Add Submit button when tests pass */}
+        <a href={`/algofail/${this.props.match.params.algoId}`}>
+          <button>Give me a {'<br/>'}</button>
+        </a>
+
+        {this.state.loading ? (
+          <div>
+            <button onClick={() => this.onAttempt(this.state.userCode)}>
+              Attempt
+            </button>
+          </div>
+        ) : (
+          <div>
+            <ReactLoading type="bars" color="black" />
+          </div>
+        )}
+
+        {this.state.errorMessage ? (
+          <div>Syntax Error - Please Reformat Your Code </div>
+        ) : (
+          <div />
+        )}
+
         <div>
           <h4>tests!</h4>
-          <div>Number of Tests Passed: {this.state.passes.length}</div>
-          <div>Number of Tests Failed: {this.state.failures.length}</div>
+          {this.state.bool ? (
+            <div>
+              <div>Number of Tests Passed: 0</div>
+              <div>Number of Tests Failed: 0</div>
+            </div>
+          ) : (
+            <div>
+              <div>Number of Tests Passed: {this.state.passes.length}</div>
+              <div>Number of Tests Failed: {this.state.failures.length}</div>
+            </div>
+          )}
 
           <div>Tests Failed:</div>
 
@@ -97,12 +149,6 @@ class SingleAlgo extends React.Component {
             </div>
           )}
         </div>
-        {/* TO DO: Add Submit button when tests pass */}
-        <button>Give me a {'<br/>'}</button>
-        <button onClick={() => this.onAttempt(this.state.userCode)}>
-          Attempt
-        </button>
-        {/* TODO: Continue flow to fail/succeed components */}
       </div>
     )
   }
