@@ -20,33 +20,37 @@ class SingleAlgo extends React.Component {
       title: 'Title',
       user: {},
       bool: true,
-      loading: true
+      loading: true,
+      errorMessage: ''
     }
   }
 
+  // axios post request
   onAttempt = async value => {
-    // axios post request
-    this.setState({
-      loading: false
-    })
-    const res = await Axios.post(
-      `/api/algos/${this.props.match.params.algoId}`,
-      {
-        text: this.state.userCode
+    try {
+      this.setState({
+        loading: false
+      })
+      const res = await Axios.post(
+        `/api/algos/${this.props.match.params.algoId}`,
+        {
+          text: this.state.userCode
+        }
+      )
+      this.setState({
+        tests: res.data.testResult.tests,
+        passes: res.data.testResult.passes,
+        failures: res.data.testResult.failures,
+        stats: res.data.testResult.stats,
+        bool: false,
+        loading: true
+      })
+      if (this.state.failures.length === 0) {
+        await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+        history.push(`/algopass/${this.props.match.params.algoId}`)
       }
-    )
-    this.setState({
-      tests: res.data.testResult.tests,
-      passes: res.data.testResult.passes,
-      failures: res.data.testResult.failures,
-      stats: res.data.testResult.stats,
-      bool: false,
-      loading: true
-    })
-    let update
-    if (this.state.failures.length === 0) {
-      update = await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
-      history.push(`/algopass/${this.props.match.params.algoId}`)
+    } catch (error) {
+      this.setState({errorMessage: error, loading: true})
     }
   }
 
@@ -55,10 +59,10 @@ class SingleAlgo extends React.Component {
       userCode: value
     })
   }
+
   // TODO: editor focus
   async componentDidMount() {
     // TODO: Create User-Algo if none exist
-    console.log('component did mount!')
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
     this.setState({
@@ -68,6 +72,7 @@ class SingleAlgo extends React.Component {
       user: data.findUser
     })
   }
+
   render() {
     const options = {
       selectOnLineNumbers: true,
@@ -75,10 +80,6 @@ class SingleAlgo extends React.Component {
       fontFamily: 'Fira Code',
       fontLigatures: true
     }
-    // console.log('this.prop of single algo', this.props)
-    console.log('STATE', this.state)
-    console.log('single algo props', this.props)
-
     return (
       <div>
         <h1>{this.state.title}</h1>
@@ -110,12 +111,11 @@ class SingleAlgo extends React.Component {
           </div>
         )}
 
-        {/* <button onClick={() => this.onAttempt(this.state.userCode)}>
-         Attempt
-        </button> */}
-
-        {/* {console.log('this is state after attempt', this.state)} */}
-        {/* TODO: Continue flow to fail/succeed components */}
+        {this.state.errorMessage ? (
+          <div>Syntax Error - Please Reformat Your Code </div>
+        ) : (
+          <div />
+        )}
 
         <div>
           <h4>tests!</h4>
@@ -149,7 +149,6 @@ class SingleAlgo extends React.Component {
             </div>
           )}
         </div>
-        {/* {console.log('STATE AFTER', this.state)} */}
       </div>
     )
   }
