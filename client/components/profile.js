@@ -84,7 +84,7 @@ class UserProfile extends Component {
           <div>
             <br />
             <PageName>Completed Exercises</PageName>
-            <SubSubHead>map through Header</SubSubHead>
+            <SubSubHead>Coming Soon</SubSubHead>
           </div>
         </div>
       </Wrapper>
