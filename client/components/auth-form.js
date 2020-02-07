@@ -7,38 +7,63 @@ import styled from 'styled-components'
 /**
  * COMPONENT
  */
-const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+class AuthForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: props.name,
+      displayName: props.displayName,
+      handleSubmit: props.handleSubmit,
+      error: props.error,
+      isEmptyField: true,
+      email: '',
+      password: ''
+    }
+  }
+  handleChange = async e => {
+    await this.setState({
+      [event.target.name]: e.target.value
+    })
+  }
+  render() {
+    const {name, displayName, handleSubmit, error, email, password} = this.state
+    return (
+      <div>
+        <Wrapper>
+          <SignInBox>
+            <H2>{displayName}</H2>
+            <Title>[Hop Hop] Array</Title>
+            <Form onSubmit={handleSubmit} name={name}>
+              <label htmlFor="email">Email</label>
+              <input name="email" type="text" onChange={this.handleChange} />
 
-  return (
-    <div>
-      <Wrapper>
-        <SignInBox>
-          <H2>{displayName}</H2>
-          <Title>[Hop Hop] Array</Title>
-          <Form onSubmit={handleSubmit} name={name}>
-            <label htmlFor="email">Email</label>
-            <input name="email" type="text" />
+              <label htmlFor="password">Password</label>
+              <input
+                name="password"
+                type="password"
+                onChange={this.handleChange}
+              />
 
-            <label htmlFor="password">Password</label>
-            <input name="password" type="password" />
-
-            <LoginButton type="submit">{displayName}</LoginButton>
-            {error && error.response && <Error> {error.response.data} </Error>}
-          </Form>
-          <Hr />
-          <AuthButton color="#4285f4" href="/auth/google">
-            <i className="fa fa-google" />
-            <span>Google</span>
-          </AuthButton>
-          <AuthButton color="#24292e" href="/auth/github">
-            <i className="fa fa-github" />
-            <span>GitHub</span>
-          </AuthButton>
-        </SignInBox>
-      </Wrapper>
-    </div>
-  )
+              {email.length !== 0 && password.length !== 0 ? (
+                <LoginButton type="submit">{displayName}</LoginButton>
+              ) : null}
+              {error &&
+                error.response && <Error> {error.response.data} </Error>}
+            </Form>
+            <Hr />
+            <AuthButton color="#4285f4" href="/auth/google">
+              <i className="fa fa-google" />
+              <span>Google</span>
+            </AuthButton>
+            <AuthButton color="#24292e" href="/auth/github">
+              <i className="fa fa-github" />
+              <span>GitHub</span>
+            </AuthButton>
+          </SignInBox>
+        </Wrapper>
+      </div>
+    )
+  }
 }
 
 /**

@@ -22,33 +22,37 @@ class SingleAlgo extends React.Component {
       examples: '',
       user: {},
       bool: true,
-      loading: true
+      loading: true,
+      errorMessage: ''
     }
   }
 
+  // axios post request
   onAttempt = async value => {
-    // axios post request
-    this.setState({
-      loading: false
-    })
-    const res = await Axios.post(
-      `/api/algos/${this.props.match.params.algoId}`,
-      {
-        text: this.state.userCode
+    try {
+      this.setState({
+        loading: false
+      })
+      const res = await Axios.post(
+        `/api/algos/${this.props.match.params.algoId}`,
+        {
+          text: this.state.userCode
+        }
+      )
+      this.setState({
+        tests: res.data.testResult.tests,
+        passes: res.data.testResult.passes,
+        failures: res.data.testResult.failures,
+        stats: res.data.testResult.stats,
+        bool: false,
+        loading: true
+      })
+      if (this.state.failures.length === 0) {
+        await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+        history.push(`/algopass/${this.props.match.params.algoId}`)
       }
-    )
-    this.setState({
-      tests: res.data.testResult.tests,
-      passes: res.data.testResult.passes,
-      failures: res.data.testResult.failures,
-      stats: res.data.testResult.stats,
-      bool: false,
-      loading: true
-    })
-    let update
-    if (this.state.failures.length === 0) {
-      update = await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
-      history.push(`/algopass/${this.props.match.params.algoId}`)
+    } catch (error) {
+      this.setState({errorMessage: error, loading: true})
     }
   }
 
@@ -57,10 +61,10 @@ class SingleAlgo extends React.Component {
       userCode: value
     })
   }
+
   // TODO: editor focus
   async componentDidMount() {
     // TODO: Create User-Algo if none exist
-    console.log('component did mount!')
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
     this.setState({
@@ -87,10 +91,6 @@ class SingleAlgo extends React.Component {
       fontFamily: 'Fira Code',
       fontLigatures: true
     }
-    // console.log('this.prop of single algo', this.props)
-    console.log('STATE', this.state)
-    console.log('single algo props', this.props)
-
     return (
       <div>
         <Wrapper>
