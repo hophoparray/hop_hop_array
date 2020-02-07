@@ -21,6 +21,7 @@ class AllAlgos extends Component {
 
   async startNewGame(algoId, userId) {
     const {data} = await axios.post('/api/games', {algoId, userId})
+
     this.props.onStartGame(data.id)
   }
 
@@ -28,9 +29,9 @@ class AllAlgos extends Component {
     const algos = this.state.algos
     const user = this.props.user
     let startGame = false
-    // if (user.gameId === null) {
-    //   startGame = true
-    // }
+    if (user.gameId === null) {
+      startGame = true
+    }
 
     return (
       <Wrapper>
@@ -43,6 +44,7 @@ class AllAlgos extends Component {
                 <Headers>Algo</Headers>
                 <Headers>Level</Headers>
                 <Headers>Prompt</Headers>
+                {startGame ? <Headers>Start Tournament</Headers> : null}
               </tr>
             </TableHeader>
             <tbody>
@@ -66,13 +68,15 @@ class AllAlgos extends Component {
                     <td>{shortPrompt(algo.prompt, 50)}</td>
                     {startGame ? (
                       <td>
-                        <button
-                          onClick={() => {
-                            this.startNewGame(algo.id, user.id)
-                          }}
-                        >
-                          Start New Game
-                        </button>
+                        <a href={`/algos/${algo.id}`}>
+                          <button
+                            onClick={() => {
+                              this.startNewGame(algo.id, user.id)
+                            }}
+                          >
+                            Start
+                          </button>
+                        </a>
                       </td>
                     ) : null}
                   </TableRow>

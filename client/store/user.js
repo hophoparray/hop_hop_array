@@ -20,7 +20,7 @@ const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 
 const updatedGame = newGameId => ({
-  type: REMOVE_USER,
+  type: UPDATE_GAME,
   gameId: newGameId
 })
 /**
@@ -63,6 +63,7 @@ export const logout = () => async dispatch => {
 
 export const updateGame = gameId => dispatch => {
   try {
+    console.log(history)
     dispatch(updatedGame(gameId))
   } catch (err) {
     console.error(err)
@@ -77,7 +78,8 @@ export default function(state = defaultUser, action) {
     case GET_USER:
       return action.user
     case UPDATE_GAME:
-      return {gameId: action.gameId}
+      state.gameId = action.gameId
+      return state
     case REMOVE_USER:
       return defaultUser
     default:
