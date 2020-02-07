@@ -4,6 +4,7 @@ import MonacoEditor from 'react-monaco-editor'
 import Axios from 'axios'
 import history from '../history'
 import ReactLoading from 'react-loading'
+import styled from 'styled-components'
 
 class SingleAlgo extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class SingleAlgo extends React.Component {
       currentAlgo: {},
       prompt: 'Prompt',
       title: 'Title',
+      examples: '',
       user: {},
       bool: true,
       loading: true,
@@ -68,9 +70,18 @@ class SingleAlgo extends React.Component {
     this.setState({
       title: data.name,
       prompt: data.prompt,
+      examples: data.examples,
       userCode: data.defaultText,
       user: data.findUser
     })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.examples !== this.props.examples) {
+      this.setState({
+        examples: this.props.examples
+      })
+    }
   }
 
   render() {
@@ -82,76 +93,203 @@ class SingleAlgo extends React.Component {
     }
     return (
       <div>
-        <h1>{this.state.title}</h1>
-        <h3>{this.state.prompt}</h3>
-        <MonacoEditor
-          width="800"
-          height="400"
-          language="javascript"
-          theme="fairyfloss"
-          value={this.state.userCode}
-          options={options}
-          onChange={this.handleChange}
-        />
+        <Wrapper>
+          <PromptBox>
+            <Title>{this.state.title}</Title>
+            <Prompt>{this.state.prompt}</Prompt>
+            <Head>Example(s):</Head>
+            <Details>{this.state.examples[0]}</Details>
 
-        {/* TO DO: Add Submit button when tests pass */}
-        <a href={`/algofail/${this.props.match.params.algoId}`}>
-          <button>Give me a {'<br/>'}</button>
-        </a>
-
-        {this.state.loading ? (
-          <div>
-            <button onClick={() => this.onAttempt(this.state.userCode)}>
-              Attempt
-            </button>
-          </div>
-        ) : (
-          <div>
-            <ReactLoading type="bars" color="black" />
-          </div>
-        )}
-
-        {this.state.errorMessage ? (
-          <div>Syntax Error - Please Reformat Your Code </div>
-        ) : (
-          <div />
-        )}
-
-        <div>
-          <h4>tests!</h4>
-          {this.state.bool ? (
             <div>
-              <div>Number of Tests Passed: 0</div>
-              <div>Number of Tests Failed: 0</div>
+              <Head>tests!</Head>
+              {this.state.bool ? (
+                <div>
+                  <Details>Number of Tests Passed: 0</Details>
+                  <Details>Number of Tests Failed: 0</Details>
+                </div>
+              ) : (
+                <div>
+                  <Details>
+                    Number of Tests Passed: {this.state.passes.length}
+                  </Details>
+                  <Details>
+                    Number of Tests Failed: {this.state.failures.length}
+                  </Details>
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <div>Number of Tests Passed: {this.state.passes.length}</div>
-              <div>Number of Tests Failed: {this.state.failures.length}</div>
-            </div>
-          )}
+          </PromptBox>
 
-          <div>Tests Failed:</div>
+          <Editor>
+            <MonacoEditor
+              width="800"
+              height="400"
+              language="javascript"
+              theme="fairyfloss"
+              value={this.state.userCode}
+              options={options}
+              onChange={this.handleChange}
+            />
 
+            {/* TO DO: Add Submit button when tests pass */}
+            <Buttons>
+              <Break href="/algofail">
+                <button className="button">
+                  Give me a {'<br/>'}
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </button>
+              </Break>
+
+              {this.state.loading ? (
+                <Attempt>
+                  <button
+                    className="button"
+                    onClick={() => this.onAttempt(this.state.userCode)}
+                  >
+                    Attempt
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </button>
+                </Attempt>
+              ) : (
+                <a>
+                  <ReactLoading type="bars" color="black" />
+                </a>
+              )}
+            </Buttons>
+          </Editor>
+        </Wrapper>
+
+        {/* <button onClick={() => this.onAttempt(this.state.userCode)}>
+         Attempt
+        </button> */}
+
+        {/* {console.log('this is state after attempt', this.state)} */}
+        {/* TODO: Continue flow to fail/succeed components */}
+
+        <TestWrapper>
+          <TopWrapper>
+            <Head>Tests Failed: {this.state.failures.length}</Head>
+            <a>
+              <button
+                onClick={() => {
+                  window.scrollTo(0, document.body.scrollHeight)
+                }}
+                className="button"
+              >
+                See More
+                <span />
+                <span />
+                <span />
+                <span />
+              </button>
+            </a>
+          </TopWrapper>
           {this.state.failures.length === 0 ? (
-            <div>0</div>
+            <div />
           ) : (
             <div>
               {' '}
               {this.state.failures.map((obj, index) => (
-                <div key={index}>
+                <Details className="tests" key={index}>
                   <p>
                     Test {index + 1}: {obj.title}
                   </p>
                   <p>Description: {obj.err.message}</p>
-                </div>
+                </Details>
               ))}
             </div>
           )}
-        </div>
+        </TestWrapper>
       </div>
     )
   }
 }
 
 export default SingleAlgo
+
+const PromptBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 60vh;
+  font-family: 'Open Sans', sans-serif;
+  background: #e7e7e7;
+  margin-top: 10px;
+  padding: 10px;
+  flex-grow: 1;
+`
+
+const Title = styled.h1`
+  text-transform: uppercase;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.4em;
+`
+
+const Prompt = styled.h3`
+  font-size: 0.9em;
+  font-weight: 100;
+  font-family: 'Open Sans', sans-serif;
+`
+
+const Head = styled.h3`
+  font-size: 1em;
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+`
+
+const Details = styled.h5`
+  margin-block-start: 0em;
+  font-weight: 100;
+  font-size: 0.9em;
+  font-family: 'Open Sans', sans-serif;
+`
+
+const Editor = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-left: 10px;
+  background: #e7e7e7;
+  padding: 10px;
+  flex-grow: 2;
+  align-items: center;
+`
+
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`
+
+const Break = styled.a`
+  margin-right: 40px;
+  margin-top: 10px;
+`
+
+const Attempt = styled.a`
+  margin-left: 40px;
+  margin-top: 10px;
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const TestWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #e7e7e7;
+  margin-top: 10px;
+`
+
+const TopWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
