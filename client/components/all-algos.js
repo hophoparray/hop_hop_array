@@ -15,8 +15,11 @@ class AllAlgos extends Component {
   }
 
   async componentDidMount() {
-    const {data} = await axios.get('/api/algos')
-    this.setState({algos: data})
+    const user = this.props.user
+    const allAlgos = await axios.get('/api/algos')
+    const notAttempted = await uncompletedAlgos(allAlgos.data, user.id)
+
+    this.setState({algos: notAttempted})
   }
 
   async startNewGame(algoId, userId) {
@@ -28,10 +31,11 @@ class AllAlgos extends Component {
   render() {
     const algos = this.state.algos
     const user = this.props.user
+
     let startGame = false
-    if (user.gameId === null) {
-      startGame = true
-    }
+    // if (user.gameId === null) {
+    //   startGame = true
+    // }
 
     return (
       <Wrapper>
@@ -53,16 +57,7 @@ class AllAlgos extends Component {
                 return (
                   <TableRow key={algo.id}>
                     <td>
-                      <Link
-                        // onClick={async () => {
-                        //   await Axios.post(`/api/algos`, {
-                        //     userSolution: algo.defaultText
-                        //   })
-                        // }}
-                        to={`/algos/${algo.id}`}
-                      >
-                        {algo.name}
-                      </Link>
+                      <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
                     </td>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
@@ -119,6 +114,20 @@ function shortPrompt(prompt, maxLength) {
 
 function openAlgos(allAlgos, userLevel) {
   return allAlgos.filter(algo => algo.algoLevel <= userLevel)
+}
+
+async function uncompletedAlgos(allAlgos, userId) {
+  const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
+  const completedAlgoIds = []
+  attemptedAlgos.data.forEach(algo => {
+    if (algo.status === 'pass' || algo.status === 'fail') {
+      completedAlgoIds.push(algo.algoId)
+    }
+  })
+  const notAttempted = allAlgos.filter(
+    algo => !completedAlgoIds.includes(algo.id)
+  )
+  return notAttempted
 }
 
 //styled components
