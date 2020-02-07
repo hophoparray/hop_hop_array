@@ -68,20 +68,6 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
-// algo success page
-router.get('/algopass/:algoId', async (req, res, next) => {
-  try {
-    const findAlgo = await Algo.findOne({
-      where: {
-        id: req.params.algoId
-      }
-    })
-    res.json(findAlgo)
-  } catch (error) {
-    next(error)
-  }
-})
-
 router.put('/:algoId', async (req, res, next) => {
   try {
     let updatePoints = await User.update(

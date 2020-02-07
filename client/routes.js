@@ -39,7 +39,7 @@ class Routes extends Component {
             <Route exact path="/algopass/:algoId" component={AlgoPass} />
             <Route exact path="/algos" component={AllAlgos} />
             <Route exact path="/games" />
-            <Route exact path="/algofail" component={AlgoFail} />
+            <Route exact path="/algofail/:algoId" component={AlgoFail} />
             <Route path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />
           </Switch>
