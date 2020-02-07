@@ -162,6 +162,13 @@ class SingleAlgo extends React.Component {
                 </a>
               )}
             </Buttons>
+            <Details>
+              {this.state.errorMessage ? (
+                <div>Syntax Error - Please Reformat Your Code </div>
+              ) : (
+                <div />
+              )}
+            </Details>
           </Editor>
         </Wrapper>
 
