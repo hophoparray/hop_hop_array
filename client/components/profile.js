@@ -73,15 +73,18 @@ class UserProfile extends Component {
             <StatWrapper>
               <SubHead>Points: {user.points}</SubHead>
               <SubSubHead>
-                <i className="fa fa-arrow-up" /> {100 - user.points} points from{' '}
-                {next} <i className="fa fa-arrow-up" />
+                <i className="fa fa-arrow-up" />{' '}
+                {level !== 'Master'
+                  ? `${100 - user.points} points from ${next}`
+                  : `You have reached the top level: master`}{' '}
+                <i className="fa fa-arrow-up" />
               </SubSubHead>
             </StatWrapper>
           </div>
           <div>
             <br />
             <PageName>Completed Exercises</PageName>
-            <h4>map through here</h4>
+            <SubSubHead>Coming Soon</SubSubHead>
           </div>
         </div>
       </Wrapper>
