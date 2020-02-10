@@ -66,6 +66,7 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
+// Update points
 router.put('/:algoId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id)
@@ -103,6 +104,50 @@ router.put('/:algoId', async (req, res, next) => {
   }
 })
 
+const test = `const chai = require("chai");
+      const expect = chai.expect
+      const { hasUniqueCharactersSet } = require('./userCode');
+
+      describe('ch1-q1', function() {
+        [
+          'abcdefghi',
+          'jklpoiuqwerzxcvmnsadf',
+          '1234567890',
+          'AaBbCcDdeFg1234567890(*&^%$#@!)'
+        ].forEach(arg => {
+          it('returns true for unique string: ' + arg, function() {
+            expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
+          });
+        });
+        [
+          'abcadef',
+          'aaaaaaaaaa',
+          'abcdefghijklmnopqrstuvwxyza',
+          '1234567890asdklf1',
+          '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
+        ].forEach(arg => {
+
+          it('returns false for string with dupes: ' + arg, function() {
+            expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
+          });
+        });
+      });`
+
+const userC = `function hasUniqueCharactersSet(str) {
+  let chars = new Set();
+
+  for (let i = 0; i < str.length; ++i) {
+    if (chars.has(str[i])) {
+      return false;
+    }
+    chars.add(str[i]);
+  }
+  return true;
+}
+
+exports.hasUniqueCharactersSet = hasUniqueCharactersSet`
+
+// Run user code
 router.post('/:algoId', async (req, res, next) => {
   try {
     let findAlgo = await Algo.findOne({
@@ -127,15 +172,15 @@ router.post('/:algoId', async (req, res, next) => {
       })
     }
 
-    let testCode = findAlgo.dataValues.tests
-    // console.log('this is the testCode', testCode)
+    // let testCode = findAlgo.dataValues.tests
+    let testCode = test
 
     // Create docker instance
     console.log('Beginning of post route')
-
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
+
     // Start container
     console.log('container starts')
     await myContainer.start()
@@ -158,16 +203,37 @@ router.post('/:algoId', async (req, res, next) => {
         './node_modules/.bin/mocha',
         'test.js',
         '--reporter',
-        'json'
+        'spec'
       ])
+      console.log('RAW TEST RESULT', testResult)
     } catch (error) {
-      // console.log('TESTS FAILED')
+      console.log('TESTS FAILED')
       // console.log(error.message)
       testResult = error.message
     }
-    testResult = formatTestJson(testResult)
-    console.log('TEST RESULTS:')
+    console.log('RAW RESULT', testResult)
+    // const consoleLogs = testResult.slice(0, testResult.indexOf('{'))
+    // console.log('Conoslelogs', consoleLogs)
+
+    // testResult = formatTestJson(testResult)
+    // console.log('TEST RESULTS:')
     // console.log(testResult)
+
+    // more tests
+    // let moreResult
+    // try {
+    //   moreResult = await dockerExec(myContainer, [
+    //     './node_modules/.bin/mocha',
+    //     'test.js',
+    //     '--reporter',
+    //     'json'
+    //   ])
+    // } catch (error) {
+    //   console.log('moreResult failed')
+    //   moreResult = error.message
+    // }
+
+    // console.log('MoreResult', moreResult)
 
     // Turn off docker container
     console.log('Stop')
@@ -188,7 +254,6 @@ function formatTestJson(testStr) {
   let firstCurlyIndex = testStr.indexOf('{')
   if (firstCurlyIndex > -1) {
     let fixedStr = testStr.slice(firstCurlyIndex)
-    console.log('fixed string', fixedStr)
     return JSON.parse(fixedStr)
   }
   throw new Error('Formatting failed: ' + testStr)
@@ -197,6 +262,7 @@ function formatTestJson(testStr) {
 async function dockerExec(container, command) {
   const exec = await container.exec({
     Cmd: command,
+    Tty: true,
     AttachStdout: true,
     AttachStderr: true
   })
