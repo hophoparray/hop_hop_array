@@ -17,10 +17,11 @@ class AllAlgos extends Component {
   async componentDidMount() {
     const user = this.props.user
     const allAlgos = await axios.get('/api/algos')
-    console.log(allAlgos, user)
     const notAttempted = await uncompletedAlgos(allAlgos.data, user.id)
 
     this.setState({algos: notAttempted})
+    const algos = await lockedAlgos(allAlgos.data, user.id)
+    this.setState({algos: algos})
   }
 
   async startNewGame(algoId, userId) {
@@ -59,6 +60,7 @@ class AllAlgos extends Component {
             <TableHeader>
               <tr>
                 <Headers>Algo</Headers>
+                <Headers>Submitted</Headers>
                 <Headers>Level</Headers>
                 <Headers>Prompt</Headers>
                 {startGame ? <Headers>Start Tournament</Headers> : null}
@@ -66,12 +68,16 @@ class AllAlgos extends Component {
             </TableHeader>
             <tbody>
               {algos.map(algo => {
-                let num = algo.id
                 return (
                   <TableRow key={algo.id}>
                     <td>
                       <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
                     </td>
+                    <Level>
+                      {algo.complete === true ? (
+                        <Complete className="fa fa-check-circle" />
+                      ) : null}
+                    </Level>
                     <Level>{algo.algoLevel}</Level>
                     <td>{shortPrompt(algo.prompt, 50)}</td>
                     {startGame ? (
@@ -143,6 +149,25 @@ async function uncompletedAlgos(allAlgos, userId) {
   return notAttempted
 }
 
+async function lockedAlgos(allAlgos, userId) {
+  const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
+  const completedAlgoIds = []
+  attemptedAlgos.data.forEach(algo => {
+    if (algo.status === 'pass' || algo.status === 'fail') {
+      completedAlgoIds.push(algo.algoId)
+    }
+  })
+
+  allAlgos.forEach(algo => {
+    if (completedAlgoIds.includes(algo.id)) {
+      algo.complete = true
+    } else {
+      algo.complete = false
+    }
+  })
+  return allAlgos
+}
+
 //styled components
 const Wrapper = styled.div`
   display: flex;
@@ -178,4 +203,7 @@ const TableRow = styled.tr`
 `
 const Level = styled.td`
   text-align: center;
+`
+const Complete = styled.i`
+  color: green;
 `
