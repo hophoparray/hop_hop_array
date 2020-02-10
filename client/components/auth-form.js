@@ -32,23 +32,33 @@ class AuthForm extends React.Component {
         <Wrapper>
           <SignInBox>
             <H2>{displayName}</H2>
-            <Title>[Hop Hop] Array</Title>
             <Form onSubmit={handleSubmit} name={name}>
               <label htmlFor="email">Email</label>
-              <input name="email" type="text" onChange={this.handleChange} />
+              <Input
+                name="email"
+                type="text"
+                onChange={this.handleChange}
+                placeholder="email"
+              />
 
               <label htmlFor="password">Password</label>
-              <input
+              <Input
                 name="password"
                 type="password"
                 onChange={this.handleChange}
+                placeholder="password"
               />
-
-              {email.length !== 0 && password.length !== 0 ? (
-                <LoginButton type="submit">{displayName}</LoginButton>
-              ) : null}
-              {error &&
-                error.response && <Error> {error.response.data} </Error>}
+              <LoginButton
+                className="button"
+                type="submit"
+                disabled={email.length == 0 && password.length == 0}
+              >
+                {displayName}
+                <span />
+                <span />
+                <span />
+                <span />
+              </LoginButton>
             </Form>
             <Hr />
             <AuthButton color="#4285f4" href="/auth/google">
@@ -119,7 +129,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 80px;
+  background-color: #e7e7e7;
 `
 
 const SignInBox = styled.div`
@@ -130,27 +140,21 @@ const SignInBox = styled.div`
   background-color: #e7e7e7;
 `
 
-const Title = styled.h1`
-  margin-top: 0px;
-  font-family: 'Open Sans', sans-serif;
-  text-transform: uppercase;
-`
-
 const H2 = styled.h2`
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
   margin-top: 0px;
-  margin-bottom: 4px;
 `
+
 const AuthButton = styled.a`
   font-family: 'Open Sans', sans-serif;
   flex: 1;
   background: ${props => props.color || '#333'};
   color: white;
-  padding: 8px 16px;
+  padding: 8px 10px;
   text-decoration: none;
   font-size: 25px;
-  margin-top: 12px;
+  margin-top: 9px;
   align-self: stretch;
   display: flex;
   align-items: baseline;
@@ -168,14 +172,7 @@ const SubHead = styled.h3`
 `
 
 const LoginButton = styled.button`
-  &:hover {
-    color: #000000;
-  }
-  font-size: 20px;
-  border: 3px solid black;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: bold;
-  text-transform: uppercase;
+  font-size: 15px;
 `
 
 const Form = styled.form`
@@ -188,10 +185,15 @@ const Form = styled.form`
   padding-right: 30px;
 
   input {
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 10px;
   }
 `
+
+const Input = styled.input`
+  font-size: 15px;
+`
+
 const Hr = styled.hr`
   margin: 20px 0px 16px 0px;
   height: 3px;

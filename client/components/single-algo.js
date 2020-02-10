@@ -133,7 +133,7 @@ class SingleAlgo extends React.Component {
 
             {/* TO DO: Add Submit button when tests pass */}
             <Buttons>
-              <Break href="/algofail">
+              <Break href={`/algofail/${this.props.match.params.algoId}`}>
                 <button className="button">
                   Give me a {'<br/>'}
                   <span />
