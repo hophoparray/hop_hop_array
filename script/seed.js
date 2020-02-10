@@ -20,7 +20,7 @@ async function seed() {
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
       examples: ['Input: ["abcdefghi"] \n Output: [true]'],
       defaultText:
-        'function hasUniqueCharactersSet(str){ \n } \n// DO NOT TOUCH \n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
+        'function hasUniqueCharactersSet(str){ \n } \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
       const expect = chai.expect
       const { hasUniqueCharactersSet } = require('./userCode');
@@ -73,324 +73,395 @@ async function seed() {
     }),
     Algo.create({
       id: 2,
-      name: 'Stack Sort',
+      name: 'Product Sum',
       prompt:
-        'Sort the stack by taking one item off the input stack at a time, find the right place within the processed items in the temp stack to insert it into. Insertion is done by holding the next value aside and moving the temp stack values into the input stack until the right spot is found.',
-      examples: ['Input: [[5, 3, 1, 4, 6, 2]] \n Output: [1, 2, 3, 4, 5, 6]'],
+        'Write a function that takes in a "special" array and returns its product sum.  A "special" array is a non-empty array that contains either integers or other "special" arrays. The product sum of a "special" array is a non-empty array that contains either integers or other "special" arrays.  The product sum of a "special" array is the sum of its elements, where "special" arrays inside it should be summed themselves and then multiplied by their level of depth.  For example, the product sum of [x,y] is x+y; the product sum of [x,[y,z]] is x + 2y + 2z.',
+      examples: [
+        'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12(calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))'
+      ],
       defaultText:
-        'function sortStack(stack) { \n } \n//DO NOT TOUCH \n exports.sortStack = sortStack',
-      solution: `function sortStack(stack) {
-        let temp = [];
-        temp.push(stack.pop());
-        while (!isEmpty(stack)) {
-          let curr = stack.pop(),
-            count = 0;
-
-          while (!isEmpty(temp) && curr < peek(temp)) {
-            stack.push(temp.pop());
-            ++count;
-          }
-          temp.push(curr);
-          for (let i = 0; i < count; ++i) {
-            temp.push(stack.pop());
+        'function productSum(array) { \n } \n//DO NOT EDIT BELOW THIS LINE \n exports.productSum = productSum',
+      solution: `function productSum(array, multiplier = 1) {
+        let sum = 0
+        for (const element of array) {
+          if (Array.isArray(element)) {
+            sum += productSum(element, multiplier + 1)
+          } else {
+            sum += element
           }
         }
-
-        while (!isEmpty(temp)) {
-          stack.push(temp.pop());
-        }
-
-        return stack;
+        return sum * multiplier
       }
 
-      function peek(stack) {
-        return stack[stack.length - 1];
-      }
-
-      function isEmpty(stack) {
-        return stack.length === 0;
-      }
-
-      exports.sortStack = sortStack`,
+      exports.productSum = productSum`,
 
       tests: `const chai = require ('chai');
       const expect = chai.expect
-      const { sortStack } = require('./userCode');
+      const { productSum } = require('./userCode');
 
-      describe('ch3-q5: ', function() {
+      it('Test Case #1', function() {
+        const test = [1,2,3,4,5]
+        chai.expect(productSum(test)).to.deep.equal(15)
+      })
 
-        it('does not crash on an empty list', function() {
-          let stack = [];
-          expect(() => sortStack(stack)).to.not.throw(Error).and.to.equal(stack);
-        });
+      it('Test Case #2', function() {
+        const test = [1,2,[3],4,5]
+        chai.expect(productSum(test)).to.deep.equal(18)
+      })
 
-        it('works with a single element stack', function() {
-          expect(sortStack([4])).to.eql([4]);
-        });
+      it('Test Case #3', function() {
+        const test = [[1,2],3,[4,5]]
+        chai.expect(productSum(test)).to.deep.equal(27)
+      })
 
-        it('correctly sorts with 100 random numbers', function() {
-          let stack = [];
-          for (let i = 0; i < 100; ++i) {
-            stack.push(Math.trunc(Math.random() * 9999999));
-          }
-          let expected = stack.slice(0).sort((a, b) => a < b ? 1 : a > b ? -1 : 0);
-          expect(sortStack(stack)).to.eql(expected);
-        });
+      it('Test Case #4', function() {
+        const test = [[[[[5]]]]]
+        chai.expect(productSum(test)).to.deep.equal(600)
+      })
 
-      });`,
-      algoLevel: 2
+      it('Test Case #5', function() {
+        const test = [5,2,[7,-1],3,[6,[-13,8],4]]
+        chai.expect(productSum(test)).to.deep.equal(12)
+      })`,
+      algoLevel: 1
     }),
     Algo.create({
       id: 3,
-      name: 'Permutation Map',
+      name: 'Find Three Largest Numbers',
       prompt:
-        'Keep track of characters counts with a Map data structure, fail when str2 has a character different to str2 or if any characters are left over at the end.',
-      examples: ['Input: [["1a1", "a11"]] \n Output: [true]'],
+        'Write a function that takes in an array of integers and returns a sorted array of the three largers integers in the input array.  Note that the function should return duplicate integers if necessary; for example, it should return [10,10,12] for an intpuer array of [10,5,9,10,12]',
+      examples: [
+        'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18,, 141, 541]'
+      ],
       defaultText:
-        'function isPermutationMap(str1, str2) { \n } \n //DO NOT TOUCH \n exports.isPermutationMap = isPermutationMap',
-      solution: `function isPermutationMap(str1, str2) {
-        if (str1.length === 0 || str1.length !== str2.length) {
-          return false;
+        'function findThreeLargestNumbers(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.findThreeLargestNumbers = findThreeLargestNumbers',
+      solution: `function findThreeLargestNumbers(array) {
+        const threeLargest = [null, null, null]
+        for (const num of array) {
+          updateLargest(threeLargest, num)
         }
-
-        let chars = new Map();
-
-        for (let i = 0; i < str1.length; ++i) {
-          chars.set(str1[i], chars.get(str1[i]) + 1 || 1); // increment or set to 1
-        }
-
-        for (let i = 0; i < str2.length; ++i) {
-          let count = chars.get(str2[i]);
-          if (!count) {
-            return false;
-          }
-          if (count === 1) {
-            chars.delete(str2[i]);
-          }
-          else {
-            chars.set(str2[i], count - 1);
-          }
-        }
-
-        return chars.size === 0;
+        return threeLargest
       }
-      exports.isPermutationMap = isPermutationMap`,
+
+      function updateLargest(threeLargest, num) {
+        if (threeLargest[2] === null || num > threeLargest[2]) {
+          shiftAndUpdate(threeLargest, num, 2)
+        } else if (threeLargest[1] === null || num > threeLargest[1]) {
+          shiftAndUpdate(threeLargest, num, 1)
+        } else if (threeLargest[0] === null || num > threeLargest[0]) {
+          shiftAndUpdate(threeLargest, num, 0)
+        }
+      }
+
+      function shiftAndUpdate(array, num, idx) {
+        for (let i = 0; i <= idx; i++) {
+          if (i === idx) {
+            array[i] = num
+          } else {
+            array[i] = array[i+1]
+          }
+        }
+      }
+
+      exports.findThreeLargestNumbers = findThreeLargestNumbers`,
       tests: `const chai = require("chai");
       const expect = chai.expect
-      const { isPermutationMap } = require("./userCode");
-      describe('ch1-q2: ', function() {
+      const { findThreeLargestNumbers } = require("./userCode");
 
-        [
-          ['abcdefghi', 'ihgfedcba'],
-          ['1a1', 'a11'],
-          ['1234567812345678', '8877665544332211'],
-          ['icarraci', 'carcarii']
-        ].forEach(args => {
+      it('Test Case #1', function() {
+        chai.expect(findThreeLargestNumbers([55,7,8])).to.deep.equal([7,8,55])
+      })
 
-          it("returns true for strings that are permutations: args[0] & args[1]", function() {
-            expect(func(args[0].split(''), args[1].split(''))).to.be.true;
-          });
+      it('Test Case #2', function() {
+        chai.expect(findThreeLargestNumbers([55,43,11,3,-3,10])).to.deep.equal([11,43,55])
+      })
 
-        });
+      it('Test Case #3', function() {
+        chai.expect(findThreeLargestNumbers([7,8,3,11,43,55])).to.deep.equal([11,43,55])
+      })
 
-        [
-          ['abcdefghiz', 'ihgfedcbaa'],
-          ['1a1', '11'],
-          ['1122334455667788', '9911223344556677'],
-          ['45678', '1239']
-        ].forEach(args => {
+      it('Test Case #4', function() {
+        chai.expect(findThreeLargestNumbers([55,7,8,3,43,11])).to.deep.equal([11,43,55])
+      })
 
-          it("returns false for strings that are not permutations: args[0] & args[1]", function() {
-            expect(func(args[0].split(''), args[1].split(''))).to.be.false;
-          });
-
-        });
-
+      it('Test Case #5', function() {
+        chai.expect(findThreeLargestNumbers([7,7,7,7,7,7,7,7,7,7,7])).to.deep.equal([7,7,7])
       })`,
       algoLevel: 1
     }),
     Algo.create({
       id: 4,
-      name: 'Encode Spaces',
+      name: 'Maximum Subset Sum With No Adjacent Elements',
       prompt:
-        'Count the number of spaces in the string to calculate the new length of the string and move characters back where required replacing spaces with %20.',
-      examples: [
-        'Input: [["http://www.google.com/search?q=something really really funny"]] \n Output: ["http://www.google.com/search?q=something%20really%20really%20funny"]'
-      ],
+        'Write a function that takes in an array of positive integers and returns an integer representing the maximum sum of non-adjacent elements in the array.  If a sum cannot be generated, the function should return 0.',
+      examples: ['Input: [75,105,120,75,90,135] \n Output: 330(75,120,135)'],
       defaultText:
-        'function encodeSpaces(url) { \n } \n //DO NOT TOUCH \n exports.encodeSpaces = encodeSpaces',
-      solution: `function encodeSpaces(url) {
-        if (!url || url.length === 0) {
-          return url;
+        'function maxSubsetSumNoAdjacent(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.maxSubsetSumNoAdjacent = maxSubsetSumNoAdjacent',
+      solution: `function maxSubsetSumNoAdjacent(array) {
+        if (!array.length) return 0
+        if (array.length === 1) return array[0]
+        const maxSums = array.slice()
+        maxSums[1] = Math.max(array[0], array[1])
+        for (let i = 2; i < array.length; i++) {
+          maxSums[i] = Math.max(maxSums[i - 1], maxSums[i - 2] + array[i])
         }
-
-        let spaceCount = 0;
-        for (let i = 0; i < url.length; ++i) {
-          if (url[i] === ' ') {
-            ++spaceCount;
-          }
-        }
-
-        // add an extra 2 characters for each space
-        let newLength = url.length - 1 + 2 * spaceCount;
-        for (let i = url.length - 1, j = newLength; i >= 0 && j > i; --i, --j) {
-          if (url[i] === ' ') {
-            url[j] = '0';
-            url[--j] = '2';
-            url[--j] = '%';
-          }
-          else {
-            url[j] = url[i];
-          }
-        }
-
-        return url;
+        return maxSums[maxSums.length - 1]
       }
 
-      exports.encodeSpaces = encodeSpaces`,
+      exports.maxSubsetSumNoAdjacent = maxSubsetSumNoAdjacent`,
       tests: `const chai = require("chai");
       const expect = chai.expect
-      const { encodeSpaces } = require('./userCode')
+      const { maxSubsetSumNoAdjacent } = require('./userCode')
 
-      describe('ch1-q3: ', function() {
+      it('Test Case #1', function() {
+        chai.expect(maxSubsetSumNoAdjacent([])).to.deep.equal(0)
+      })
 
-        it('works with null/undefined as input', function() {
-          expect(encodeSpaces(undefined)).to.be.undefined;
-          expect(encodeSpaces(null)).to.be.null;
-        });
+      it('Test Case #2', function() {
+        chai.expect(maxSubsetSumNoAdjacent([1])).to.deep.equal(1)
+      })
 
-        it('works with an empty array as input', function() {
-          expect(encodeSpaces([])).to.eql([]);
-        });
+      it('Test Case #3', function() {
+        chai.expect(maxSubsetSumNoAdjacent([1,2])).to.deep.equal(2)
+      })
 
-        [
-          'nospaces',
-          ' ',
-          '   ',
-          ' firstSpace',
-          'lastSpace ',
-          '  surroundedBySpaces  ',
-          'middle  spaces',
-          ' l o t s   o f   s p a c e ',
-          'http://www.google.com/',
-          'http://www.google.com/search?q=something really really funny'
-        ].forEach(arg => {
+      it('Test Case #4', function() {
+        chai.expect(maxSubsetSumNoAdjacent([1,2,3])).to.deep.equal(4)
+      })
 
-          it("returns true for unique string:", function() {
-            let expected = arg.replace(/ /g, '%20').split('');
-            expect(encodeSpaces(arg.split(''))).to.eql(expected);
-          });
-
-        });
-
-      });
+      it('Test Case #5', function() {
+        chai.expect(maxSubsetSumNoAdjacent([1,15,3])).to.deep.equal(15)
+      })
     `,
-      algoLevel: 1
+      algoLevel: 2
     }),
     Algo.create({
       id: 5,
-      name: 'Animal Shelter',
+      name: 'Zigzag Traverse',
       prompt:
-        'Uses two different queues one for dogs and one for cats. Each entry is assigned a unique identifier which allows dequeueAny to determine which of the two queues to dequeue an item from.',
+        "Write a function that takes in a square-shaped(n x n) two-dimensional array and returns a one-dimensional array of all the array's elements in zigzag order.  Zigzag order starts at the top left corner of the two-dimensional array, goes down by one element, and proceeds in a zigzag pattern all the way to the bottom right corner.",
       examples: [
-        'Input: “this.obj.enqueueDog(“dog”) \nthis.obj.dequeueAny()” \n Output: “dog”'
+        'Input: [\n[1,3,4,10],\n[2,5,9,11],\n[6,8,12,15],\n[7,13,14,16]\n] \n Output: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]'
       ],
       defaultText:
-        'class AnimalShelter {\n} \n// DO NOT TOUCH \nexports.AnimalShelter = AnimalShelter ',
+        'function zigzagTraverse(array) {\n} \n// DO NOT EDIT BELOW THIS LINE \nexports.zigzagTraverse = zigzagTraverse ',
       tests: `const chai = require ('chai')
       const expect = chai.expect;
-      const {AnimalShelter} = require('./userCode');
-        describe('ch3-q6: ', function() {
-          beforeEach(function() {
-            this.obj = new AnimalShelter();
-          });
-          it('any returns whichever animal is in queue', function() {
-            this.obj.enqueueCat('cat');
-            expect(this.obj.dequeueAny()).to.equal('cat');
-            expect(this.obj.dequeueAny()).to.be.undefined;
-            this.obj.enqueueDog('dog');
-            expect(this.obj.dequeueAny()).to.equal('dog');
-            expect(this.obj.dequeueAny()).to.be.undefined;
-          });
-          it('returns animals in the right order', function() {
-            for (let i = 0; i < 4; ++i) {
-              this.obj.enqueueCat('cat' + i);
-            }
-            for (let i = 0; i < 4; ++i) {
-              expect(this.obj.dequeueAny()).to.equal('cat' + i);
-            }
-          });
-          it('returns animals in alternating order when enqueued that way', function() {
-            for (let i = 20; i > 0; --i) {
-              if (i & 1) {
-                this.obj.enqueueCat(i);
+      const { zigzagTraverse } = require("./userCode");
+
+      it('Test Case #1', function() {
+        chai.expect(zigzagTraverse([[1]])).to.deep.equal([1])
+      })
+
+      it('Test Case #2', function() {
+        chai.expect(zigzagTraverse([[1,2,3,4,5]])).to.deep.equal([1,2,3,4,5])
+      })
+
+      it('Test Case #3', function() {
+        chai.expect(zigzagTraverse([[1,3],[2,4],[5,7],[6,8],[9,10]])).to.deep.equal([1,2,3,4,5,6,7,8,9,10])
+      })
+
+      it('Test Case #4', function() {
+        chai.expect(zigzagTraverse([[1,3,4,7,8],[2,5,6,9,10]])).to.deep.equal([1,2,3,4,5,6,7,8,9,10])
+      })
+
+      it('Test Case #5', function() {
+        chai.expect(zigzagTraverse([[1,3,4,10],[2,5,9,11],[6,8,12,15],[7,13,14,16]])).to.deep.equal([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+      })
+      `,
+      solution: `function zigzagTraverse(array) {
+        const height = array.length - 1
+        const width = array[0].length - 1
+        const result = []
+        let row = 0
+        let col = 0
+        let goingDown = true
+        while(!isOutOfBounds (row, col, height, width)) {
+          result.push(array[row][col])
+          if (goingDown) {
+            if (col === 0 || row === height) {
+              goingDown = false
+              if (row === height) {
+                col++
+              } else {
+                row++
               }
-              else {
-                this.obj.enqueueDog(i);
+            } else {
+              row++
+              col--
+            }
+          } else {
+            if (row === 0 || col === width) {
+              goingDown = true
+              if (col === width) {
+                row++
+              } else {
+                col ++
               }
-            }
-            for (let i = 20; i > 0; --i) {
-              expect(this.obj.dequeueAny()).to.equal(i);
-            }
-          });
-          it('correctly returns animals when enqueued alternating but dequeued one at a time', function() {
-            for (let i = 20; i > 0; --i) {
-              if (i & 1) {
-                this.obj.enqueueCat(i);
-              }
-              else {
-                this.obj.enqueueDog(i);
-              }
-            }
-            for (let i = 20; i > 10; i -= 2) {
-              expect(this.obj.dequeueDog()).to.equal(i);
-            }
-            for (let i = 19; i > 10; i -= 2) {
-              expect(this.obj.dequeueCat()).to.equal(i);
-            }
-            for (let i = 10; i > 0; --i) {
-              expect(this.obj.dequeueAny()).to.equal(i);
-            }
-          });
-        });`,
-      solution: `class AnimalShelter {
-        constructor() {
-          this._dogs = [];
-          this._cats = [];
-          this._id = 0;
-        }
-        enqueueCat(name) {
-          this._cats.push({
-            name: name,
-            id: ++this._id
-          });
-        }
-        enqueueDog(name) {
-          this._dogs.push({
-            name: name,
-            id: ++this._id
-          });
-        }
-        dequeueAny() {
-          let dogId = this._dogs.length > 0 ? this._dogs[0].id : Number.POSITIVE_INFINITY,
-            catId = this._cats.length > 0 ? this._cats[0].id : Number.POSITIVE_INFINITY;
-          if (dogId !== Number.POSITIVE_INFINITY || catId !== Number.POSITIVE_INFINITY) {
-            if (dogId < catId) {
-              return this._dogs.shift().name;
-            }
-            else {
-              return this._cats.shift().name;
+            } else {
+              row--
+              col++
             }
           }
         }
-        dequeueCat() {
-          return this._cats.shift().name;
-        }
-        dequeueDog() {
-          return this._dogs.shift().name;
-        }
+        return result
       }
-      exports.AnimalShelter = AnimalShelter`,
+
+      function isOutOfBounds(row, col, height, width) {
+        return row < 0 || row > height || col < 0 || col > width
+      }
+
+      exports.zigzagTraverse = zigzagTraverse`,
+      algoLevel: 3
+    }),
+    Algo.create({
+      id: 6,
+      name: 'Single Cycle Check',
+      prompt:
+        "You are given an array of integers.  Each integer represents a jump of its value in the array.  For instance, the integer 2 represents a jump of 2 indices forward in the array; the integer -3 represents a jump of 3 indices backward in the array.  If a jump spills past the array's bounds, it wraps over to the other side.  For instance, a jump of -1 at index 0 brings us to the last index in the array.  Similarly, a jump of 1 at the last index in the array brings us to index 0.  Write a function that returns a boolean representing whether the jumps in the array form a single cycle.  A single cycle occurs if, starting at any index in the array and following the jumps ,every element is visited exactly once before landing back on the starting index.",
+      examples: ['Input: [2,3,1,-4,-4,2] \n Output: True'],
+      defaultText:
+        'function hasSingleCycle(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.hasSingleCycle = hasSingleCycle',
+      solution: `function hasSingleCycle(array) {
+        let numElementsVisited = 0
+        let currentIdx = 0
+        while (numElementsVisited < array.length) {
+          if (numElementsVisited > 0 && currentIdx === 0) return false
+          numElementsVisited++
+          currentIdx = getNextIdx(currentIdx, array)
+        }
+        return currentIdx === 0
+      }
+
+      function getNextIdx(currentIdx, array) {
+        const jump = array[currentIdx]
+        const nextIdx = (currentIdx + jump) % array.length
+        return nextIdx >= 0 ? nextIdx : nextIdx + array.length
+      }
+
+      exports.hasSingleCycle = hasSingleCycle`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { hasSingleCycle } = require("./userCode");
+
+      it('Test Case #1', function() {
+        chai.expect(hasSingleCycle([2,2,-1])).to.deep.equal(true)
+      })
+
+      it('Test Case #2', function() {
+        chai.expect(hasSingleCycle([2,2,2])).to.deep.equal(true)
+      })
+
+      it('Test Case #3', function() {
+        chai.expect(hasSingleCycle([1,1,1,1,1])).to.deep.equal(true)
+      })
+
+      it('Test Case #4', function() {
+        chai.expect(hasSingleCycle([1,1,0,1,1])).to.deep.equal(false)
+      })
+
+      it('Test Case #5', function() {
+        chai.expect(hasSingleCycle([1,1,1,1,2])).to.deep.equal(false)
+      })`,
+      algoLevel: 2
+    }),
+    Algo.create({
+      id: 7,
+      name: 'Min Number of Coins For Change',
+      prompt:
+        'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlminited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
+      examples: ['Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)'],
+      defaultText:
+        'function minNumberOfCoinsForChange(n, denoms) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',
+      solution: `function minNumberOfCoinsForChange(n, denoms) {
+       const numOfCoins = new Array(n + 1).fill(Infinity)
+       numOfCoins[0] = 0
+       for (const denom of denoms) {
+         for (let amount = 0; amount < numOfCoins.length; amount++) {
+           if (denom <= amount) {
+             numOfCoins[amount] = Math.min(numOfCoins[amount], numOfCoins[amount - denom] + 1)
+           }
+         }
+       }
+       return numOfCoins[n] !== Infinity ? numOfCoins[n] : -1
+      }
+
+      exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { minNumberOfCoinsForChange } = require("./userCode");
+
+      it('Test Case #1', function() {
+        chai.expect(minNumberOfCoinsForChange(0, [1,2,3])).to.deep.equal(0)
+      })
+
+      it('Test Case #2', function() {
+        chai.expect(minNumberOfCoinsForChange(3, [2,1])).to.deep.equal(2)
+      })
+
+      it('Test Case #3', function() {
+        chai.expect(minNumberOfCoinsForChange(4, [1,5,10])).to.deep.equal(4)
+      })
+
+      it('Test Case #4', function() {
+        chai.expect(minNumberOfCoinsForChange(7, [1,5,10])).to.deep.equal(3)
+      })
+
+      it('Test Case #5', function() {
+        chai.expect(minNumberOfCoinsForChange(10, [1, 5, 10])).to.deep.equal(1)
+      })
+      `,
+      algoLevel: 2
+    }),
+    Algo.create({
+      id: 8,
+      name: 'Min Rewards',
+      prompt:
+        "Imagine that you're a teacher who's just graded the final exam in a class.  You have a list of student scores on the final exam in a particular order (not necessarily sorted), and you want to reward your students.  You decide to do so fairly by giving them arbitrary rewards following two rules: first, all students must receive at least one reward; second, any given student must receive strictly more rewards than an adjacent student (a student immediately to the left or to the right) with a lower score and must receive strictly fewer awards than an adjacent student with a higher score.  Assume that all students have different scores; in other words, the scores are all unique.  Write a function that takes in a list of scores and returns the minimum number of rewards that you must give out to students, all the while satisfying the two rules.",
+      examples: ['Input: [8,4,2,1,3,6,7,9,5] \n Output: 25([4,3,2,1,2,3,4,5,1'],
+      defaultText:
+        'function minRewards(scores) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minRewards = minRewards',
+      solution: `function minRewards(scores) {
+       const rewards = scores.map(_ => 1)
+       for (let i = 1; i < scores.length; i++) {
+         let j = i - 1
+         if (scores[i] > scores[j]) {
+           rewards[i] = rewards[j] + 1
+         } else {
+           while (j >= 0 && scores[j] > scores[j+1]) {
+             rewards[j] = Math.max(rewards[j], rewards[j+1] + 1)
+             j--
+           }
+         }
+       }
+       return rewards.reduce((a,b) => a + b)
+      }
+
+      exports.minRewards = minRewards`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { minRewards } = require("./userCode");
+
+      it('Test Case #1', function() {
+        chai.expect(minRewards([1])).to.deep.equal(1)
+      })
+
+      it('Test Case #2', function() {
+        chai.expect(minRewards([5,10])).to.deep.equal(3)
+      })
+
+      it('Test Case #3', function() {
+        chai.expect(minRewards([10,5])).to.deep.equal(3)
+      })
+
+      it('Test Case #4', function() {
+        chai.expect(minRewards([4,2,1,3])).to.deep.equal(8)
+      })
+
+      it('Test Case #5', function() {
+        chai.expect(minRewards([0,4,2,1,3])).to.deep.equal(9)
+      })
+      `,
       algoLevel: 3
     })
   ])
