@@ -5,7 +5,7 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import userAlgos from './userAlgos'
 
-const reducer = combineReducers({user, userAlgos})
+const reducer = combineReducers({user, userAlgos, allAlgos})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

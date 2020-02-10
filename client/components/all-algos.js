@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
-import Axios from 'axios'
 import {updateGame} from '../store/user'
 
 class AllAlgos extends Component {
@@ -15,10 +14,13 @@ class AllAlgos extends Component {
   }
 
   async componentDidMount() {
-    const user = this.props.user
-    const allAlgos = await axios.get('/api/algos')
-    const algos = await lockedAlgos(allAlgos.data, user.id)
-    this.setState({algos: algos})
+    try {
+      const user = this.props.user
+      const algos = await lockedAlgos(user.id)
+      this.setState({algos: algos})
+    } catch (error) {
+      console.log('All Algos Error')
+    }
   }
 
   async startNewGame(algoId, userId) {
@@ -134,7 +136,8 @@ async function uncompletedAlgos(allAlgos, userId) {
   return notAttempted
 }
 
-async function lockedAlgos(allAlgos, userId) {
+async function lockedAlgos(userId) {
+  const allAlgos = await axios.get('/api/algos')
   const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
   const completedAlgoIds = []
   attemptedAlgos.data.forEach(algo => {
@@ -143,14 +146,14 @@ async function lockedAlgos(allAlgos, userId) {
     }
   })
 
-  allAlgos.forEach(algo => {
+  allAlgos.data.forEach(algo => {
     if (completedAlgoIds.includes(algo.id)) {
       algo.complete = true
     } else {
       algo.complete = false
     }
   })
-  return allAlgos
+  return allAlgos.data
 }
 
 //styled components
