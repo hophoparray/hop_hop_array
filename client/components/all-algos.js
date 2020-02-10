@@ -17,6 +17,9 @@ class AllAlgos extends Component {
   async componentDidMount() {
     const user = this.props.user
     const allAlgos = await axios.get('/api/algos')
+    const notAttempted = await uncompletedAlgos(allAlgos.data, user.id)
+
+    this.setState({algos: notAttempted})
     const algos = await lockedAlgos(allAlgos.data, user.id)
     this.setState({algos: algos})
   }
@@ -27,6 +30,14 @@ class AllAlgos extends Component {
     this.props.onStartGame(data.id)
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.setState({
+        user: this.props.user
+      })
+    }
+  }
+
   render() {
     const algos = this.state.algos
     const user = this.props.user
@@ -35,6 +46,10 @@ class AllAlgos extends Component {
     // if (user.gameId === null) {
     //   startGame = true
     // }
+
+    if (!user) {
+      return null
+    }
 
     return (
       <Wrapper>
