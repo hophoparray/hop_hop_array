@@ -32,7 +32,7 @@ router.get('/:algoId', async (req, res, next) => {
       raw: true
     })
     const userAlgo = await userAlgos.findOne({
-      where: {userId: req.user.id},
+      where: {userId: req.user.id, algoId: algoId},
       raw: true
     })
     const findUser = await User.findOne({
@@ -42,7 +42,7 @@ router.get('/:algoId', async (req, res, next) => {
     })
     const response = {
       ...algo,
-      userAlgo: userAlgo && userAlgo.solution,
+      userAlgo,
       findUser
     }
     res.json(response)
@@ -107,12 +107,13 @@ router.post('/algofail/:algoId', async (req, res, next) => {
     if (!row) {
       await userAlgos.create({
         userId: req.user.id,
-        algoId: req.params.algoId
+        algoId: req.params.algoId,
+        userSolution: req.body.text
       })
       res.json(row)
     }
   } catch (error) {
-    console.log('algofail post error', error)
+    next(error)
   }
 })
 
@@ -174,8 +175,23 @@ router.post('/:algoId', async (req, res, next) => {
     if (!row) {
       newUserAlgo = await userAlgos.create({
         userId: req.user.id,
-        algoId: req.params.algoId
+        algoId: req.params.algoId,
+        userSolution: req.body.text
       })
+    }
+
+    if (row) {
+      await userAlgos.update(
+        {
+          userSolution: req.body.text
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          }
+        }
+      )
     }
 
     let testCode = findAlgo.dataValues.tests

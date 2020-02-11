@@ -17,6 +17,7 @@ export default class AlgoFail extends React.Component {
   async componentDidMount() {
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
+    console.log('data from algofail', {data})
     this.setState({
       solution: data.solution
     })
