@@ -13,15 +13,12 @@ class SingleAlgo extends React.Component {
     this.state = {
       userCode: '// Type your code...\n',
       tests: '',
-      passes: [],
-      failures: [],
-      stats: [],
+      failureStatus: '',
       currentAlgo: {},
       prompt: 'Prompt',
       title: 'Title',
       examples: '',
       user: {},
-      bool: true,
       loading: true,
       errorMessage: ''
     }
@@ -33,26 +30,23 @@ class SingleAlgo extends React.Component {
       this.setState({
         loading: false
       })
-      const res = await Axios.post(
+      const {data} = await Axios.post(
         `/api/algos/${this.props.match.params.algoId}`,
         {
           text: this.state.userCode
         }
       )
-      console.log('RES', res.data)
-      // this.setState({
-      //   tests: res.data.testResult.tests,
-      //   passes: res.data.testResult.passes,
-      //   failures: res.data.testResult.failures,
-      //   stats: res.data.testResult.stats,
-      //   bool: false,
-      //   loading: true
-      // })
-      // if (this.state.failures.length === 0) {
-      //   await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
-      //   history.push(`/algopass/${this.props.match.params.algoId}`)
-      // }
+      this.setState({
+        tests: data.allTests,
+        failureStatus: data.failsStatus,
+        loading: true
+      })
+      if (data.allPassing) {
+        await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+        history.push(`/algopass/${this.props.match.params.algoId}`)
+      }
     } catch (error) {
+      console.log('ERROR', error)
       this.setState({errorMessage: error, loading: true})
     }
   }
@@ -63,9 +57,7 @@ class SingleAlgo extends React.Component {
     })
   }
 
-  // TODO: editor focus
   async componentDidMount() {
-    // TODO: Create User-Algo if none exist
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
     this.setState({
@@ -103,19 +95,9 @@ class SingleAlgo extends React.Component {
 
             <div>
               <Head>tests!</Head>
-              {this.state.bool ? (
+              {this.state.tests.length === 0 ? null : (
                 <div>
-                  <Details>Number of Tests Passed: 0</Details>
-                  <Details>Number of Tests Failed: 0</Details>
-                </div>
-              ) : (
-                <div>
-                  <Details>
-                    Number of Tests Passed: {this.state.passes.length}
-                  </Details>
-                  <Details>
-                    Number of Tests Failed: {this.state.failures.length}
-                  </Details>
+                  <Details>{this.state.tests}</Details>
                 </div>
               )}
             </div>
@@ -132,7 +114,6 @@ class SingleAlgo extends React.Component {
               onChange={this.handleChange}
             />
 
-            {/* TO DO: Add Submit button when tests pass */}
             <Buttons>
               <Break href="/algofail">
                 <button className="button">
@@ -173,16 +154,9 @@ class SingleAlgo extends React.Component {
           </Editor>
         </Wrapper>
 
-        {/* <button onClick={() => this.onAttempt(this.state.userCode)}>
-         Attempt
-        </button> */}
-
-        {/* {console.log('this is state after attempt', this.state)} */}
-        {/* TODO: Continue flow to fail/succeed components */}
-
         <TestWrapper>
           <TopWrapper>
-            <Head>Tests Failed: {this.state.failures.length}</Head>
+            <Head>Assertion Errors: </Head>
             <a>
               <button
                 onClick={() => {
@@ -198,19 +172,17 @@ class SingleAlgo extends React.Component {
               </button>
             </a>
           </TopWrapper>
-          {this.state.failures.length === 0 ? (
-            <div />
-          ) : (
+          {this.state.failureStatus.length === 0 ? null : (
             <div>
-              {' '}
-              {this.state.failures.map((obj, index) => (
+              {this.state.failureStatus}
+              {/* {this.state.failures.map((obj, index) => (
                 <Details className="tests" key={index}>
                   <p>
                     Test {index + 1}: {obj.title}
                   </p>
                   <p>Description: {obj.err.message}</p>
                 </Details>
-              ))}
+              ))} */}
             </div>
           )}
         </TestWrapper>
