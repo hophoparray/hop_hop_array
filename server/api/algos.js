@@ -153,49 +153,6 @@ router.put('/:algoId', async (req, res, next) => {
   }
 })
 
-const test = `const chai = require("chai");
-      const expect = chai.expect
-      const { hasUniqueCharactersSet } = require('./userCode');
-
-      describe('ch1-q1', function() {
-        [
-          'abcdefghi',
-          'jklpoiuqwerzxcvmnsadf',
-          '1234567890',
-          'AaBbCcDdeFg1234567890(*&^%$#@!)'
-        ].forEach(arg => {
-          it('returns true for unique string: ' + arg, function() {
-            expect(hasUniqueCharactersSet(arg.split(''))).to.be.true;
-          });
-        });
-        [
-          'abcadef',
-          'aaaaaaaaaa',
-          'abcdefghijklmnopqrstuvwxyza',
-          '1234567890asdklf1',
-          '!@#$%^&*()(*#($&#(*$&#*($&#()))))'
-        ].forEach(arg => {
-
-          it('returns false for string with dupes: ' + arg, function() {
-            expect(hasUniqueCharactersSet(arg.split(''))).to.be.false;
-          });
-        });
-      });`
-
-const userC = `function hasUniqueCharactersSet(str) {
-  let chars = new Set();
-
-  for (let i = 0; i < str.length; ++i) {
-    if (chars.has(str[i])) {
-      return false;
-    }
-    chars.add(str[i]);
-  }
-  return true;
-}
-
-exports.hasUniqueCharactersSet = hasUniqueCharactersSet`
-
 // Run user code
 router.post('/:algoId', async (req, res, next) => {
   try {
@@ -221,8 +178,7 @@ router.post('/:algoId', async (req, res, next) => {
       })
     }
 
-    // let testCode = findAlgo.dataValues.tests
-    let testCode = test
+    let testCode = findAlgo.dataValues.tests
 
     // Create docker instance
     console.log('Beginning of post route')
