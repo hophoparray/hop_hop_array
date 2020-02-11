@@ -39,18 +39,19 @@ class SingleAlgo extends React.Component {
           text: this.state.userCode
         }
       )
-      this.setState({
-        tests: res.data.testResult.tests,
-        passes: res.data.testResult.passes,
-        failures: res.data.testResult.failures,
-        stats: res.data.testResult.stats,
-        bool: false,
-        loading: true
-      })
-      if (this.state.failures.length === 0) {
-        await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
-        history.push(`/algopass/${this.props.match.params.algoId}`)
-      }
+      console.log('RES', res.data)
+      // this.setState({
+      //   tests: res.data.testResult.tests,
+      //   passes: res.data.testResult.passes,
+      //   failures: res.data.testResult.failures,
+      //   stats: res.data.testResult.stats,
+      //   bool: false,
+      //   loading: true
+      // })
+      // if (this.state.failures.length === 0) {
+      //   await Axios.put(`/api/algos/${this.props.match.params.algoId}`)
+      //   history.push(`/algopass/${this.props.match.params.algoId}`)
+      // }
     } catch (error) {
       this.setState({errorMessage: error, loading: true})
     }
