@@ -12,7 +12,8 @@ import {
   SingleAlgo,
   UserProfile,
   Game,
-  ErrorPage
+  ErrorPage,
+  Leaderboard
 } from './components'
 import {me} from './store'
 
@@ -43,6 +44,7 @@ class Routes extends Component {
             <Route exact path="/algofail/:algoId" component={AlgoFail} />
             <Route exact path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />
+            <Route exact path="/leaderboard" component={Leaderboard} />
             <Route path="*" component={ErrorPage} />
           </Switch>
         )}

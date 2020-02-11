@@ -85,6 +85,8 @@ class SingleAlgo extends React.Component {
   }
 
   render() {
+    console.log(this.state)
+    console.log(this.props)
     const options = {
       selectOnLineNumbers: true,
       minimap: {enabled: false},
