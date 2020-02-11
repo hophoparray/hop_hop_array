@@ -121,7 +121,7 @@ class SingleAlgo extends React.Component {
             />
 
             <Buttons>
-              <Break href="/algofail">
+              <Break href={`/algofail/${this.props.match.params.algoId}`}>
                 <button className="button">
                   Give me a {'<br/>'}
                   <span />

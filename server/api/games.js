@@ -36,7 +36,7 @@ router.post('/', async (req, res, next) => {
       algoId: algoId
     })
 
-    //updates users gamer ID
+    //updates users game ID
     const [numAffectedRows, user] = await User.update(
       {
         gameId: newGame.id

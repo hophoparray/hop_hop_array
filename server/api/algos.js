@@ -67,6 +67,55 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
 })
 
 // Update points
+router.put('/algofail/:algoId', async (req, res, next) => {
+  try {
+    let userAlgo = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+
+    if (userAlgo) {
+      const [numOfAffectedRows, updatedUserAlgo] = await userAlgos.update(
+        {
+          status: 'fail'
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          },
+          returning: true
+        }
+      )
+      res.json('updated fail status')
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/algofail/:algoId', async (req, res, next) => {
+  try {
+    const row = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+    if (!row) {
+      await userAlgos.create({
+        userId: req.user.id,
+        algoId: req.params.algoId
+      })
+      res.json(row)
+    }
+  } catch (error) {
+    console.log('algofail post error', error)
+  }
+})
+
 router.put('/:algoId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id)
