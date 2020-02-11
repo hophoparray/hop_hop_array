@@ -6,7 +6,7 @@ const initialState = []
 /**
  * ACTION CREATORS
  */
-const getTopUsers = users => ({type: GET_USER, topUsers: users})
+const getTopUsers = users => ({type: GET_TOP_USERS, topUsers: users})
 
 export const fetchTopUsers = num => async dispatch => {
   try {
@@ -44,9 +44,16 @@ function merge(array1, array2) {
   let arr1 = [...array1]
   let arr2 = [...array2]
   let solution = []
-
   while (arr1.length > 0 || arr2.length > 0) {
-    if (arr1[0].points > arr2[0].points || arr1.length === 0) {
+    console.log(arr1, arr2, 'IN MERGE')
+    console.log(solution)
+    if (arr1.length === 0) {
+      solution.push(arr2[0])
+      arr2 = arr2.slice(1)
+    } else if (arr2.length === 0) {
+      solution.push(arr1[0])
+      arr1 = arr1.slice(1)
+    } else if (arr1[0].points < arr2[0].points) {
       solution.push(arr2[0])
       arr2 = arr2.slice(1)
     } else {

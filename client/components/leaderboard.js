@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import axios from 'axios'
 import styled from 'styled-components'
 import {fetchTopUsers} from '../store/allUser'
 
@@ -11,14 +9,18 @@ class Leaderboard extends Component {
   }
 
   render() {
-    console.log(this.props)
     const topUsers = this.props.topUsers
     let count = 0
+    let num = topUsers.length
 
     return (
       <Wrapper>
         <PageName>Leaderboard</PageName>
-        <SubHead>[Hop Hop] Array's users with the most points</SubHead>
+        <SubHead>
+          <i className="fa fa-trophy" />
+          {`  Top ${num} users  `}
+          <i className="fa fa-trophy" />
+        </SubHead>
         <div>
           <table className="all-algos-table">
             <TableHeader>
@@ -34,7 +36,7 @@ class Leaderboard extends Component {
                 return (
                   <TableRow key={user.id}>
                     <CenterRow>{count}</CenterRow>
-                    <CenterRow>{user.email}</CenterRow>
+                    <td>{user.email}</td>
                     <CenterRow>{user.points}</CenterRow>
                   </TableRow>
                 )
@@ -102,7 +104,4 @@ const TableRow = styled.tr`
 `
 const CenterRow = styled.td`
   text-align: center;
-`
-const Complete = styled.i`
-  color: green;
 `
