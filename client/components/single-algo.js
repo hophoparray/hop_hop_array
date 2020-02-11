@@ -97,7 +97,13 @@ class SingleAlgo extends React.Component {
               <Head>tests!</Head>
               {this.state.tests.length === 0 ? null : (
                 <div>
-                  <Details>{this.state.tests}</Details>
+                  <Details>
+                    {this.state.tests.split('\n').map(piece => (
+                      <div>
+                        {piece} <br />
+                      </div>
+                    ))}
+                  </Details>
                 </div>
               )}
             </div>
@@ -174,15 +180,11 @@ class SingleAlgo extends React.Component {
           </TopWrapper>
           {this.state.failureStatus.length === 0 ? null : (
             <div>
-              {this.state.failureStatus}
-              {/* {this.state.failures.map((obj, index) => (
-                <Details className="tests" key={index}>
-                  <p>
-                    Test {index + 1}: {obj.title}
-                  </p>
-                  <p>Description: {obj.err.message}</p>
-                </Details>
-              ))} */}
+              {this.state.failureStatus.split('\n').map(piece => (
+                <div>
+                  {piece} <br />
+                </div>
+              ))}
             </div>
           )}
         </TestWrapper>
