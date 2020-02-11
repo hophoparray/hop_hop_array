@@ -20,12 +20,15 @@ export default class AlgoFail extends React.Component {
     this.setState({
       solution: data.solution
     })
+    await Axios.post(`/api/algos/algofail/${algoId}`)
   }
 
-  handleClick() {
+  async handleClick() {
+    const algoId = this.props.match.params.algoId
     this.setState({
       clicked: true
     })
+    await Axios.put(`/api/algos/algofail/${algoId}`)
   }
 
   handleChange = value => {
