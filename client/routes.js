@@ -11,7 +11,8 @@ import {
   AlgoFail,
   SingleAlgo,
   UserProfile,
-  Game
+  Game,
+  ErrorPage
 } from './components'
 import {me} from './store'
 
@@ -29,19 +30,20 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
 
-            <Route path="/home" component={UserHome} />
+            <Route exact path="/home" component={UserHome} />
             <Route exact path="/algopass/:algoId" component={AlgoPass} />
             <Route exact path="/algos" component={AllAlgos} />
             <Route exact path="/games" />
             <Route exact path="/algofail/:algoId" component={AlgoFail} />
-            <Route path="/algos/:algoId" component={SingleAlgo} />
+            <Route exact path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />
+            <Route path="*" component={ErrorPage} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
