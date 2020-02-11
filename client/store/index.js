@@ -4,6 +4,7 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import userAlgos from './userAlgos'
+import allAlgos from './allAlgos'
 
 const reducer = combineReducers({user, userAlgos, allAlgos})
 const middleware = composeWithDevTools(

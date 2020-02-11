@@ -4,23 +4,16 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import {updateGame} from '../store/user'
+import {fetchAllAlgos} from '../store/allAlgos'
 
 class AllAlgos extends Component {
   constructor() {
     super()
-    this.state = {
-      algos: []
-    }
   }
 
   async componentDidMount() {
-    try {
-      const user = this.props.user
-      const algos = await lockedAlgos(user.id)
-      this.setState({algos: algos})
-    } catch (error) {
-      console.log('All Algos Error')
-    }
+    const user = this.props.user
+    this.props.onLoadAllAlgos(user.id)
   }
 
   async startNewGame(algoId, userId) {
@@ -30,7 +23,7 @@ class AllAlgos extends Component {
   }
 
   render() {
-    const algos = this.state.algos
+    const algos = this.props.allAlgos
     const user = this.props.user
 
     let startGame = false
@@ -93,7 +86,8 @@ class AllAlgos extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    allAlgos: state.allAlgos
   }
 }
 
@@ -101,12 +95,14 @@ const mapDispatchToProps = function(dispatch) {
   return {
     onStartGame: function(gameId) {
       dispatch(updateGame(gameId))
+    },
+    onLoadAllAlgos: function(userId) {
+      dispatch(fetchAllAlgos(userId))
     }
   }
 }
 
 const ConnectedAlgos = connect(mapStateToProps, mapDispatchToProps)(AllAlgos)
-
 export default ConnectedAlgos
 
 //helper functions
@@ -120,40 +116,6 @@ function shortPrompt(prompt, maxLength) {
 
 function openAlgos(allAlgos, userLevel) {
   return allAlgos.filter(algo => algo.algoLevel <= userLevel)
-}
-
-async function uncompletedAlgos(allAlgos, userId) {
-  const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
-  const completedAlgoIds = []
-  attemptedAlgos.data.forEach(algo => {
-    if (algo.status === 'pass' || algo.status === 'fail') {
-      completedAlgoIds.push(algo.algoId)
-    }
-  })
-  const notAttempted = allAlgos.filter(
-    algo => !completedAlgoIds.includes(algo.id)
-  )
-  return notAttempted
-}
-
-async function lockedAlgos(userId) {
-  const allAlgos = await axios.get('/api/algos')
-  const attemptedAlgos = await axios.get(`/api/algos/userAlgos/${userId}`)
-  const completedAlgoIds = []
-  attemptedAlgos.data.forEach(algo => {
-    if (algo.status === 'pass' || algo.status === 'fail') {
-      completedAlgoIds.push(algo.algoId)
-    }
-  })
-
-  allAlgos.data.forEach(algo => {
-    if (completedAlgoIds.includes(algo.id)) {
-      algo.complete = true
-    } else {
-      algo.complete = false
-    }
-  })
-  return allAlgos.data
 }
 
 //styled components
