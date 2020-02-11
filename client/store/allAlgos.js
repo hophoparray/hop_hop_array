@@ -26,7 +26,6 @@ export const fetchAllAlgos = userId => async dispatch => {
       } else {
         algo.complete = false
       }
-      
     })
     dispatch(getAllAlgos(allAlgos.data))
   } catch (err) {
