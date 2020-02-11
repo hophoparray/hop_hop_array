@@ -1,7 +1,7 @@
 .button {
   --c: black;
   color: var(--c);
-  width: 12em;
+  width: 15em;
   height: 3em;
   border: 0.3em solid var(--c);
   text-align: center;
@@ -52,4 +52,14 @@ button:hover {
 
 .button span:nth-child(4) {
   --n: 4;
+}
+
+#footer {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+}
+
+#app {
+  min-height: 100vh;
 }

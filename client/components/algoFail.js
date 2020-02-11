@@ -1,5 +1,6 @@
 import React from 'react'
 import Axios from 'axios'
+import styled from 'styled-components'
 import MonacoEditor from 'react-monaco-editor'
 
 export default class AlgoFail extends React.Component {
@@ -19,12 +20,15 @@ export default class AlgoFail extends React.Component {
     this.setState({
       solution: data.solution
     })
+    await Axios.post(`/api/algos/algofail/${algoId}`)
   }
 
-  handleClick() {
+  async handleClick() {
+    const algoId = this.props.match.params.algoId
     this.setState({
       clicked: true
     })
+    await Axios.put(`/api/algos/algofail/${algoId}`)
   }
 
   handleChange = value => {
@@ -45,10 +49,22 @@ export default class AlgoFail extends React.Component {
     }
 
     return (
-      <div>
-        <h3>Keep Practicing!</h3>
+      <Wrapper>
+        <Title>Keep Practicing!</Title>
         <p>Here's our solution if you'd like to take a look</p>
-        <button onClick={this.handleClick}>Our Solution</button>
+        <p>
+          Please note: if you reveal the solution below, you will no longer be
+          able to receive points from any future attempts.
+        </p>
+        <a>
+          <button className="button" onClick={this.handleClick}>
+            Our Solution
+            <span />
+            <span />
+            <span />
+            <span />
+          </button>
+        </a>
 
         {this.state.clicked ? (
           <div>
@@ -67,7 +83,23 @@ export default class AlgoFail extends React.Component {
         ) : (
           <div />
         )}
-      </div>
+      </Wrapper>
     )
   }
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #e7e7e7;
+  margin-block-start: 10px;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+`
+
+const Title = styled.h1`
+  text-transform: uppercase;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.4em;
+`

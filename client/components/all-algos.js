@@ -13,6 +13,7 @@ class AllAlgos extends Component {
 
   async componentDidMount() {
     const user = this.props.user
+
     this.props.onLoadAllAlgos(user.id)
   }
 
@@ -20,6 +21,14 @@ class AllAlgos extends Component {
     const {data} = await axios.post('/api/games', {algoId, userId})
 
     this.props.onStartGame(data.id)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.setState({
+        user: this.props.user
+      })
+    }
   }
 
   render() {
@@ -30,6 +39,10 @@ class AllAlgos extends Component {
     // if (user.gameId === null) {
     //   startGame = true
     // }
+
+    if (!user) {
+      return null
+    }
 
     return (
       <Wrapper>
