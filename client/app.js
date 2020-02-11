@@ -7,12 +7,24 @@ import './themes'
 import styled from 'styled-components'
 
 const App = () => {
+  if (
+    window.location.href.indexOf('login') > -1 ||
+    window.location.href.indexOf('signup') > -1 ||
+    window.location.href == '/'
+  ) {
+    return (
+      <div>
+        <Wrapper>
+          <Routes />
+        </Wrapper>
+      </div>
+    )
+  }
   return (
     <div>
       <Wrapper>
         <Navbar />
         <Routes />
-        <Footer id="footer" />
       </Wrapper>
     </div>
   )

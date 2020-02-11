@@ -17,53 +17,53 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       {isLoggedIn ? (
         <Nav>
           <a href="/algos">
-            <button className="button">
+            <Button className="button">
               Practice
               <span />
               <span />
               <span />
               <span />
-            </button>
+            </Button>
           </a>
           <a href="/profile">
-            <button className="button">
+            <Button className="button">
               Profile
               <span />
               <span />
               <span />
               <span />
-            </button>
+            </Button>
           </a>
           <a href="#" onClick={handleClick}>
-            <button className="button">
+            <Button className="button">
               Logout
               <span />
               <span />
               <span />
               <span />
-            </button>
+            </Button>
           </a>
         </Nav>
       ) : (
         <Nav>
           {/* The navbar will show these links before you log in */}
           <a href="/login">
-            <button className="button">
+            <Button className="button">
               Login
               <span />
               <span />
               <span />
               <span />
-            </button>
+            </Button>
           </a>
           <a href="/signup">
-            <button className="button">
+            <Button className="button">
               Sign Up
               <span />
               <span />
               <span />
               <span />
-            </button>
+            </Button>
           </a>
         </Nav>
       )}
@@ -131,3 +131,5 @@ const Nav = styled.div`
   justify-content: space-around;
   flex-grow: 2;
 `
+
+const Button = styled.button``
