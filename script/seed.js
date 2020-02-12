@@ -9,7 +9,25 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123'}),
+    User.create({email: 'kate@email.com', password: '123', points: 2050}),
+    User.create({
+      email: 'GraceHopper@email.com',
+      password: '123',
+      points: 20000
+    }),
+    User.create({email: 'kim@email.com', password: '123', points: 450}),
+    User.create({email: 'matt@email.com', password: '123', points: 700}),
+    User.create({email: 'john@email.com', password: '123', points: 300}),
+    User.create({email: 'dave@email.com', password: '123', points: 1050}),
+    User.create({email: 'will@email.com', password: '123', points: 50}),
+    User.create({email: 'caroline@email.com', password: '123', points: 800}),
+    User.create({email: 'mark@email.com', password: '123', points: 400}),
+    User.create({email: 'jennifer@email.com', password: '123', points: 800}),
+    User.create({email: 'emily@email.com', password: '123', points: 250}),
+    User.create({email: 'alex@email.com', password: '123', points: 950}),
+    User.create({email: 'holden@email.com', password: '123', points: 650}),
+    User.create({email: 'george@email.com', password: '123', points: 50})
   ])
 
   const algos = await Promise.all([
@@ -369,7 +387,7 @@ async function seed() {
       id: 7,
       name: 'Min Number of Coins For Change',
       prompt:
-        'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlminited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
+        'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlimited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
       examples: ['Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)'],
       defaultText:
         'function minNumberOfCoinsForChange(n, denoms) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',
