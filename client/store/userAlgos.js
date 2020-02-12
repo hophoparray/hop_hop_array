@@ -9,9 +9,7 @@ const GET_USER_ALGOS = 'GET_USER_ALGOS'
 /**
  * INITIAL STATE
  */
-const initialState = {
-  userAlgos: []
-}
+const initialState = []
 /**
  * ACTION CREATORS
  */

@@ -66,6 +66,56 @@ router.get('/userAlgos/:userId', async (req, res, next) => {
   }
 })
 
+// Update points
+router.put('/algofail/:algoId', async (req, res, next) => {
+  try {
+    let userAlgo = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+
+    if (userAlgo) {
+      const [numOfAffectedRows, updatedUserAlgo] = await userAlgos.update(
+        {
+          status: 'fail'
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          },
+          returning: true
+        }
+      )
+      res.json('updated fail status')
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/algofail/:algoId', async (req, res, next) => {
+  try {
+    const row = await userAlgos.findOne({
+      where: {
+        userId: req.user.id,
+        algoId: req.params.algoId
+      }
+    })
+    if (!row) {
+      await userAlgos.create({
+        userId: req.user.id,
+        algoId: req.params.algoId
+      })
+      res.json(row)
+    }
+  } catch (error) {
+    console.log('algofail post error', error)
+  }
+})
+
 router.put('/:algoId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id)
@@ -103,6 +153,7 @@ router.put('/:algoId', async (req, res, next) => {
   }
 })
 
+// Run user code
 router.post('/:algoId', async (req, res, next) => {
   try {
     let findAlgo = await Algo.findOne({
@@ -128,14 +179,13 @@ router.post('/:algoId', async (req, res, next) => {
     }
 
     let testCode = findAlgo.dataValues.tests
-    // console.log('this is the testCode', testCode)
 
     // Create docker instance
     console.log('Beginning of post route')
-
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
+
     // Start container
     console.log('container starts')
     await myContainer.start()
@@ -154,20 +204,15 @@ router.post('/:algoId', async (req, res, next) => {
 
     let testResult
     try {
-      testResult = await dockerExec(myContainer, [
-        './node_modules/.bin/mocha',
-        'test.js',
-        '--reporter',
-        'json'
-      ])
+      testResult = await dockerExec(myContainer, ['npm', 'test'])
     } catch (error) {
-      // console.log('TESTS FAILED')
-      // console.log(error.message)
-      testResult = error.message
+      console.log('TESTS FAILED')
+      console.log(error.message)
     }
-    testResult = formatTestJson(testResult)
+
+    testResult = formatTestResult(testResult)
     console.log('TEST RESULTS:')
-    // console.log(testResult)
+    console.log(testResult)
 
     // Turn off docker container
     console.log('Stop')
@@ -176,20 +221,24 @@ router.post('/:algoId', async (req, res, next) => {
     await myContainer.remove()
 
     console.log('Done')
-    res.json({testResult, newUserAlgo})
+    res.json({...testResult})
   } catch (error) {
     console.log('ERROR:', error)
     next(error)
   }
 })
 
-// The test result is JSON, but it has some random characters (for terminal colors)
-function formatTestJson(testStr) {
-  let firstCurlyIndex = testStr.indexOf('{')
-  if (firstCurlyIndex > -1) {
-    let fixedStr = testStr.slice(firstCurlyIndex)
-    console.log('fixed string', fixedStr)
-    return JSON.parse(fixedStr)
+// Formats the TestResult string to pass to front-end
+function formatTestResult(testStr) {
+  let firstIndexAll = testStr.indexOf('cat results.txt') + 29
+  let firstIndexFails = testStr.indexOf('passing') - 2
+  // Splits results into list of all tests + consolelogs && list of assertion errors
+  if (firstIndexAll > 28 && firstIndexAll > -3) {
+    let allStr = testStr.slice(firstIndexAll, firstIndexFails)
+    let failsStr = testStr.slice(firstIndexFails)
+    let allPassing = false
+    if (!failsStr.includes('failing')) allPassing = true
+    return {allTests: allStr, failsStatus: failsStr, allPassing}
   }
   throw new Error('Formatting failed: ' + testStr)
 }
@@ -197,6 +246,7 @@ function formatTestJson(testStr) {
 async function dockerExec(container, command) {
   const exec = await container.exec({
     Cmd: command,
+    Tty: false,
     AttachStdout: true,
     AttachStderr: true
   })
