@@ -83,26 +83,26 @@ class AuthForm extends React.Component {
                   <div>
                     <SubHead>Not a member?</SubHead>
                     <Link to="/signup">
-                      <LoginButton className="button">
+                      <OtherButton className="button">
                         Sign Up
                         <span />
                         <span />
                         <span />
                         <span />
-                      </LoginButton>
+                      </OtherButton>
                     </Link>
                   </div>
                 ) : (
                   <div>
                     <SubHead>Already a member?</SubHead>
                     <Link to="/login">
-                      <LoginButton className="button">
+                      <OtherButton className="button">
                         Login
                         <span />
                         <span />
                         <span />
                         <span />
-                      </LoginButton>
+                      </OtherButton>
                     </Link>
                   </div>
                 )}
@@ -169,6 +169,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background: #e7e7e7;
 `
 
 const Wrapper = styled.div`
@@ -198,6 +199,8 @@ const LogoContainer = styled.div`
 const Logo = styled.img`
   width: 70%;
   height: auto;
+  margin-block-end: 0.5em;
+  margin-block-start: 0.5em;
 `
 
 const SignInBox = styled.div`
@@ -214,14 +217,12 @@ const H2 = styled.h2`
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
   margin-top: 0px;
-  margin-block-end: 0.5em;
+  margin-block-end: 0px;
 `
 
 const Social = styled.div`
   display: flex;
   flex-direction: row;
-  margin-block-end: 10px;
-  margin-block-end: 0.5em;
 `
 
 const AuthButton = styled.a`
@@ -251,6 +252,12 @@ const AuthButton = styled.a`
 const LoginButton = styled.button`
   font-size: 15px;
   margin-block-end: 0em;
+`
+
+const OtherButton = styled.button`
+  font-size: 15px;
+  margin-block-end: 0em;
+  margin-block-start: 0em;
 `
 
 const Form = styled.form`
