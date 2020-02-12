@@ -2,21 +2,22 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
-import {fetchMyAlgos} from '../store/userAlgos'
+import {fetchAllAlgos} from '../store/allAlgos'
 import styled from 'styled-components'
+import ConnectedLeaderboard from './leaderboard'
 
 class UserProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
       user: {},
-      userAlgo: []
+      algos: []
     }
   }
 
   componentDidMount() {
     this.props.getUser()
-    this.props.getUserAlgos(this.props.user.id)
+    this.props.getAlgos(this.props.user.id)
   }
 
   componentDidUpdate(prevProps) {
@@ -25,18 +26,20 @@ class UserProfile extends Component {
         user: this.props.user
       })
     }
-    if (prevProps.userAlgos !== this.props.userAlgos) {
+    if (prevProps.algos !== this.props.algos) {
       this.setState({
-        userAlgos: this.props.userAlgos
+        algos: this.props.algos
       })
     }
   }
 
   render() {
-    if (!this.state.user) {
+    if (!this.state.user || !this.state.algos) {
       return null
     }
     let user = this.state.user
+    let algos = this.state.algos
+    console.log('ALGOS', algos)
     let level
     let next
     if (user.userLevel == 1) {
@@ -49,43 +52,53 @@ class UserProfile extends Component {
       level = 'Expert'
     }
     if (level == 'Expert') {
-      level = 'Master'
+      level = 'Expert'
     }
     return (
       <Wrapper>
         <div>
           <div>
-            <div>
-              <Header>
-                <PageName>Your Stats</PageName>
-                <SubSubHead>{user.email}</SubSubHead>
-              </Header>
-            </div>
+            <Header>
+              <PageName>Your Stats</PageName>
+              <SubSubHead>{user.email}</SubSubHead>
+            </Header>
+          </div>
 
-            <StatWrapper>
-              <SubHead>Level: {user.userLevel}</SubHead>
-              <SubSubHead>
-                <i className="fa fa-star" /> {level}{' '}
-                <i className="fa fa-star" />
-              </SubSubHead>
-            </StatWrapper>
-            <br />
-            <StatWrapper>
-              <SubHead>Points: {user.points}</SubHead>
-              <SubSubHead>
-                <i className="fa fa-arrow-up" />{' '}
-                {level !== 'Master'
-                  ? `${100 - user.points} points from ${next}`
-                  : `You have reached the top level: master`}{' '}
-                <i className="fa fa-arrow-up" />
-              </SubSubHead>
-            </StatWrapper>
-          </div>
+          <StatWrapper>
+            <SubHead>Level: {user.userLevel}</SubHead>
+            <SubSubHead>
+              <i className="fa fa-star" /> {level} <i className="fa fa-star" />
+            </SubSubHead>
+          </StatWrapper>
+          <br />
+          <StatWrapper>
+            <SubHead>Points: {user.points}</SubHead>
+            <SubSubHead>
+              <i className="fa fa-arrow-up" />{' '}
+              {level === 'Beginner'
+                ? `${100 - user.points} points from ${next}`
+                : level === 'Intermediate'
+                  ? `${200 - user.points} points from ${next}`
+                  : `You have reached the top level: expert`}
+              <i className="fa fa-arrow-up" />
+            </SubSubHead>
+          </StatWrapper>
+        </div>
+        <div>
+          <br />
+          <PageName>Completed Exercises</PageName>
           <div>
-            <br />
-            <PageName>Completed Exercises</PageName>
-            <SubSubHead>Coming Soon</SubSubHead>
+            <ul>
+              {algos.map(algo => {
+                if (algo.complete) {
+                  return <li key={algo.id}>{algo.name}</li>
+                }
+              })}
+            </ul>
           </div>
+        </div>
+        <div>
+          <ConnectedLeaderboard />
         </div>
       </Wrapper>
     )
@@ -95,14 +108,14 @@ class UserProfile extends Component {
 const mapState = state => {
   return {
     user: state.user,
-    userAlgos: state.userAlgos
+    algos: state.allAlgos
   }
 }
 
 const mapDispatch = dispatch => {
   return {
     getUser: () => dispatch(me()),
-    getUserAlgos: id => dispatch(fetchMyAlgos(id))
+    getAlgos: id => dispatch(fetchAllAlgos(id))
   }
 }
 
