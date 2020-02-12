@@ -387,7 +387,7 @@ async function seed() {
       id: 7,
       name: 'Min Number of Coins For Change',
       prompt:
-        'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlminited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
+        'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlimited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
       examples: ['Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)'],
       defaultText:
         'function minNumberOfCoinsForChange(n, denoms) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',

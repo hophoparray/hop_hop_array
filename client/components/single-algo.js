@@ -58,13 +58,26 @@ class SingleAlgo extends React.Component {
   }
 
   async componentDidMount() {
+    let userSol
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
+    console.log('component did mount', {data})
+    if (data.userAlgo) {
+      console.log('usersol = usersolution')
+      if (data.userAlgo.userSolution) {
+        userSol = data.userAlgo.userSolution
+      } else {
+        userSol = data.defaultText
+      }
+    } else {
+      console.log('usersol = defaulttext')
+      userSol = data.defaultText
+    }
     this.setState({
       title: data.name,
       prompt: data.prompt,
       examples: data.examples,
-      userCode: data.defaultText,
+      userCode: userSol,
       user: data.findUser
     })
   }
