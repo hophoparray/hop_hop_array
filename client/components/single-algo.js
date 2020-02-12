@@ -46,7 +46,6 @@ class SingleAlgo extends React.Component {
         history.push(`/algopass/${this.props.match.params.algoId}`)
       }
     } catch (error) {
-      console.log('ERROR', error)
       this.setState({errorMessage: error, loading: true})
     }
   }
@@ -61,16 +60,13 @@ class SingleAlgo extends React.Component {
     let userSol
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
-    console.log('component did mount', {data})
     if (data.userAlgo) {
-      console.log('usersol = usersolution')
       if (data.userAlgo.userSolution) {
         userSol = data.userAlgo.userSolution
       } else {
         userSol = data.defaultText
       }
     } else {
-      console.log('usersol = defaulttext')
       userSol = data.defaultText
     }
     this.setState({

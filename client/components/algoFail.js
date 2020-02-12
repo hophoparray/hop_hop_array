@@ -17,7 +17,6 @@ export default class AlgoFail extends React.Component {
   async componentDidMount() {
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
-    console.log('data from algofail', {data})
     this.setState({
       solution: data.solution
     })
@@ -39,9 +38,6 @@ export default class AlgoFail extends React.Component {
   }
 
   render() {
-    console.log('state', this.state)
-    console.log('this.state.solution', this.state.solution)
-
     const options = {
       selectOnLineNumbers: true,
       minimap: {enabled: false},

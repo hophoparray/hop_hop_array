@@ -15,7 +15,6 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props, 'PROPS')
     if (this.props.user.gameId !== null) {
       this.setState({
         inGame: true

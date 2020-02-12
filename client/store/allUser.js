@@ -45,8 +45,6 @@ function merge(array1, array2) {
   let arr2 = [...array2]
   let solution = []
   while (arr1.length > 0 || arr2.length > 0) {
-    console.log(arr1, arr2, 'IN MERGE')
-    console.log(solution)
     if (arr1.length === 0) {
       solution.push(arr2[0])
       arr2 = arr2.slice(1)
