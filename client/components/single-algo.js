@@ -69,12 +69,17 @@ class SingleAlgo extends React.Component {
     } else {
       userSol = data.defaultText
     }
+    let status = false
+    if (data.userAlgo !== null) {
+      status = true
+    }
     this.setState({
       title: data.name,
       prompt: data.prompt,
       examples: data.examples,
       userCode: userSol,
-      user: data.findUser
+      user: data.findUser,
+      submitted: status
     })
   }
 
@@ -142,16 +147,20 @@ class SingleAlgo extends React.Component {
 
               {this.state.loading ? (
                 <Attempt>
-                  <button
-                    className="button"
-                    onClick={() => this.onAttempt(this.state.userCode)}
-                  >
-                    Attempt
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </button>
+                  {this.state.submitted ? (
+                    <Head>You have already submitted this problem</Head>
+                  ) : (
+                    <button
+                      className="button"
+                      onClick={() => this.onAttempt(this.state.userCode)}
+                    >
+                      Attempt
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                    </button>
+                  )}
                 </Attempt>
               ) : (
                 <a>
