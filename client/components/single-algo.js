@@ -98,7 +98,8 @@ class SingleAlgo extends React.Component {
       selectOnLineNumbers: true,
       minimap: {enabled: false},
       fontFamily: 'Fira Code',
-      fontLigatures: true
+      fontLigatures: true,
+      fontSize: '16px'
     }
     return (
       <div>
