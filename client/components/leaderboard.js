@@ -15,6 +15,7 @@ class Leaderboard extends Component {
 
     return (
       <Wrapper>
+        <br />
         <PageName>Leaderboard</PageName>
         <SubHead>
           <i className="fa fa-trophy" />
@@ -74,12 +75,12 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Open Sans', sans-serif;
 `
 const PageName = styled.h1`
-  font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
-  font-weight: lighter;
   letter-spacing: 1.9px;
+  font-size: 1.3em;
   margin-block-end: 0;
 `
 const SubHead = styled.h4`
@@ -92,6 +93,7 @@ const TableHeader = styled.thead`
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
   text-align: center;
+  font-size: 0.9em;
 `
 const Headers = styled.th`
   padding: 10px;
@@ -101,6 +103,7 @@ const TableRow = styled.tr`
   background-color: #ffffff;
   box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
   font-family: 'Open Sans', sans-serif;
+  font-size: 0.85em;
 `
 const CenterRow = styled.td`
   text-align: center;

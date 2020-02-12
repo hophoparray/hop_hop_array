@@ -42,64 +42,70 @@ class UserProfile extends Component {
     console.log('ALGOS', algos)
     let level
     let next
+    let maxLevelPoint
     if (user.userLevel == 1) {
       level = 'Beginner'
       next = 'Intermediate'
+      maxLevelPoint = 100
     } else if (user.userLevel == 2) {
       level = 'Intermediate'
       next = 'Expert'
+      maxLevelPoint = 200
     } else {
       level = 'Expert'
+      maxLevelPoint = null
     }
     if (level == 'Expert') {
       level = 'Expert'
     }
     return (
       <Wrapper>
-        <div>
-          <div>
-            <Header>
-              <PageName>Your Stats</PageName>
-              <SubSubHead>{user.email}</SubSubHead>
-            </Header>
-          </div>
-
-          <StatWrapper>
-            <SubHead>Level: {user.userLevel}</SubHead>
-            <SubSubHead>
-              <i className="fa fa-star" /> {level} <i className="fa fa-star" />
-            </SubSubHead>
-          </StatWrapper>
-          <br />
-          <StatWrapper>
-            <SubHead>Points: {user.points}</SubHead>
-            <SubSubHead>
-              <i className="fa fa-arrow-up" />{' '}
-              {level === 'Beginner'
-                ? `${100 - user.points} points from ${next}`
-                : level === 'Intermediate'
-                  ? `${200 - user.points} points from ${next}`
-                  : `You have reached the top level: expert`}
-              <i className="fa fa-arrow-up" />
-            </SubSubHead>
-          </StatWrapper>
-        </div>
-        <div>
+        <Container className="profilecontainer">
           <br />
           <PageName>Completed Exercises</PageName>
           <div>
             <ul>
               {algos.map(algo => {
                 if (algo.complete) {
-                  return <li key={algo.id}>{algo.name}</li>
+                  return <Algo key={algo.id}>{algo.name}</Algo>
                 }
               })}
             </ul>
           </div>
-        </div>
-        <div>
+        </Container>
+        <Container className="profilecontainer">
+          <br />
+          <PageName>Your Stats</PageName>
+          <SubHead>{user.email}</SubHead>
+          <Level>Level: {user.userLevel}</Level>
+          <SubHead>
+            <i className="fa fa-star" /> {level} <i className="fa fa-star" />
+          </SubHead>
+          <br />
+          <Points>Points: {user.points}</Points>
+          <SubHead>
+            <i className="fa fa-arrow-up" />{' '}
+            {level === 'Beginner'
+              ? `${100 - user.points} points from ${next}`
+              : level === 'Intermediate'
+                ? `${200 - user.points} points from ${next}`
+                : `You have reached the top level: expert`}
+            <i className="fa fa-arrow-up" />
+          </SubHead>
+          <Progress>
+            {maxLevelPoint ? (
+              <progress
+                id="progressBar"
+                max="100"
+                value={user.points / maxLevelPoint * 100}
+              />
+            ) : null}
+          </Progress>
+        </Container>
+
+        <Container className="profilecontainer">
           <ConnectedLeaderboard />
-        </div>
+        </Container>
       </Wrapper>
     )
   }
@@ -124,35 +130,53 @@ export default connect(mapState, mapDispatch)(UserProfile)
 //styled components
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-const PageName = styled.h1`
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-block-start: 1em;
   font-family: 'Open Sans', sans-serif;
-  text-transform: uppercase;
+`
 
+const Algo = styled.li``
+
+const Progress = styled.div`
+  margin-block-start: 1em;
+`
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: #e7e7e7;
+  padding: 15px;
+`
+
+const PageName = styled.h1`
+  text-transform: uppercase;
   letter-spacing: 1.9px;
+  font-size: 1.3em;
   margin-block-end: 0;
 `
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-`
+
 const SubHead = styled.h2`
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
+  font-size: 0.9em;
 `
 
-const SubSubHead = styled.h4`
-  font-family: 'Open Sans', sans-serif;
+const Level = styled.h2`
   text-transform: uppercase;
+  letter-spacing: 1.9px;
+  font-size: 1.3em;
+  margin-block-end: 0;
+  margin-block-start: 1em;
 `
 
-const StatWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #e7e7e7;
-  border-radius: 5px;
+const Points = styled.h2`
+  text-transform: uppercase;
+  letter-spacing: 1.9px;
+  font-size: 1.3em;
+  margin-block-end: 0;
+  margin-block-start: 1em;
 `

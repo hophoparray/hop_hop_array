@@ -139,6 +139,17 @@ input {
   min-height: 480px;
 }
 
+.profilecontainer {
+  background-color: #e7e7e7;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 1/4vh;
+  max-width: 100%;
+  min-height: 480px;
+}
+
 .form-container {
   position: absolute;
   top: 0;
@@ -289,4 +300,44 @@ footer i {
 footer a {
   color: #3c97bf;
   text-decoration: none;
+}
+
+progress {
+  display: inline-block;
+  width: 190px;
+  height: 20px;
+  padding: 15px 0 0 0;
+  margin: 0;
+  background: none;
+  border: 0;
+  border-radius: 15px;
+  text-align: left;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.8em;
+}
+progress::-webkit-progress-bar {
+  height: 11px;
+  width: 150px;
+  margin: 0 auto;
+  background-color: #ccc;
+  border-radius: 15px;
+  box-shadow: 0px 0px 6px #777 inset;
+}
+progress::-webkit-progress-value {
+  display: inline-block;
+  float: left;
+  height: 11px;
+  margin: 0px -10px 0 0;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 0px 6px #777 inset;
+}
+progress:after {
+  margin: -26px 0 0 -7px;
+  padding: 0;
+  display: inline-block;
+  float: left;
+  content: attr(value) '%';
+  font-family: 'Open Sans', sans-serif;
 }
