@@ -292,4 +292,5 @@ const TestWrapper = styled.div`
 const TopWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `

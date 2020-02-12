@@ -97,7 +97,7 @@ class UserProfile extends Component {
               <progress
                 id="progressBar"
                 max="100"
-                value={user.points / maxLevelPoint * 100}
+                value={100 - (maxLevelPoint - user.points)}
               />
             ) : null}
           </Progress>
