@@ -9,7 +9,25 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123'}),
+    User.create({email: 'kate@email.com', password: '123', points: 2050}),
+    User.create({
+      email: 'GraceHopper@email.com',
+      password: '123',
+      points: 20000
+    }),
+    User.create({email: 'kim@email.com', password: '123', points: 450}),
+    User.create({email: 'matt@email.com', password: '123', points: 700}),
+    User.create({email: 'john@email.com', password: '123', points: 300}),
+    User.create({email: 'dave@email.com', password: '123', points: 1050}),
+    User.create({email: 'will@email.com', password: '123', points: 50}),
+    User.create({email: 'caroline@email.com', password: '123', points: 800}),
+    User.create({email: 'mark@email.com', password: '123', points: 400}),
+    User.create({email: 'jennifer@email.com', password: '123', points: 800}),
+    User.create({email: 'emily@email.com', password: '123', points: 250}),
+    User.create({email: 'alex@email.com', password: '123', points: 950}),
+    User.create({email: 'holden@email.com', password: '123', points: 650}),
+    User.create({email: 'george@email.com', password: '123', points: 50})
   ])
 
   const algos = await Promise.all([
