@@ -40,6 +40,7 @@ router.get('/:algoId', async (req, res, next) => {
         id: req.user.id
       }
     })
+    console.log(userAlgo, 'user algo')
     const response = {
       ...algo,
       userAlgo,

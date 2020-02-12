@@ -71,7 +71,9 @@ class SingleAlgo extends React.Component {
     }
     let status = false
     if (data.userAlgo !== null) {
-      status = true
+      if (data.userAlgo.status && data.userAlgo.status !== 'pending') {
+        status = true
+      }
     }
     this.setState({
       title: data.name,
