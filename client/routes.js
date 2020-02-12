@@ -29,12 +29,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route exact path="/">
-          {isLoggedIn ? <Redirect to="/home" /> : <Redirect to="login" />}
-        </Route>
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <Switch>
             {/* Routes placed here are only available after logging in */}
 
@@ -45,6 +40,23 @@ class Routes extends Component {
             <Route exact path="/algofail/:algoId" component={AlgoFail} />
             <Route path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/login">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/signup">
+              <Redirect to="/home" />
+            </Route>
+          </Switch>
+        ) : (
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
