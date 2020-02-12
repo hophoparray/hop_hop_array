@@ -63,8 +63,14 @@ class SingleAlgo extends React.Component {
     const {data} = await Axios.get(`/api/algos/${algoId}`)
     console.log('component did mount', {data})
     if (data.userAlgo) {
-      userSol = data.userAlgo.userSolution
+      console.log('usersol = usersolution')
+      if (data.userAlgo.userSolution) {
+        userSol = data.userAlgo.userSolution
+      } else {
+        userSol = data.defaultText
+      }
     } else {
+      console.log('usersol = defaulttext')
       userSol = data.defaultText
     }
     this.setState({
