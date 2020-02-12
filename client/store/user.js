@@ -63,7 +63,6 @@ export const logout = () => async dispatch => {
 
 export const updateGame = gameId => dispatch => {
   try {
-    console.log(history)
     dispatch(updatedGame(gameId))
   } catch (err) {
     console.error(err)

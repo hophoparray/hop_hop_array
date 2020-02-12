@@ -197,19 +197,17 @@ router.post('/:algoId', async (req, res, next) => {
     let testCode = findAlgo.dataValues.tests
 
     // Create docker instance
-    console.log('Beginning of post route')
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
 
     // Start container
-    console.log('container starts')
     await myContainer.start()
 
-    console.log('write file for test code')
+    //Write file for test code
     await dockerExec(myContainer, ['node', 'writeFile.js', 'test.js', testCode])
 
-    console.log('write file for user code')
+    //Write file for user code
     const userCode = req.body.text
     await dockerExec(myContainer, [
       'node',
@@ -222,24 +220,19 @@ router.post('/:algoId', async (req, res, next) => {
     try {
       testResult = await dockerExec(myContainer, ['npm', 'test'])
     } catch (error) {
-      console.log('TESTS FAILED')
       console.log(error.message)
     }
 
     testResult = formatTestResult(testResult)
-    console.log('TEST RESULTS:')
-    console.log(testResult)
 
     // Turn off docker container
-    console.log('Stop')
     await myContainer.stop()
-    console.log('Remove')
+    // Remove docker container
     await myContainer.remove()
 
-    console.log('Done')
+    //Sending results back
     res.json({...testResult})
   } catch (error) {
-    console.log('ERROR:', error)
     next(error)
   }
 })

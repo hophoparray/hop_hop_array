@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 export default class AlgoPass extends React.Component {
   render() {
-    console.log('this is props of algopass', this)
     return (
       <Wrapper>
         <img src="https://3.bp.blogspot.com/-StU37DdFxKg/Wcpt8sJ-9lI/AAAAAAAKpzg/qcObtkOEXrslo5LLyiFcHGQKVMVO-9YAwCLcBGAs/s1600/AW551796_01.gif" />
