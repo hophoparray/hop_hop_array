@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
+import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
   Login,
@@ -31,21 +31,35 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={Signup} />
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <Switch>
             {/* Routes placed here are only available after logging in */}
-            <Route exact path="/" component={AllAlgos} />
-            <Route exact path="/home" component={UserHome} />
+
+            <Route path="/home" component={AllAlgos} />
             <Route exact path="/algopass/:algoId" component={AlgoPass} />
             <Route exact path="/algos" component={AllAlgos} />
             <Route exact path="/games" />
             <Route exact path="/algofail/:algoId" component={AlgoFail} />
             <Route exact path="/algos/:algoId" component={SingleAlgo} />
             <Route exact path="/profile" component={UserProfile} />
-            <Route exact path="/leaderboard" component={Leaderboard} />
             <Route path="*" component={ErrorPage} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/login">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/signup">
+              <Redirect to="/home" />
+            </Route>
+          </Switch>
+        ) : (
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
