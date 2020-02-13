@@ -38,7 +38,7 @@ async function seed() {
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
       examples: ['Input: ["abcdefghi"] \n Output: [true]'],
       defaultText:
-        'function hasUniqueCharactersSet(str){ \n // } \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
+        'function hasUniqueCharactersSet(str){ \n} \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
       const expect = chai.expect
       const { hasUniqueCharactersSet } = require('./userCode');
