@@ -39,7 +39,6 @@ class UserProfile extends Component {
     }
     let user = this.state.user
     let algos = this.state.algos
-    console.log('ALGOS', algos)
     let level
     let next
     let maxLevelPoint
@@ -60,6 +59,8 @@ class UserProfile extends Component {
     }
     return (
       <Wrapper>
+        <br />
+        <br />
         <Container className="profilecontainer">
           <br />
           <PageName>Completed Exercises</PageName>

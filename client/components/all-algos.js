@@ -46,6 +46,8 @@ class AllAlgos extends Component {
 
     return (
       <Wrapper>
+        <br />
+        <br />
         <PageName>All Algos</PageName>
         <SubHead>Select an algo to attempt!</SubHead>
         <div>
@@ -64,7 +66,9 @@ class AllAlgos extends Component {
                 return (
                   <TableRow key={algo.id}>
                     <td>
-                      <Link to={`/algos/${algo.id}`}>{algo.name}</Link>
+                      <AlgoLink href={`/algos/${algo.id}`}>
+                        {algo.name}
+                      </AlgoLink>
                     </td>
                     <Level>
                       {algo.complete === true ? (
@@ -136,6 +140,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const AlgoLink = styled.a`
+  font-weight: bold;
+  text-decoration: underline;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
 `
 const PageName = styled.h1`
   font-family: 'Open Sans', sans-serif;
