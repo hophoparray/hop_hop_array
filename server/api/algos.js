@@ -222,7 +222,6 @@ router.post('/:algoId', async (req, res, next) => {
     } catch (error) {
       console.log(error.message)
     }
-
     testResult = formatTestResult(testResult)
 
     // Turn off docker container
