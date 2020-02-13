@@ -69,12 +69,19 @@ class SingleAlgo extends React.Component {
     } else {
       userSol = data.defaultText
     }
+    let status = false
+    if (data.userAlgo !== null) {
+      if (data.userAlgo.status && data.userAlgo.status !== 'pending') {
+        status = true
+      }
+    }
     this.setState({
       title: data.name,
       prompt: data.prompt,
       examples: data.examples,
       userCode: userSol,
-      user: data.findUser
+      user: data.findUser,
+      submitted: status
     })
   }
 
@@ -94,7 +101,8 @@ class SingleAlgo extends React.Component {
       selectOnLineNumbers: true,
       minimap: {enabled: false},
       fontFamily: 'Fira Code',
-      fontLigatures: true
+      fontLigatures: true,
+      fontSize: '16px'
     }
     return (
       <div>
@@ -145,16 +153,20 @@ class SingleAlgo extends React.Component {
 
               {this.state.loading ? (
                 <Attempt>
-                  <button
-                    className="button"
-                    onClick={() => this.onAttempt(this.state.userCode)}
-                  >
-                    Attempt
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </button>
+                  {this.state.submitted ? (
+                    <Head>You have already submitted this problem</Head>
+                  ) : (
+                    <button
+                      className="button"
+                      onClick={() => this.onAttempt(this.state.userCode)}
+                    >
+                      Attempt
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                    </button>
+                  )}
                 </Attempt>
               ) : (
                 <a>
@@ -164,7 +176,7 @@ class SingleAlgo extends React.Component {
             </Buttons>
             <Details>
               {this.state.errorMessage ? (
-                <div>Syntax Error - Please Reformat Your Code </div>
+                <div> Timeout Error - Please check for infinite loop </div>
               ) : (
                 <div />
               )}
@@ -286,4 +298,5 @@ const TestWrapper = styled.div`
 const TopWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `

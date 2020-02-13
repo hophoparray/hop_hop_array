@@ -40,6 +40,7 @@ router.get('/:algoId', async (req, res, next) => {
         id: req.user.id
       }
     })
+    console.log(userAlgo, 'user algo')
     const response = {
       ...algo,
       userAlgo,
@@ -163,7 +164,6 @@ router.post('/:algoId', async (req, res, next) => {
       },
       attributes: ['tests']
     })
-
     const row = await userAlgos.findOne({
       where: {
         userId: req.user.id,
@@ -194,8 +194,6 @@ router.post('/:algoId', async (req, res, next) => {
       )
     }
 
-    let testCode = findAlgo.dataValues.tests
-
     // Create docker instance
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
@@ -204,10 +202,10 @@ router.post('/:algoId', async (req, res, next) => {
     // Start container
     await myContainer.start()
 
-    //Write file for test code
+    // Write files for tests and usercode in docker
+    const testCode = findAlgo.dataValues.tests
     await dockerExec(myContainer, ['node', 'writeFile.js', 'test.js', testCode])
 
-    //Write file for user code
     const userCode = req.body.text
     await dockerExec(myContainer, [
       'node',
@@ -216,17 +214,22 @@ router.post('/:algoId', async (req, res, next) => {
       userCode
     ])
 
+    // Run tests
     let testResult
     try {
-      testResult = await dockerExec(myContainer, ['npm', 'test'])
+      testResult = await dockerExec(myContainer, [
+        'timeout',
+        '6',
+        'npm',
+        'test'
+      ])
     } catch (error) {
-      console.log(error.message)
+      console.log('TESTS FAILED:', error.message)
     }
     testResult = formatTestResult(testResult)
 
-    // Turn off docker container
+    // Turn off docker container and remove
     await myContainer.stop()
-    // Remove docker container
     await myContainer.remove()
 
     //Sending results back
@@ -240,12 +243,29 @@ router.post('/:algoId', async (req, res, next) => {
 function formatTestResult(testStr) {
   let firstIndexAll = testStr.indexOf('cat results.txt') + 29
   let firstIndexFails = testStr.indexOf('passing') - 2
+
   // Splits results into list of all tests + consolelogs && list of assertion errors
   if (firstIndexAll > 28 && firstIndexAll > -3) {
     let allStr = testStr.slice(firstIndexAll, firstIndexFails)
     let failsStr = testStr.slice(firstIndexFails)
     let allPassing = false
-    if (!failsStr.includes('failing')) allPassing = true
+    if (!failsStr.includes('failing') && failsStr.includes('passing')) {
+      allPassing = true
+    }
+
+    // Changes Output to if Error caught
+    if (allStr.includes('ReferenceError:')) {
+      const startI = allStr.indexOf('ReferenceError:')
+      const endI = allStr.indexOf('at')
+      allStr = allStr.slice(startI, endI)
+      failsStr = ''
+    }
+    if (allStr.includes('SyntaxError:')) {
+      const startI = allStr.indexOf('SyntaxError:')
+      const endI = allStr.indexOf('at')
+      allStr = allStr.slice(startI, endI)
+      failsStr = ''
+    }
     return {allTests: allStr, failsStatus: failsStr, allPassing}
   }
   throw new Error('Formatting failed: ' + testStr)
@@ -271,7 +291,6 @@ async function dockerExec(container, command) {
 
   // Get the exit code for the command (0 === success)
   const {ExitCode} = await exec.inspect()
-
   if (ExitCode !== 0) {
     throw new Error(commandOutput)
   }
