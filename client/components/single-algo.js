@@ -173,7 +173,7 @@ class SingleAlgo extends React.Component {
             </Buttons>
             <Details>
               {this.state.errorMessage ? (
-                <div>Syntax Error - Please Reformat Your Code </div>
+                <div> Timeout Error - Please check for infinite loop </div>
               ) : (
                 <div />
               )}
