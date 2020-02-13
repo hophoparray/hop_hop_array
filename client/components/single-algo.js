@@ -82,7 +82,8 @@ class SingleAlgo extends React.Component {
       selectOnLineNumbers: true,
       minimap: {enabled: false},
       fontFamily: 'Fira Code',
-      fontLigatures: true
+      fontLigatures: true,
+      fontSize: '16px'
     }
     return (
       <div>
@@ -152,7 +153,7 @@ class SingleAlgo extends React.Component {
             </Buttons>
             <Details>
               {this.state.errorMessage ? (
-                <div>Syntax Error - Please Reformat Your Code </div>
+                <div> Timeout Error - Please check for infinite loop </div>
               ) : (
                 <div />
               )}
