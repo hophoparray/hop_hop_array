@@ -32,7 +32,7 @@ router.get('/:algoId', async (req, res, next) => {
       raw: true
     })
     const userAlgo = await userAlgos.findOne({
-      where: {userId: req.user.id},
+      where: {userId: req.user.id, algoId: algoId},
       raw: true
     })
     const findUser = await User.findOne({
@@ -40,9 +40,10 @@ router.get('/:algoId', async (req, res, next) => {
         id: req.user.id
       }
     })
+    console.log(userAlgo, 'user algo')
     const response = {
       ...algo,
-      userAlgo: userAlgo && userAlgo.solution,
+      userAlgo,
       findUser
     }
     res.json(response)
@@ -107,12 +108,13 @@ router.post('/algofail/:algoId', async (req, res, next) => {
     if (!row) {
       await userAlgos.create({
         userId: req.user.id,
-        algoId: req.params.algoId
+        algoId: req.params.algoId,
+        userSolution: req.body.text
       })
       res.json(row)
     }
   } catch (error) {
-    console.log('algofail post error', error)
+    next(error)
   }
 })
 
@@ -173,12 +175,27 @@ router.post('/:algoId', async (req, res, next) => {
     if (!row) {
       newUserAlgo = await userAlgos.create({
         userId: req.user.id,
-        algoId: req.params.algoId
+        algoId: req.params.algoId,
+        userSolution: req.body.text
       })
     }
 
+    if (row) {
+      await userAlgos.update(
+        {
+          userSolution: req.body.text
+        },
+        {
+          where: {
+            userId: req.user.id,
+            algoId: req.params.algoId
+          }
+        }
+      )
+    }
+
+
     // Create docker instance
-    console.log('Beginning of post route')
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'
     })
@@ -212,13 +229,13 @@ router.post('/:algoId', async (req, res, next) => {
     }
     testResult = formatTestResult(testResult)
 
-    // Turn off docker container
+    // Turn off docker container and remove
     await myContainer.stop()
     await myContainer.remove()
 
+    //Sending results back
     res.json({...testResult})
   } catch (error) {
-    console.log('ERROR:', error)
     next(error)
   }
 })

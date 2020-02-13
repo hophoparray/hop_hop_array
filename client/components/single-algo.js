@@ -46,7 +46,6 @@ class SingleAlgo extends React.Component {
         history.push(`/algopass/${this.props.match.params.algoId}`)
       }
     } catch (error) {
-      console.log('ERROR', error)
       this.setState({errorMessage: error, loading: true})
     }
   }
@@ -58,14 +57,31 @@ class SingleAlgo extends React.Component {
   }
 
   async componentDidMount() {
+    let userSol
     const algoId = this.props.match.params.algoId
     const {data} = await Axios.get(`/api/algos/${algoId}`)
+    if (data.userAlgo) {
+      if (data.userAlgo.userSolution) {
+        userSol = data.userAlgo.userSolution
+      } else {
+        userSol = data.defaultText
+      }
+    } else {
+      userSol = data.defaultText
+    }
+    let status = false
+    if (data.userAlgo !== null) {
+      if (data.userAlgo.status && data.userAlgo.status !== 'pending') {
+        status = true
+      }
+    }
     this.setState({
       title: data.name,
       prompt: data.prompt,
       examples: data.examples,
-      userCode: data.defaultText,
-      user: data.findUser
+      userCode: userSol,
+      user: data.findUser,
+      submitted: status
     })
   }
 
@@ -134,16 +150,20 @@ class SingleAlgo extends React.Component {
 
               {this.state.loading ? (
                 <Attempt>
-                  <button
-                    className="button"
-                    onClick={() => this.onAttempt(this.state.userCode)}
-                  >
-                    Attempt
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </button>
+                  {this.state.submitted ? (
+                    <Head>You have already submitted this problem</Head>
+                  ) : (
+                    <button
+                      className="button"
+                      onClick={() => this.onAttempt(this.state.userCode)}
+                    >
+                      Attempt
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                    </button>
+                  )}
                 </Attempt>
               ) : (
                 <a>
@@ -275,4 +295,5 @@ const TestWrapper = styled.div`
 const TopWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `

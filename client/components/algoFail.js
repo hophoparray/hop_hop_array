@@ -38,9 +38,6 @@ export default class AlgoFail extends React.Component {
   }
 
   render() {
-    console.log('state', this.state)
-    console.log('this.state.solution', this.state.solution)
-
     const options = {
       selectOnLineNumbers: true,
       minimap: {enabled: false},

@@ -19,7 +19,9 @@ export default class ErrorPage extends React.Component {
         <Title>Sorry, this page isn't available.</Title>
         <Message>The link you followed may be broken.</Message>
         <Message>
-          <Link onClick={this.handleClick}>Go Back to [Hop Hop Array]</Link>
+          <Link to="/home" onClick={this.handleClick}>
+            Go Back to [Hop Hop Array]
+          </Link>
         </Message>
       </Wrapper>
     )
