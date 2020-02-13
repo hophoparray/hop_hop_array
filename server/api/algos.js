@@ -194,7 +194,6 @@ router.post('/:algoId', async (req, res, next) => {
       )
     }
 
-
     // Create docker instance
     const myContainer = await docker.createContainer({
       Image: 'hop-hop-array/node-testrunner-app'

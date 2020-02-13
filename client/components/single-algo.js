@@ -94,6 +94,9 @@ class SingleAlgo extends React.Component {
   }
 
   render() {
+    console.log('single algo state', this.state)
+    console.log('type!', typeof this.state.examples[0])
+
     const options = {
       selectOnLineNumbers: true,
       minimap: {enabled: false},
