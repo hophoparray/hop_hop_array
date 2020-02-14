@@ -40,7 +40,7 @@ router.get('/:algoId', async (req, res, next) => {
         id: req.user.id
       }
     })
-    console.log(userAlgo, 'user algo')
+    // console.log(userAlgo, 'user algo')
     const response = {
       ...algo,
       userAlgo,
@@ -121,7 +121,14 @@ router.post('/algofail/:algoId', async (req, res, next) => {
 router.put('/:algoId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id)
-    user.points = req.user.points + 50
+    const algo = await Algo.findByPk(req.params.algoId)
+    if (algo.algoLevel == 1) {
+      user.points = req.user.points + 10
+    } else if (algo.algoLevel == 2) {
+      user.points = req.user.points + 20
+    } else {
+      user.points = req.user.points + 30
+    }
     if (user.points >= 100 && user.points < 200) user.userLevel = 2
     if (user.points >= 200) user.userLevel = 3
     user.save()
@@ -193,7 +200,6 @@ router.post('/:algoId', async (req, res, next) => {
         }
       )
     }
-
 
     // Create docker instance
     const myContainer = await docker.createContainer({
