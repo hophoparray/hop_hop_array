@@ -116,7 +116,13 @@ class SingleAlgo extends React.Component {
             <Title>{this.state.title}</Title>
             <Prompt>{this.state.prompt}</Prompt>
             <Head>Example(s):</Head>
-            <Details>{this.state.examples[0]}</Details>
+            <Details>
+              {this.state.examples.split('\n').map(piece => (
+                <div>
+                  {piece} <br />
+                </div>
+              ))}
+            </Details>
 
             <Gif>
               {this.state.failureStatus.length === 0 &&

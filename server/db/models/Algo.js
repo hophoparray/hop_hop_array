@@ -9,7 +9,7 @@ const Algo = db.define('algos', {
     type: Sequelize.TEXT
   },
   examples: {
-    type: Sequelize.ARRAY(Sequelize.TEXT)
+    type: Sequelize.TEXT
   },
   defaultText: {
     type: Sequelize.TEXT
