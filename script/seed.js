@@ -48,7 +48,7 @@ async function seed() {
       name: 'Unique Characters',
       prompt:
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
-      examples: 'Input: ["abcdefghi"] \n Output: [true]',
+      examples: 'Input: ["abcdefghi"] \n Output: true',
       defaultText:
         'function hasUniqueCharactersSet(str){ \n // Write your code here. \n} \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
@@ -107,7 +107,7 @@ async function seed() {
       prompt:
         'Write a function that takes in a "special" array and returns its product sum.  A "special" array is a non-empty array that contains either integers or other "special" arrays. The product sum of a "special" array is a non-empty array that contains either integers or other "special" arrays.  The product sum of a "special" array is the sum of its elements, where "special" arrays inside it should be summed themselves and then multiplied by their level of depth.  For example, the product sum of [x,y] is x+y; the product sum of [x,[y,z]] is x + 2y + 2z.',
       examples:
-        'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12(calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))',
+        'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12 // (calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))',
       defaultText:
         'function productSum(array) { \n // Write your code here. \n} \n//DO NOT EDIT BELOW THIS LINE \n exports.productSum = productSum',
       solution: `function productSum(array, multiplier = 1) {
