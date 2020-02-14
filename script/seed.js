@@ -48,7 +48,7 @@ async function seed() {
       name: 'Unique Characters',
       prompt:
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
-      examples: ['Input: ["abcdefghi"] \n Output: [true]'],
+      examples: 'Input: ["abcdefghi"] \n Output: true',
       defaultText:
         'function hasUniqueCharactersSet(str){ \n // Write your code here. \n} \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
@@ -106,9 +106,8 @@ async function seed() {
       name: 'Product Sum',
       prompt:
         'Write a function that takes in a "special" array and returns its product sum.  A "special" array is a non-empty array that contains either integers or other "special" arrays. The product sum of a "special" array is a non-empty array that contains either integers or other "special" arrays.  The product sum of a "special" array is the sum of its elements, where "special" arrays inside it should be summed themselves and then multiplied by their level of depth.  For example, the product sum of [x,y] is x+y; the product sum of [x,[y,z]] is x + 2y + 2z.',
-      examples: [
-        'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12(calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))'
-      ],
+      examples:
+        'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12 // (calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))',
       defaultText:
         'function productSum(array) { \n // Write your code here. \n} \n//DO NOT EDIT BELOW THIS LINE \n exports.productSum = productSum',
       solution: `function productSum(array, multiplier = 1) {
@@ -160,9 +159,8 @@ async function seed() {
       name: 'Find Three Largest Numbers',
       prompt:
         'Write a function that takes in an array of integers and returns a sorted array of the three largers integers in the input array.  Note that the function should return duplicate integers if necessary; for example, it should return [10,10,12] for an intpuer array of [10,5,9,10,12]',
-      examples: [
-        'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18, 141, 541]'
-      ],
+      examples:
+        'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18, 141, 541]',
       defaultText:
         'function findThreeLargestNumbers(array) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.findThreeLargestNumbers = findThreeLargestNumbers',
       solution: `function findThreeLargestNumbers(array) {
@@ -224,7 +222,7 @@ async function seed() {
       name: 'Maximum Subset Sum With No Adjacent Elements',
       prompt:
         'Write a function that takes in an array of positive integers and returns an integer representing the maximum sum of non-adjacent elements in the array.  If a sum cannot be generated, the function should return 0.',
-      examples: ['Input: [75,105,120,75,90,135] \n Output: 330(75,120,135)'],
+      examples: 'Input: [75,105,120,75,90,135] \n Output: 330(75,120,135)',
       defaultText:
         'function maxSubsetSumNoAdjacent(array) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.maxSubsetSumNoAdjacent = maxSubsetSumNoAdjacent',
       solution: `function maxSubsetSumNoAdjacent(array) {
@@ -270,9 +268,8 @@ async function seed() {
       name: 'Zigzag Traverse',
       prompt:
         "Write a function that takes in a square-shaped(n x n) two-dimensional array and returns a one-dimensional array of all the array's elements in zigzag order.  Zigzag order starts at the top left corner of the two-dimensional array, goes down by one element, and proceeds in a zigzag pattern all the way to the bottom right corner.",
-      examples: [
-        'Input: [\n[1,3,4,10],\n[2,5,9,11],\n[6,8,12,15],\n[7,13,14,16]\n] \n Output: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]'
-      ],
+      examples:
+        'Input: [\n[1,3,4,10],\n[2,5,9,11],\n[6,8,12,15],\n[7,13,14,16]\n] \n Output: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]',
       defaultText:
         'function zigzagTraverse(array) {\n // Write your code here. \n} \n// DO NOT EDIT BELOW THIS LINE \nexports.zigzagTraverse = zigzagTraverse ',
       tests: `const chai = require ('chai')
@@ -349,7 +346,7 @@ async function seed() {
       name: 'Single Cycle Check',
       prompt:
         "You are given an array of integers.  Each integer represents a jump of its value in the array.  For instance, the integer 2 represents a jump of 2 indices forward in the array; the integer -3 represents a jump of 3 indices backward in the array.  If a jump spills past the array's bounds, it wraps over to the other side.  For instance, a jump of -1 at index 0 brings us to the last index in the array.  Similarly, a jump of 1 at the last index in the array brings us to index 0.  Write a function that returns a boolean representing whether the jumps in the array form a single cycle.  A single cycle occurs if, starting at any index in the array and following the jumps ,every element is visited exactly once before landing back on the starting index.",
-      examples: ['Input: [2,3,1,-4,-4,2] \n Output: True'],
+      examples: 'Input: [2,3,1,-4,-4,2] \n Output: True',
       defaultText:
         'function hasSingleCycle(array) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.hasSingleCycle = hasSingleCycle',
       solution: `function hasSingleCycle(array) {
@@ -400,7 +397,7 @@ async function seed() {
       name: 'Min Number of Coins For Change',
       prompt:
         'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlimited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
-      examples: ['Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)'],
+      examples: 'Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)',
       defaultText:
         'function minNumberOfCoinsForChange(n, denoms) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',
       solution: `function minNumberOfCoinsForChange(n, denoms) {
@@ -448,7 +445,7 @@ async function seed() {
       name: 'Min Rewards',
       prompt:
         "Imagine that you're a teacher who's just graded the final exam in a class.  You have a list of student scores on the final exam in a particular order (not necessarily sorted), and you want to reward your students.  You decide to do so fairly by giving them arbitrary rewards following two rules: first, all students must receive at least one reward; second, any given student must receive strictly more rewards than an adjacent student (a student immediately to the left or to the right) with a lower score and must receive strictly fewer awards than an adjacent student with a higher score.  Assume that all students have different scores; in other words, the scores are all unique.  Write a function that takes in a list of scores and returns the minimum number of rewards that you must give out to students, all the while satisfying the two rules.",
-      examples: ['Input: [8,4,2,1,3,6,7,9,5] \n Output: 25([4,3,2,1,2,3,4,5,1'],
+      examples: 'Input: [8,4,2,1,3,6,7,9,5] \n Output: 25([4,3,2,1,2,3,4,5,1',
       defaultText:
         'function minRewards(scores) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.minRewards = minRewards',
       solution: `function minRewards(scores) {
@@ -499,9 +496,8 @@ async function seed() {
       name: 'Levenshtein Distance',
       prompt:
         'Write a function that takes in two strings and returns the minimum number of edit operations that need to be performed on the first string to obtain the second string. There are three edit operations: insertion of a character, deletion of a character, and substitution of a character for another.',
-      examples: [
-        'Input: "abc", "yabd" \n Output: 2 (insert "y"; substitute "c" for "d")'
-      ],
+      examples:
+        'Input: "abc", "yabd" \n Output: 2 (insert "y"; substitute "c" for "d")',
       defaultText: `function levenshteinDistance(str1, str2) { \n // Type your code...\n\n } \n //DO NOT EDIT BELOW THIS LINE \nexports.levenshteinDistance = levenshteinDistance`,
       tests: `const levenshteinDistance = require('./userCode').levenshteinDistance;
       const chai = require('chai');
@@ -581,9 +577,8 @@ async function seed() {
       name: 'Powerset',
       prompt:
         'Write a function that takes in an array of unique integers and returns its powerset. The powerset P(X) of a set X is the set of all subsets of X. For example, the powerset of [1,2] is [[], [1], [2], [1,2]]. Note that the sets in the powerset do not need to be in any particular order.',
-      examples: [
-        'Input: [1, 2, 3]\n Output: [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]'
-      ],
+      examples:
+        'Input: [1, 2, 3]\n Output: [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]',
       defaultText: `function powerset(array, idx = null) { \n // Type your code...\n\n } \n //DO NOT EDIT BELOW THIS LINE \nexports.powerset = powerset;`,
       solution: `// O(n*2^n) time | O(n*2^n) space
       function powerset(array, idx = null) {
@@ -666,9 +661,8 @@ it('Test Case #5', function() {
       id: 9,
       name: 'Linked List Construction',
       prompt: `Write a class for a Doubly Linked List. The class should have a "head" and "tail" properties, both of which should point to either the None (null) value or to a Linked List node. Every node will have a "value" property as well as "next" and "prev" properties, both of which can point to either the None (null) value or another node. The class should support setting the head and tail of the linked list, inserting nodes before and after other nodes as well as at certain positions, removing given nodes and removing nodes with specific values, and searching for nodes with values. Only the searching method should return a value: specifically, a boolean.`,
-      examples: [
-        'Input: 1 -> 2 -> 3 -> 4 -> 5 \n Output: (after setting 4 to head): 4 -> 1 -> 2 -> 3 -> 5'
-      ],
+      examples:
+        'Input: 1 -> 2 -> 3 -> 4 -> 5 \n Output: (after setting 4 to head): 4 -> 1 -> 2 -> 3 -> 5',
       defaultText: `// This is an input class. Do not edit.
         class Node {
           constructor(value) {
@@ -932,7 +926,7 @@ it('Test Case #5', function() {
       name: 'Palindrome Check',
       prompt:
         'Write a function that takes in a non-empty string and that returns a boolean representing whether or not the string is a palindrome. A palindrome is defined as a string that is written the same forward and backward.',
-      examples: ['Input: "abcdcba" \n Output: True'],
+      examples: 'Input: "abcdcba" \n Output: True',
       defaultText:
         'function isPalindrome(string) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.isPalindrome = isPalindrome',
       solution: `
@@ -975,7 +969,7 @@ it('Test Case #5', function() {
       name: 'Caesar Cipher Encryptor',
       prompt:
         'Given a non-empty string of lowercase letters and a non-negative integer value representing a key, write a function that returns a new string obtained by shifting every letter in the input string by k positions in the alphabet, where k is the key. Note that letters should "wrap" around the alphabet; in other words, the letter "z" shifted by 1 returns the letter "a".',
-      examples: ['Input: "xyz", 2 \n Output: "zab"'],
+      examples: 'Input: "xyz", 2 \n Output: "zab"',
       defaultText:
         'function caesarCipherEncryptor(string, key) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.caesarCipherEncryptor = caesarCipherEncryptor',
       solution: `
