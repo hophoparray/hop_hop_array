@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import {me} from '../store/user'
 import {fetchAllAlgos} from '../store/allAlgos'
 import styled from 'styled-components'
+import {Link} from 'react-router-dom'
+
 import ConnectedLeaderboard from './leaderboard'
 
 class UserProfile extends Component {
@@ -68,7 +70,11 @@ class UserProfile extends Component {
             <ul>
               {algos.map(algo => {
                 if (algo.complete) {
-                  return <Algo key={algo.id}>{algo.name}</Algo>
+                  return (
+                    <li key={algo.id}>
+                      <Algo href={`/algos/${algo.id}`}>{algo.name}</Algo>
+                    </li>
+                  )
                 }
               })}
             </ul>
@@ -138,7 +144,7 @@ const Wrapper = styled.div`
   font-family: 'Open Sans', sans-serif;
 `
 
-const Algo = styled.li``
+const Algo = styled.a``
 
 const Progress = styled.div`
   margin-block-start: 1em;

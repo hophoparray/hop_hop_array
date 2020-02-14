@@ -9,25 +9,37 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'}),
-    User.create({email: 'kate@email.com', password: '123', points: 2050}),
+    User.create({email: 'murphyeats1990@gmail.com', password: '123'}),
     User.create({
-      email: 'GraceHopper@email.com',
+      email: 'kateMahon12@yahoo.com',
+      password: '123',
+      points: 2050
+    }),
+    User.create({
+      email: 'GraceHopper@gmail.com',
       password: '123',
       points: 20000
     }),
-    User.create({email: 'kim@email.com', password: '123', points: 450}),
-    User.create({email: 'matt@email.com', password: '123', points: 700}),
-    User.create({email: 'john@email.com', password: '123', points: 300}),
-    User.create({email: 'dave@email.com', password: '123', points: 1050}),
-    User.create({email: 'will@email.com', password: '123', points: 50}),
-    User.create({email: 'caroline@email.com', password: '123', points: 800}),
-    User.create({email: 'mark@email.com', password: '123', points: 400}),
-    User.create({email: 'jennifer@email.com', password: '123', points: 800}),
-    User.create({email: 'emily@email.com', password: '123', points: 250}),
-    User.create({email: 'alex@email.com', password: '123', points: 950}),
-    User.create({email: 'holden@email.com', password: '123', points: 650}),
-    User.create({email: 'george@email.com', password: '123', points: 50})
+    User.create({email: 'kimgaiser18@gmail.com', password: '123', points: 450}),
+    User.create({email: 'matth@hotmail.com', password: '123', points: 700}),
+    User.create({email: 'john1234@yahoo.com', password: '123', points: 300}),
+    User.create({
+      email: 'soccerstar134@gmail.com',
+      password: '123',
+      points: 1050
+    }),
+    User.create({email: 'nyccoder78@gmail.com', password: '123', points: 50}),
+    User.create({
+      email: 'chicagokevin1@sbcglobal.net',
+      password: '123',
+      points: 800
+    }),
+    User.create({email: 'markwallace@gmail.com', password: '123', points: 400}),
+    User.create({email: 'jennifer@yahoo.com', password: '123', points: 800}),
+    User.create({email: 'emilysmith@gmail.com', password: '123', points: 250}),
+    User.create({email: 'agordon@gmail.com', password: '123', points: 950}),
+    User.create({email: 'holdenw12@gmail.com', password: '123', points: 650}),
+    User.create({email: 'ggh15@gmail.com', password: '123', points: 50})
   ])
 
   const algos = await Promise.all([
@@ -149,7 +161,7 @@ async function seed() {
       prompt:
         'Write a function that takes in an array of integers and returns a sorted array of the three largers integers in the input array.  Note that the function should return duplicate integers if necessary; for example, it should return [10,10,12] for an intpuer array of [10,5,9,10,12]',
       examples: [
-        'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18,, 141, 541]'
+        'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18, 141, 541]'
       ],
       defaultText:
         'function findThreeLargestNumbers(array) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.findThreeLargestNumbers = findThreeLargestNumbers',
