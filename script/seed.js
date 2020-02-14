@@ -38,7 +38,7 @@ async function seed() {
         'Keep track of seen characters with a Set data structure, fail when a repeated character is found.',
       examples: ['Input: ["abcdefghi"] \n Output: [true]'],
       defaultText:
-        'function hasUniqueCharactersSet(str){ \n} \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
+        'function hasUniqueCharactersSet(str){ \n // Write your code here. \n} \n// DO NOT EDIT BELOW THIS LINE\n exports.hasUniqueCharactersSet = hasUniqueCharactersSet',
       tests: `const chai = require("chai");
       const expect = chai.expect
       const { hasUniqueCharactersSet } = require('./userCode');
@@ -98,7 +98,7 @@ async function seed() {
         'Input: [5,2,[7,-1],3,[6,[-13,8]4]] \n Output: 12(calculated as:(5+2+2*(7-1)+3+2*(6+3*()-23+8)+4))'
       ],
       defaultText:
-        'function productSum(array) { \n } \n//DO NOT EDIT BELOW THIS LINE \n exports.productSum = productSum',
+        'function productSum(array) { \n // Write your code here. \n} \n//DO NOT EDIT BELOW THIS LINE \n exports.productSum = productSum',
       solution: `function productSum(array, multiplier = 1) {
         let sum = 0
         for (const element of array) {
@@ -152,7 +152,7 @@ async function seed() {
         'Input: [141,1,17,-7,-17,-27,18,541,8,7,7] \n Output: [18,, 141, 541]'
       ],
       defaultText:
-        'function findThreeLargestNumbers(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.findThreeLargestNumbers = findThreeLargestNumbers',
+        'function findThreeLargestNumbers(array) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.findThreeLargestNumbers = findThreeLargestNumbers',
       solution: `function findThreeLargestNumbers(array) {
         const threeLargest = [null, null, null]
         for (const num of array) {
@@ -214,7 +214,7 @@ async function seed() {
         'Write a function that takes in an array of positive integers and returns an integer representing the maximum sum of non-adjacent elements in the array.  If a sum cannot be generated, the function should return 0.',
       examples: ['Input: [75,105,120,75,90,135] \n Output: 330(75,120,135)'],
       defaultText:
-        'function maxSubsetSumNoAdjacent(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.maxSubsetSumNoAdjacent = maxSubsetSumNoAdjacent',
+        'function maxSubsetSumNoAdjacent(array) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.maxSubsetSumNoAdjacent = maxSubsetSumNoAdjacent',
       solution: `function maxSubsetSumNoAdjacent(array) {
         if (!array.length) return 0
         if (array.length === 1) return array[0]
@@ -262,7 +262,7 @@ async function seed() {
         'Input: [\n[1,3,4,10],\n[2,5,9,11],\n[6,8,12,15],\n[7,13,14,16]\n] \n Output: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]'
       ],
       defaultText:
-        'function zigzagTraverse(array) {\n} \n// DO NOT EDIT BELOW THIS LINE \nexports.zigzagTraverse = zigzagTraverse ',
+        'function zigzagTraverse(array) {\n // Write your code here. \n} \n// DO NOT EDIT BELOW THIS LINE \nexports.zigzagTraverse = zigzagTraverse ',
       tests: `const chai = require ('chai')
       const expect = chai.expect;
       const { zigzagTraverse } = require("./userCode");
@@ -339,7 +339,7 @@ async function seed() {
         "You are given an array of integers.  Each integer represents a jump of its value in the array.  For instance, the integer 2 represents a jump of 2 indices forward in the array; the integer -3 represents a jump of 3 indices backward in the array.  If a jump spills past the array's bounds, it wraps over to the other side.  For instance, a jump of -1 at index 0 brings us to the last index in the array.  Similarly, a jump of 1 at the last index in the array brings us to index 0.  Write a function that returns a boolean representing whether the jumps in the array form a single cycle.  A single cycle occurs if, starting at any index in the array and following the jumps ,every element is visited exactly once before landing back on the starting index.",
       examples: ['Input: [2,3,1,-4,-4,2] \n Output: True'],
       defaultText:
-        'function hasSingleCycle(array) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.hasSingleCycle = hasSingleCycle',
+        'function hasSingleCycle(array) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.hasSingleCycle = hasSingleCycle',
       solution: `function hasSingleCycle(array) {
         let numElementsVisited = 0
         let currentIdx = 0
@@ -390,7 +390,7 @@ async function seed() {
         'Given an array of positive integers representing coin denominations and a single non-negative integer representing a target amount of money, implement a function that returns the smallest number of coins needed to make change for that target amount using the given coin denominations.  Note that an unlimited amount of coins is at your disposal.  If it is impossible to make change for the target amount, return -1.',
       examples: ['Input: 7,[1,5,10] \n Output: 3(2x1 + 1x5)'],
       defaultText:
-        'function minNumberOfCoinsForChange(n, denoms) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',
+        'function minNumberOfCoinsForChange(n, denoms) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.minNumberOfCoinsForChange = minNumberOfCoinsForChange',
       solution: `function minNumberOfCoinsForChange(n, denoms) {
        const numOfCoins = new Array(n + 1).fill(Infinity)
        numOfCoins[0] = 0
@@ -438,7 +438,7 @@ async function seed() {
         "Imagine that you're a teacher who's just graded the final exam in a class.  You have a list of student scores on the final exam in a particular order (not necessarily sorted), and you want to reward your students.  You decide to do so fairly by giving them arbitrary rewards following two rules: first, all students must receive at least one reward; second, any given student must receive strictly more rewards than an adjacent student (a student immediately to the left or to the right) with a lower score and must receive strictly fewer awards than an adjacent student with a higher score.  Assume that all students have different scores; in other words, the scores are all unique.  Write a function that takes in a list of scores and returns the minimum number of rewards that you must give out to students, all the while satisfying the two rules.",
       examples: ['Input: [8,4,2,1,3,6,7,9,5] \n Output: 25([4,3,2,1,2,3,4,5,1'],
       defaultText:
-        'function minRewards(scores) { \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.minRewards = minRewards',
+        'function minRewards(scores) { \n // Write your code here. \n} \n //DO NOT EDIT BELOW THIS LINE \n exports.minRewards = minRewards',
       solution: `function minRewards(scores) {
        const rewards = scores.map(_ => 1)
        for (let i = 1; i < scores.length; i++) {
@@ -481,6 +481,372 @@ async function seed() {
       })
       `,
       algoLevel: 3
+    }),
+    Algo.create({
+      id: 9,
+      name: 'Linked List Construction',
+      prompt: `Write a class for a Doubly Linked List. The class should have a "head" and "tail" properties, both of which should point to either the None (null) value or to a Linked List node. Every node will have a "value" property as well as "next" and "prev" properties, both of which can point to either the None (null) value or another node. The class should support setting the head and tail of the linked list, inserting nodes before and after other nodes as well as at certain positions, removing given nodes and removing nodes with specific values, and searching for nodes with values. Only the searching method should return a value: specifically, a boolean.`,
+      examples: [
+        'Input: 1 -> 2 -> 3 -> 4 -> 5 \n Output: (after setting 4 to head): 4 -> 1 -> 2 -> 3 -> 5'
+      ],
+      defaultText: `// This is an input class. Do not edit.
+        class Node {
+          constructor(value) {
+            this.value = value;
+            this.prev = null;
+            this.next = null; }}
+
+        // Feel free to add new properties and methods to the class.
+        class DoublyLinkedList {
+          constructor() {
+            this.head = null;
+            this.tail = null;
+          }
+
+          setHead(node) {
+            // Write your code here.
+          }
+
+          setTail(node) {
+            // Write your code here.
+          }
+
+          insertBefore(node, nodeToInsert) {
+            // Write your code here.
+          }
+          insertAfter(node, nodeToInsert) {
+            // Write your code here.
+          }
+
+          insertAtPosition(position, nodeToInsert) {
+            // Write your code here.
+          }
+
+          removeNodesWithValue(value) {
+            // Write your code here.
+          }
+
+          remove(node) {
+            // Write your code here.
+          }
+
+          containsNodeWithValue(value) {
+            // Write your code here.
+          }
+        }
+        //DO NOT EDIT BELOW THIS LINE
+        exports.Node = Node;
+        exports.DoublyLinkedList = DoublyLinkedList;`,
+      solution: `class Node {
+          constructor(value) {
+            this.value = value;
+            this.prev = null;
+            this.next = null;
+          }
+        }
+
+        class DoublyLinkedList {
+          constructor() {
+            this.head = null;
+            this.tail = null;
+          }
+
+          setHead(node) {
+            if (this.head === null) {
+              this.head = node;
+              this.tail = node;
+              return;
+            }
+            this.insertBefore(this.head, node);
+          }
+
+          setTail(node) {
+            if (this.tail === null) {
+              this.setHead(node);
+              return;
+            }
+            this.insertAfter(this.tail, node);
+          }
+
+          insertBefore(node, nodeToInsert) {
+            if (nodeToInsert === this.head && nodeToInsert === this.tail) return;
+            this.remove(nodeToInsert);
+            nodeToInsert.prev = node.prev;
+            nodeToInsert.next = node;
+            if (node.prev === null) {
+              this.head = nodeToInsert;
+            } else {
+              node.prev.next = nodeToInsert;
+            }
+            node.prev = nodeToInsert;
+          }
+
+          insertAfter(node, nodeToInsert) {
+            if (nodeToInsert === this.head && nodeToInsert === this.tail) return;
+            this.remove(nodeToInsert);
+            nodeToInsert.prev = node;
+            nodeToInsert.next = node.next;
+            if (node.next === null) {
+              this.tail = nodeToInsert;
+            } else {
+              node.next.prev = nodeToInsert;
+            }
+            node.next = nodeToInsert;
+          }
+
+          insertAtPosition(position, nodeToInsert) {
+            if (position === 1) {
+              this.setHead(nodeToInsert);
+              return;
+                  }
+               let node = this.head;
+               let currentPosition = 1;
+               while (node !== null && currentPosition++ !== position) node = node.next;
+                  if (node !== null) {
+                    this.insertBefore(node, nodeToInsert);
+                  } else {
+                    this.setTail(nodeToInsert);
+                  }
+                }
+
+            removeNodesWithValue(value) {
+              let node = this.head;
+              while (node !== null) {
+                const nodeToRemove = node;
+                node = node.next;
+                  if (nodeToRemove.value === value) this.remove(nodeToRemove);
+                  }
+                }
+
+            remove(node) {
+                if (node === this.head) this.head = this.head.next;
+                if (node === this.tail) this.tail = this.tail.prev;
+                this.removeNodeBindings(node);
+                }
+
+            containsNodeWithValue(value) {
+                let node = this.head;
+                while (node !== null && node.value !== value) node = node.next;
+                  return node !== null;
+                }
+
+             removeNodeBindings(node) {
+              if (node.prev !== null) node.prev.next = node.next;
+              if (node.next !== null) node.next.prev = node.prev;
+              node.prev = null;
+              node.next = null;
+                }
+              }
+
+              exports.Node = Node;
+              exports.DoublyLinkedList = DoublyLinkedList;
+              `,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { DoublyLinkedList } = require("./userCode");
+
+      class StartNode {
+          constructor(value) {
+            this.value = value;
+            this.prev = null;
+            this.next = null;
+          }
+        }
+
+        const nodeClass =  StartNode;
+
+        class Node extends nodeClass {
+          constructor(value) {
+            super(value);
+          }
+        }
+
+        function expectEmpty(linkedList) {
+          chai.expect(linkedList.head).to.deep.equal(null);
+          chai.expect(linkedList.tail).to.deep.equal(null);
+        }
+
+        function expectHeadTail(linkedList, head, tail) {
+          chai.expect(linkedList.head).to.deep.equal(head);
+          chai.expect(linkedList.tail).to.deep.equal(tail);
+        }
+
+        function expectSingleNode(linkedList, node) {
+          chai.expect(linkedList.head).to.deep.equal(node);
+          chai.expect(linkedList.tail).to.deep.equal(node);
+        }
+
+        function getNodeValuesHeadToTail(linkedList) {
+          const values = [];
+          let node = linkedList.head;
+          while (node !== null) {
+            values.push(node.value);
+            node = node.next;
+          }
+          return values;
+        }
+
+        function getNodeValuesTailToHead(linkedList) {
+          const values = [];
+          let node = linkedList.tail;
+          while (node !== null) {
+            values.push(node.value);
+            node = node.prev;
+          }
+          return values;
+        }
+
+        function removeNodes(linkedList, nodes) {
+          for (const node of nodes) {
+            linkedList.remove(node);
+          }
+        }
+
+        it('Test Case #1', function() {
+          const linkedList = new DoublyLinkedList();
+          const node = new Node(1);
+          linkedList.setHead(node);
+          expectSingleNode(linkedList, node);
+          linkedList.remove(node);
+          expectEmpty(linkedList);
+          linkedList.setTail(node);
+          expectSingleNode(linkedList, node);
+          linkedList.removeNodesWithValue(1);
+          expectEmpty(linkedList);
+          linkedList.insertAtPosition(1, node);
+          expectSingleNode(linkedList, node);
+        });
+
+        it('Test Case #2', function() {
+          const linkedList = new DoublyLinkedList();
+          const first = new Node(1);
+          const second = new Node(2);
+          const nodes = [first, second];
+
+          linkedList.setHead(first);
+          linkedList.setTail(second);
+          expectHeadTail(linkedList, first, second);
+          removeNodes(linkedList, nodes);
+          expectEmpty(linkedList);
+          linkedList.setHead(first);
+          linkedList.insertAfter(first, second);
+          expectHeadTail(linkedList, first, second);
+          removeNodes(linkedList, nodes);
+          linkedList.setHead(first);
+          linkedList.insertBefore(first, second);
+          expectHeadTail(linkedList, second, first);
+          removeNodes(linkedList, nodes);
+          linkedList.insertAtPosition(1, first);
+          linkedList.insertAtPosition(2, second);
+          expectHeadTail(linkedList, first, second);
+          removeNodes(linkedList, nodes);
+          linkedList.insertAtPosition(2, first);
+          linkedList.insertAtPosition(1, second);
+          expectHeadTail(linkedList, second, first);
+        });
+      `,
+      algoLevel: 1
+    }),
+    Algo.create({
+      id: 10,
+      name: 'Palindrome Check',
+      prompt:
+        'Write a function that takes in a non-empty string and that returns a boolean representing whether or not the string is a palindrome. A palindrome is defined as a string that is written the same forward and backward.',
+      examples: ['Input: "abcdcba" \n Output: True'],
+      defaultText:
+        'function isPalindrome(string) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.isPalindrome = isPalindrome',
+      solution: `
+      function isPalindrome(string) {
+          let reversedString = '';
+          for (let i = string.length - 1; i >= 0; i--) {
+            reversedString += string[i];
+          }
+          return string === reversedString;
+        }
+        exports.isPalindrome = isPalindrome;`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { isPalindrome } = require("./userCode");
+
+      it('Test Case #1', function() {
+          chai.expect(isPalindrome('a')).to.deep.equal(true);
+        });
+
+        it('Test Case #2', function() {
+          chai.expect(isPalindrome('ab')).to.deep.equal(false);
+        });
+
+        it('Test Case #3', function() {
+          chai.expect(isPalindrome('aba')).to.deep.equal(true);
+        });
+
+        it('Test Case #4', function() {
+          chai.expect(isPalindrome('abb')).to.deep.equal(false);
+        });
+
+        it('Test Case #5', function() {
+          chai.expect(isPalindrome('abba')).to.deep.equal(true);
+        });
+      `,
+      algoLevel: 1
+    }),
+    Algo.create({
+      id: 11,
+      name: 'Caesar Cipher Encryptor',
+      prompt:
+        'Given a non-empty string of lowercase letters and a non-negative integer value representing a key, write a function that returns a new string obtained by shifting every letter in the input string by k positions in the alphabet, where k is the key. Note that letters should "wrap" around the alphabet; in other words, the letter "z" shifted by 1 returns the letter "a".',
+      examples: ['Input: "xyz", 2 \n Output: "zab"'],
+      defaultText:
+        'function caesarCipherEncryptor(string, key) { \n // Write your code here. \n } \n //DO NOT EDIT BELOW THIS LINE \n exports.caesarCipherEncryptor = caesarCipherEncryptor',
+      solution: `
+      function caesarCipherEncryptor(string, key) {
+          const newLetters = [];
+          const newKey = key % 26;
+          for (const letter of string) {
+            newLetters.push(getNewLetter(letter, newKey));
+          }
+          return newLetters.join('');
+        }
+
+        function getNewLetter(letter, key) {
+          const newLetterCode = letter.charCodeAt() + key;
+          return newLetterCode <= 122 ? String.fromCharCode(newLetterCode) : String.fromCharCode(96 + (newLetterCode % 122));
+        }
+
+        exports.caesarCipherEncryptor = caesarCipherEncryptor;`,
+      tests: `const chai = require("chai");
+      const expect = chai.expect
+      const { caesarCipherEncryptor } = require("./userCode");
+
+      it('Test Case #1', function() {
+          chai.expect(caesarCipherEncryptor('abc', 0)).to.deep.equal('abc');
+        });
+
+        it('Test Case #2', function() {
+          chai.expect(caesarCipherEncryptor('abc', 3)).to.deep.equal('def');
+        });
+
+        it('Test Case #3', function() {
+          chai.expect(caesarCipherEncryptor('xyz', 2)).to.deep.equal('zab');
+        });
+
+        it('Test Case #4', function() {
+          chai.expect(caesarCipherEncryptor('xyz', 5)).to.deep.equal('cde');
+        });
+
+        it('Test Case #5', function() {
+          chai.expect(caesarCipherEncryptor('abc', 26)).to.deep.equal('abc');
+        });
+
+        it('Test Case #6', function() {
+          chai.expect(caesarCipherEncryptor('abc', 52)).to.deep.equal('abc');
+        });
+
+        it('Test Case #7', function() {
+          chai.expect(caesarCipherEncryptor('abc', 57)).to.deep.equal('fgh');
+        });
+      `,
+      algoLevel: 1
     })
   ])
 

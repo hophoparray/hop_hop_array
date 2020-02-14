@@ -40,7 +40,7 @@ router.get('/:algoId', async (req, res, next) => {
         id: req.user.id
       }
     })
-    console.log(userAlgo, 'user algo')
+    // console.log(userAlgo, 'user algo')
     const response = {
       ...algo,
       userAlgo,
@@ -193,7 +193,6 @@ router.post('/:algoId', async (req, res, next) => {
         }
       )
     }
-
 
     // Create docker instance
     const myContainer = await docker.createContainer({
