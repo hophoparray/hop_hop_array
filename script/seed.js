@@ -481,6 +481,174 @@ async function seed() {
       })
       `,
       algoLevel: 3
+    }),
+    Algo.create({
+      id: 9,
+      name: 'Levenshtein Distance',
+      prompt:
+        'Write a function that takes in two strings and returns the minimum number of edit operations that need to be performed on the first string to obtain the second string. There are three edit operations: insertion of a character, deletion of a character, and substitution of a character for another.',
+      examples: [
+        'Input: "abc", "yabd" \n Output: 2 (insert "y"; substitute "c" for "d")'
+      ],
+      defaultText: `function levenshteinDistance(str1, str2) { \n // Type your code...\n\n } \n //DO NOT EDIT BELOW THIS LINE \nexports.levenshteinDistance = levenshteinDistance`,
+      tests: `const levenshteinDistance = require('./userCode').levenshteinDistance;
+      const chai = require('chai');
+      it('Test Case #1', function() {
+        chai.expect(levenshteinDistance('', '')).to.deep.equal(0);
+      });
+      it('Test Case #2', function() {
+        chai.expect(levenshteinDistance('', 'abc')).to.deep.equal(3);
+      });
+      it('Test Case #3', function() {
+        chai.expect(levenshteinDistance('abc', 'abc')).to.deep.equal(0);
+      });
+      it('Test Case #4', function() {
+        chai.expect(levenshteinDistance('abc', 'abx')).to.deep.equal(1);
+      });
+      it('Test Case #5', function() {
+        chai.expect(levenshteinDistance('abc', 'abcx')).to.deep.equal(1);
+      });
+      it('Test Case #6', function() {
+        chai.expect(levenshteinDistance('abc', 'yabcx')).to.deep.equal(2);
+      });
+      it('Test Case #7', function() {
+        chai.expect(levenshteinDistance('algoexpert', 'algozexpert')).to.deep.equal(1);
+      });
+      it('Test Case #8', function() {
+        chai.expect(levenshteinDistance('abcdefghij', '1234567890')).to.deep.equal(10);
+      });
+      it('Test Case #9', function() {
+        chai.expect(levenshteinDistance('abcdefghij', 'a234567890')).to.deep.equal(9);
+      });
+      it('Test Case #10', function() {
+        chai.expect(levenshteinDistance('biting', 'mitten')).to.deep.equal(4);
+      });
+      it('Test Case #11', function() {
+        chai.expect(levenshteinDistance('cereal', 'saturday')).to.deep.equal(6);
+      });
+      it('Test Case #12', function() {
+        chai.expect(levenshteinDistance('cereal', 'saturdzz')).to.deep.equal(7);
+      });
+      it('Test Case #13', function() {
+        chai.expect(levenshteinDistance('abbbbbbbbb', 'bbbbbbbbba')).to.deep.equal(2);
+      });
+      it('Test Case #14', function() {
+        chai.expect(levenshteinDistance('abc', 'yabd')).to.deep.equal(2);
+      });
+      it('Test Case #15', function() {
+        chai.expect(levenshteinDistance('xabc', 'abcx')).to.deep.equal(2);
+      });`,
+      solution: `
+      // O(nm) time | O(nm) space
+      function levenshteinDistance(str1, str2) {
+        const edits = [];
+        for (let i = 0; i < str2.length + 1; i++) {
+          const row = [];
+          for (let j = 0; j < str1.length + 1; j++) {
+            row.push(j);
+          }
+          row[0] = i;
+          edits.push(row);
+        }
+        for (let i = 1; i < str2.length + 1; i++) {
+          for (let j = 1; j < str1.length + 1; j++) {
+            if (str2[i - 1] === str1[j - 1]) {
+              edits[i][j] = edits[i - 1][j - 1];
+            } else {
+              edits[i][j] = 1 + Math.min(edits[i - 1][j - 1], edits[i - 1][j], edits[i][j - 1]);
+            }
+          }
+        }
+        return edits[str2.length][str1.length];
+      }
+      exports.levenshteinDistance = levenshteinDistance;`,
+      algoLevel: 2
+    }),
+    Algo.create({
+      id: 10,
+      name: 'Powerset',
+      prompt:
+        'Write a function that takes in an array of unique integers and returns its powerset. The powerset P(X) of a set X is the set of all subsets of X. For example, the powerset of [1,2] is [[], [1], [2], [1,2]]. Note that the sets in the powerset do not need to be in any particular order.',
+      examples: [
+        'Input: [1, 2, 3]\n Output: [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]'
+      ],
+      defaultText: `function powerset(array, idx = null) { \n // Type your code...\n\n } \n //DO NOT EDIT BELOW THIS LINE \nexports.powerset = powerset;`,
+      solution: `// O(n*2^n) time | O(n*2^n) space
+      function powerset(array, idx = null) {
+        if (idx === null) {
+          idx = array.length - 1;
+        }
+        if (idx < 0) {
+          return [[]];
+        }
+        const ele = array[idx];
+        const subsets = powerset(array, idx - 1);
+        const length = subsets.length;
+        for (let i = 0; i < length; i++) {
+          const currentSubset = subsets[i];
+          subsets.push(currentSubset.concat(ele));
+        }
+        return subsets;
+      }
+      exports.powerset = powerset;`,
+      tests: `
+const {powerset} = require('./userCode');
+const chai = require('chai');
+
+function sortAndStringify(array) {
+  return array.sort((a, b) => a - b).join(',');
+}
+it('Test Case #1', function() {
+  const output = powerset([]).map(sortAndStringify);
+  chai.expect(output.length === 1).to.be.true;
+  chai.expect(output).to.include('');
+});
+it('Test Case #2', function() {
+  const output = powerset([1]).map(sortAndStringify);
+  chai.expect(output.length === 2).to.be.true;
+  chai.expect(output).to.include('');
+  chai.expect(output).to.include('1');
+});
+it('Test Case #3', function() {
+  const output = powerset([1, 2]).map(sortAndStringify);
+  chai.expect(output.length === 4).to.be.true;
+  chai.expect(output).to.include('1');
+  chai.expect(output).to.include('2');
+  chai.expect(output).to.include('1,2');
+});
+it('Test Case #4', function() {
+  const output = powerset([1, 2, 3]).map(sortAndStringify);
+  chai.expect(output.length === 8).to.be.true;
+  chai.expect(output).to.include('');
+  chai.expect(output).to.include('1');
+  chai.expect(output).to.include('2');
+  chai.expect(output).to.include('1,2');
+  chai.expect(output).to.include('3');
+  chai.expect(output).to.include('1,3');
+  chai.expect(output).to.include('2,3');
+  chai.expect(output).to.include('1,2,3');
+});
+it('Test Case #5', function() {
+  const output = powerset([1, 2, 3, 4]).map(sortAndStringify);
+  chai.expect(output.length === 16).to.be.true;
+  chai.expect(output).to.include('');
+  chai.expect(output).to.include('1');
+  chai.expect(output).to.include('2');
+  chai.expect(output).to.include('1,2');
+  chai.expect(output).to.include('3');
+  chai.expect(output).to.include('1,3');
+  chai.expect(output).to.include('2,3');
+  chai.expect(output).to.include('1,2,3');
+  chai.expect(output).to.include('4');
+  chai.expect(output).to.include('1,4');
+  chai.expect(output).to.include('2,4');
+  chai.expect(output).to.include('1,2,4');
+  chai.expect(output).to.include('3,4');
+  chai.expect(output).to.include('1,3,4');
+  chai.expect(output).to.include('2,3,4');
+  chai.expect(output).to.include('1,2,3,4');
+});`,
+      algoLevel: 2
     })
   ])
 
