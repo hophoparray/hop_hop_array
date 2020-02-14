@@ -483,7 +483,7 @@ async function seed() {
       algoLevel: 3
     }),
     Algo.create({
-      id: 9,
+      id: 12,
       name: 'Levenshtein Distance',
       prompt:
         'Write a function that takes in two strings and returns the minimum number of edit operations that need to be performed on the first string to obtain the second string. There are three edit operations: insertion of a character, deletion of a character, and substitution of a character for another.',
@@ -565,7 +565,7 @@ async function seed() {
       algoLevel: 2
     }),
     Algo.create({
-      id: 10,
+      id: 13,
       name: 'Powerset',
       prompt:
         'Write a function that takes in an array of unique integers and returns its powerset. The powerset P(X) of a set X is the set of all subsets of X. For example, the powerset of [1,2] is [[], [1], [2], [1,2]]. Note that the sets in the powerset do not need to be in any particular order.',
