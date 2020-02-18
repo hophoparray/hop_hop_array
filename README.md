@@ -1,8 +1,19 @@
+![Screenshot](logo.png)
+
+##
+
+[Hop Hop] Array is a web application for practicing coding algorithms. Users attempt to submit code to be run against test specs; as well as gain points and experience levels for correct solutions.
+
 Schema:
 https://drive.google.com/file/d/1ZEx9gmbQdgiOGQtXB2nr0ovRRA6ft3Pj/view?usp=sharing
 
 Wireframe:
 https://www.figma.com/file/Ru4wXyFKdDKBWKkrhuiROp/Untitled?node-id=0%3A1
+
+## Setup
+
+We used the boilermaker linked below as the base of our project and built off it. Please follow the setup instructions in the link.
+https://github.com/FullstackAcademy/boilermaker
 
 ## Technology Stack & Tools
 
@@ -25,6 +36,7 @@ _Docker_ was a key part of our web application that provided necessary security.
 _Monaco Editor_ is created by Microsoft and is the code editor that powers VS Code. It is open source and under the MIT license. It supports syntax highlighting, bracket matching, and intellisense. It also supports color themes. We used fairyfloss for the editor on our website.
 
 ![Screenshot](techstack.png)
+
 
 ## OAuth Set Up
 
@@ -51,3 +63,20 @@ Please see the below for Google's documentation for configuring Google OAuth:
 Please see the below to set up an OAuth App within Github:
 
 [Link](https://github.com/settings/developers)
+
+## Schema
+
+Below is our finalized schema:
+
+![Screenshot](schema.png)
+
+We followed the DRY approach, as UserAlgos acted as a through-table between Algos and Users.
+
+## Deployment
+
+To deploy our web application, we had to limit our options given our use of Docker and the budget we set for ourselves. With those factors in mind, we found that either AWS or Scaleway was the ideal deployment source for our product.
+
+We then went ahead and purchased a virtual machine from Scaleway and used its public IP address, and our DNS on NameCheap.
+
+If you choose to use our method of deployment, please note, you will need to ssh into your server from your terminal, reconfigure your dB, Docker, and your OAuth secrets. Please review https://www.scaleway.com/en/docs/create-and-connect-to-your-server/ for more details.
+
