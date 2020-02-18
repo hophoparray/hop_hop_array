@@ -26,19 +26,19 @@ _Monaco Editor_ is created by Microsoft and is the code editor that powers VS Co
 
 ![Screenshot](techstack.png)
 
-##OAuth Set Up
+## OAuth Set Up
 
 [Hop Hop] Array offers three options for a user to login: a [Hop Hop] Array account, Google, and Github.
 
 The following variables need to be defined in your system environment in order for the Google OAuth and Github OAuth to be set up:
 
-*GOOGLE_CLIENT_ID
-*GOOGLE_CLIENT_SECRET
-\*GOOGLE_CALLBACK
+* GOOGLE_CLIENT_ID
+* GOOGLE_CLIENT_SECRET
+* GOOGLE_CALLBACK
 
-*GITHUB_CLIENT_ID
-*GITHUB_CLIENT_SECRET
-\*GITHUB_CALLBACK
+* GITHUB_CLIENT_ID
+* GITHUB_CLIENT_SECRET
+* GITHUB_CALLBACK
 
 **Google**
 
