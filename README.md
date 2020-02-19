@@ -1,4 +1,4 @@
-![Screenshot](logo.png)
+![Screenshot](./images/logo.png)
 
 ##
 
@@ -35,8 +35,7 @@ _Docker_ was a key part of our web application that provided necessary security.
 
 _Monaco Editor_ is created by Microsoft and is the code editor that powers VS Code. It is open source and under the MIT license. It supports syntax highlighting, bracket matching, and intellisense. It also supports color themes. We used fairyfloss for the editor on our website.
 
-![Screenshot](techstack.png)
-
+![Screenshot](./images/techstack.png)
 
 ## OAuth Set Up
 
@@ -68,7 +67,7 @@ Please see the below to set up an OAuth App within Github:
 
 Below is our finalized schema:
 
-![Screenshot](schema.png)
+![Screenshot](./images/schema.png)
 
 We followed the DRY approach, as UserAlgos acted as a through-table between Algos and Users.
 
@@ -79,4 +78,3 @@ To deploy our web application, we had to limit our options given our use of Dock
 We then went ahead and purchased a virtual machine from Scaleway and used its public IP address, and our DNS on NameCheap.
 
 If you choose to use our method of deployment, please note, you will need to ssh into your server from your terminal, reconfigure your dB, Docker, and your OAuth secrets. Please review https://www.scaleway.com/en/docs/create-and-connect-to-your-server/ for more details.
-
