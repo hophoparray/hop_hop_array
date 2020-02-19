@@ -77,7 +77,7 @@ Please see the below to set up an OAuth App within Github:
 
 [Link](https://github.com/settings/developers)
 
-### Docker Setup
+## Docker Setup
 
 1.  [Install Docker](https://hub.docker.com/?overlay=onboarding)
 2.  Run `npm run build-docker` once to create the code runner Docker image.
