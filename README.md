@@ -67,15 +67,11 @@ The following variables need to be defined in your system environment in order f
 
 **Google**
 
-Please see the below for Google's documentation for configuring Google OAuth:
-
-[Link](https://developers.google.com/identity/protocols/OAuth2)
+Please see [Google's documentation](https://developers.google.com/identity/protocols/OAuth2) for configuring Google OAuth.
 
 **Github**
 
-Please see the below to set up an OAuth App within Github:
-
-[Link](https://github.com/settings/developers)
+Check out [Github's developer settings](https://github.com/settings/developers) to set up an OAuth App within Github.
 
 ### Docker Setup
 
